@@ -3,3 +3,4 @@
 /ar/qr.html  /ar/index.html  301!
 
 /r/*  /.netlify/functions/r?pid=:splat  200
+
