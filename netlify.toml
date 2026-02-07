@@ -1,0 +1,15 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/r/*"
+  to = "/.netlify/functions/r?pid=:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/r"
+  to = "/.netlify/functions/r"
+  status = 200
+  force = true
