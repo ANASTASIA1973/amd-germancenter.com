@@ -2,5 +2,6 @@
 /de/qr.html  /de/index.html  301!
 /ar/qr.html  /ar/index.html  301!
 
-/r/*  /.netlify/functions/r?pid=:splat  200
+/r  /.netlify/functions/r  200!
+/r/*  /.netlify/functions/r?pid=:splat  200!
 
