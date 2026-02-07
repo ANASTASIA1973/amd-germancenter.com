@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>AMD German Center – من نحن</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Website-Styles (wie Startseite) -->
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+
+  <style>
+    .about-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--amd-bg, #f5f5f7);
+    }
+
+    .about-main {
+      flex: 1;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .about-container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .about-heading {
+      margin-bottom: 1.5rem;
+      text-align: right;
+    }
+
+    .about-heading h1 {
+      margin: 0;
+      font-size: 1.9rem;
+      color: var(--amd-heading, #111827);
+    }
+
+    .about-heading p {
+      margin-top: 0.4rem;
+      color: var(--amd-text-muted, #6b7280);
+    }
+
+    .team-section {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .team-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: var(--amd-card-bg, #ffffff);
+      border-radius: var(--amd-radius-lg, 18px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .team-card{
+      overflow: hidden;
+      height: auto !important;
+      align-items: flex-start !important;
+    }
+
+    .team-info{
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      text-align: right;
+    }
+
+    .team-photo{
+      width: 150px;
+      height: 150px;
+      border-radius: 14px;
+      object-fit: cover;
+      object-position: center;
+      border: 3px solid var(--amd-primary, #c1272d);
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .team-info h3 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--amd-heading, #111827);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .team-role {
+      margin: 0.15rem 0 0.8rem 0;
+      color: var(--amd-accent, #1b6f5a);
+      font-weight: 600;
+    }
+
+    .team-bio-block {
+      margin-bottom: 0.9rem;
+    }
+
+    .team-bio-block p {
+      margin: 0;
+      line-height: 1.6;
+      color: var(--amd-text, #111827);
+      font-size: 0.97rem;
+    }
+
+    @media (max-width: 700px) {
+      .team-photo{
+        display: block;
+        margin: 0 auto;
+      }
+
+      .team-info{
+        width: 100%;
+      }
+
+      .team-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        align-items: flex-start;
+      }
+
+      .team-info{
+        text-align: center;
+      }
+
+      .team-photo {
+        width: 170px;
+        height: 170px;
+      }
+    }
+  </style>
+</head>
+
+<body class="amd-page">
+  <div class="about-page-wrapper">
+
+    <header class="amd-header">
+      <div class="amd-header-inner">
+        <a href="./index.html" class="amd-logo" aria-label="AMD German Center">
+         <img src="../assets/img/logo-amd-lion.png" alt="AMD German Center Logo" width="140" height="140" decoding="async" />
+
+        </a>
+
+        <div class="amd-header-right">
+          <div class="amd-lang-switch" aria-label="اللغة">
+            <a href="../de/about.html" class="lang-btn">
+              <span class="lang-flag lang-flag-de" aria-hidden="true"></span>
+              <span class="lang-label">DE</span>
+            </a>
+
+            <a href="../en/about.html" class="lang-btn">
+              <span class="lang-flag lang-flag-en" aria-hidden="true"></span>
+              <span class="lang-label">EN</span>
+            </a>
+
+            <a href="../ar/about.html" class="lang-btn is-active" aria-current="page">
+              <span class="lang-flag lang-flag-ar" aria-hidden="true"></span>
+              <span class="lang-label">AR</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="amd-subnav" aria-label="العودة إلى الصفحة الرئيسية">
+      <div class="amd-subnav-inner">
+        <a class="amd-backlink" href="./index.html">← العودة إلى الصفحة الرئيسية</a>
+      </div>
+    </nav>
+
+    <!-- المحتوى -->
+    <main class="about-main">
+      <div class="about-container">
+        <div class="about-heading">
+          <h1>من نحن</h1>
+<p>مركز AMD الألماني – شخصي. عادل. رقمي.</p>
+        </div>
+
+        <section class="team-section">
+
+          <!-- علي محسن أحمد -->
+          <article class="team-card">
+            <img
+              src="../assets/img/ali-ahmad.jpg"
+              alt="Ali Mohsen Ahmad – Owner / CEO AMD German Center"
+              class="team-photo"
+            />
+
+            <div class="team-info">
+              <h3>Ali Mohsen Ahmad</h3>
+              <p class="team-role">
+                المالك / المدير التنفيذي<br />
+                AMD German Center
+              </p>
+
+              <div class="team-bio-block">
+                <p>
+                  وُلِدتُ ونشأتُ في شمال ألمانيا، حيث يُعدّ الترحيب الودود «موين موين»
+                  جزءًا من الحياة اليومية، ولديّ مسيرة مهنية تمتد لأكثر من 20 عامًا في
+                  مجالات السياحة والتأمين والقطاع المالي. منذ طفولتي كان والدي يشجّعني
+                  على احترام الجذور والعودة إلى الوطن الأم لبنان، حيث أعيش اليوم.
+                </p>
+                <p>
+                  هنا في جنوب لبنان أجمع بين خلفيتي الألمانية وخبرتي المهنية من جهة،
+                  وبين روح الحياة والضيافة والثقافة اللبنانية من جهة أخرى. هذا الجسر
+                  الثقافي ينعكس على حياتي اليومية وعلى عملي معًا.
+                </p>
+                <p>
+                  هدفي هو تقديم خدمات حصرية ومصمَّمة خصيصًا لتلبية أعلى التوقّعات. وبمساعدة
+                  فريقي وشبكة قوية من الشركاء في كلٍّ من ألمانيا ولبنان، أضمن أن تكون رحلتكم
+                  أو إقامتكم تجربة لا تُنسى – سواء عبر جولات يومية خاصة، أو برامج سفر فردية،
+                  أو خدمات نقل مريحة من وإلى المطار.
+                </p>
+                <p>
+                  يمكنكم الاعتماد على خبرتي الطويلة وعلى التوازن بين الدقّة الألمانية
+                  وحرارة الضيافة اللبنانية. دعونا نحقّق رغباتكم معًا ونقدّم لكم تجربة
+                  مخصّصة لن تُنسى بسهولة.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- فرانسيس لانغه -->
+          <article class="team-card">
+            <img
+              src="../assets/img/francis-lange.jpg"
+              alt="Francis Lange – Sales Director"
+              class="team-photo"
+            />
+
+            <div class="team-info">
+              <h3>Francis Lange</h3>
+              <p class="team-role">
+                مدير المبيعات<br />
+                السياحة والتسويق
+              </p>
+
+              <div class="team-bio-block">
+                <p>
+                  وُلدتُ في برلين، وأمتلك خبرة واسعة في مجال المبيعات منذ عام 2010، لا سيما في
+                  قطاعَي السياحة والتسويق. وبشغفٍ لتطوير مفاهيم بيع مبتكرة وفهمٍ واضح لاحتياجات
+                  العملاء، شاركتُ في تنفيذ العديد من المشاريع وساهمتُ في تحقيق نموّ مستدام للشركات.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- محمد علي الحاج -->
+          <article class="team-card">
+            <img
+              src="../assets/img/Mohammad-ali-al-hagh_square_v4_headmore.jpg"
+              alt="Mohammad Ali Al Hagh – Tour Management"
+              class="team-photo"
+            />
+
+            <div class="team-info">
+              <h3>Mohammad Ali Al Hagh</h3>
+              <p class="team-role">إدارة وتنظيم الجولات</p>
+
+              <div class="team-bio-block">
+                <p>
+                  وُلدتُ في جنوب لبنان وما زلت أعيش فيه حتى اليوم. أعمل منذ أكثر من عشر سنوات
+                  في مجال تنظيم الرحلات اليومية وجولات المشي المرافَقة، وأمتلك معرفة دقيقة
+                  بمناطق الجنوب والشمال على حدّ سواء.
+                </p>
+                <p>
+                  أركّز على تجارب فردية مُصمَّمة بعناية، يكون فيها عامل السلامة، والثقافة
+                  المحلية، والارتباط بالطبيعة في صميم التجربة. في AMD، تأتي سلامة الضيوف
+                  والالتزام بالموثوقية على النهج الألماني في المقام الأول.
+                </p>
+                <p>
+                  أرافق جميع الجولات شخصيًا وأقودها بشكل مهني، مع مراعاة احتياجات الضيوف
+                  وتوقّعاتهم وقدراتهم الجسدية. تتميّز عروضنا بالمرونة والمسؤولية والاستدامة،
+                  وتهدف إلى تقديم تجارب أصيلة ولا تُنسى.
+                </p>
+              </div>
+            </div>
+          </article>
+
+        </section>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="amd-footer">
+      <div class="footer-grid">
+        <!-- العمود الأيسر -->
+        <div class="footer-column">
+   <ul class="footer-links">
+  <li>
+    <a href="https://transfer.amd-germancenter.com/booking" target="_blank" rel="noopener">
+      نقل من/إلى المطار
+    </a>
+  </li>
+
+  <li>
+    <a href="https://tours.amd-germancenter.com/index.html" target="_blank" rel="noopener">
+      جولات يومية
+    </a>
+  </li>
+
+  <li><a href="./car-rental.html">تأجير سيارات</a></li>
+  <li><a href="./package-tours.html">رحلات وباقات</a></li>
+
+  <li>
+    <a href="https://amd-tarifcheck.de/" target="_blank" rel="noopener">
+      AMD Tarifcheck
+    </a>
+  </li>
+</ul>
+
+        </div>
+
+        <!-- الوسط -->
+        <div class="footer-column footer-column--center" dir="rtl">
+          <p class="footer-title">تابعونا على:</p>
+          <div class="footer-social">
+            <a href="https://wa.me/96181622668" target="_blank" rel="noopener">
+              <img src="../assets/img/icon-whatsapp.svg" alt="WhatsApp" />
+            </a>
+            <a href="https://www.instagram.com/amd.german.center/" target="_blank" rel="noopener">
+              <img src="../assets/img/icon-instagram.svg" alt="Instagram" />
+            </a>
+            <a href="https://www.facebook.com/p/AMD-German-Center-61575238540217/" target="_blank" rel="noopener">
+              <img src="../assets/img/icon-facebook.svg" alt="Instagram" />
+            </a>
+            <a href="https://www.tiktok.com/@amdgermancenter" target="_blank" rel="noopener">
+              <img src="../assets/img/icon-tiktok.svg" alt="TikTok" />
+            </a>
+          </div>
+        </div>
+
+        <!-- العمود الأيمن -->
+        <div class="footer-column" dir="rtl">
+          <ul class="footer-links">
+            <li><a href="./faq.html">الأسئلة الشائعة</a></li>
+            <li><a href="./about.html">من نحن</a></li>
+            <li><a href="./imprint.html">البيانات القانونية</a></li>
+            <li><a href="./datenschutz.html">سياسة الخصوصية</a></li>
+            <li><a href="./agb.html">الشروط والأحكام</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+ <script src="../assets/js/main.js"></script>
+</body>
+
+
+</html>

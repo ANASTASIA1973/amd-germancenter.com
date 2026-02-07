@@ -1,0 +1,3050 @@
+/* ========== Grund-Setup ========== */
+
+:root {
+  --amd-bg: #f5f5f7;
+  --amd-card-bg: #ffffff;
+
+  /* Hauptfarbe */
+  --amd-primary: #c1272d;        /* AMD-Rot */
+
+  /* Edler Libanon-Look: Bordeaux + Zedern-Grün */
+  --amd-primary-soft: #fbe6e9;   /* sehr helles Rot für Hintergründe */
+  --amd-accent: #1b6f5a;         /* ruhiges Zedern-Grün */
+
+  --amd-text: #111827;
+  --amd-text-muted: #6b7280;
+  --amd-border: #e5e7eb;
+  --amd-heading: #111827;
+
+  --amd-radius-lg: 18px;
+  --amd-radius-md: 12px;
+  --amd-radius-sm: 8px;
+  --amd-shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+  --amd-shadow-card: 0 14px 30px rgba(15, 23, 42, 0.06);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--amd-text);
+  background: var(--amd-bg);
+  line-height: 1.5;
+}
+
+/* Links und Buttons */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Utility-Container */
+
+.container {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+}
+
+/* ===================================================== */
+/* ===============   HEADER – EINHEITLICH   ============ */
+/* ===================================================== */
+
+.amd-header {
+  background: linear-gradient(to bottom, #ffffff, #f5f5f7);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+.amd-header-inner {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0;
+  gap: 1rem;
+}
+
+/* Logo links */
+
+.amd-logo img {
+  height: 42px;
+  width: auto;
+  display: block;
+}
+
+/* Sprachbuttons rechts – wie Touren-App */
+
+.amd-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.amd-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 999px;
+  background: #f9fafb;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--amd-text-muted);
+  line-height: 1;
+  font-family: inherit;
+  text-decoration: none;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease,
+    transform 0.1s ease,
+    color 0.12s ease;
+}
+
+.lang-btn .lang-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lang-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+}
+
+/* aktive Sprache – rote Kapsel */
+
+.lang-btn.is-active {
+  border-color: var(--amd-primary);
+  background: var(--amd-primary-soft);
+  color: var(--amd-primary);
+}
+
+/* Flaggen-Icons – rund wie in der Touren-App */
+
+.lang-flag {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.7);
+  background-color: #f9fafb;
+}
+
+.lang-flag-de { background-image: url("../img/flag-de.svg"); }
+.lang-flag-ar { background-image: url("../img/flag-lb.svg"); } /* Libanon */
+.lang-flag-en { background-image: url("../img/flag-us.svg"); } /* USA */
+
+/* WhatsApp-Icon im Header ausblenden (falls vorhanden) */
+.amd-whatsapp-icon {
+  display: none !important;
+}
+
+/* Mobile Header */
+@media (max-width: 600px) {
+  .amd-header-inner {
+    padding: 0.25rem 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .amd-logo img {
+    height: 40px;
+  }
+
+  /* Pills kompakter (iPhone) */
+  .amd-lang-switch {
+    gap: 0.18rem;
+    padding: 0.08rem 0.16rem;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+  }
+
+  .lang-btn {
+    padding: 0.12rem 0.42rem;
+    font-size: 0.68rem;
+  }
+
+  .lang-flag {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Tablet-Zwischenstufe */
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .amd-header-inner {
+    padding: 0.45rem 0.75rem;
+    gap: 0.4rem;
+  }
+}
+/* Header-Navigation (Desktop) */
+.amd-nav{
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.amd-nav-link{
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--amd-text);
+  opacity: 0.9;
+  text-decoration: none;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+}
+
+.amd-nav-link:hover{
+  background: rgba(193,39,45,.08);
+  text-decoration: none;
+}
+
+
+/* Promo-Banner (falls genutzt) */
+
+.promo-banner {
+  width: 100%;
+  padding: 0.3rem 0;
+  background: #ffdede;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: left;
+  padding-left: clamp(1.5rem, 4vw, 4rem);
+  animation: promoPulse 12s ease-in-out infinite;
+}
+
+.promo-banner strong {
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .promo-banner {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.6rem;
+    padding-left: 0.6rem;
+  }
+}
+
+/* ========== Buttons (global) ========== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.7rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--amd-primary);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--amd-primary);
+  border: 1px solid var(--amd-border);
+}
+
+.btn-secondary:hover {
+  background: var(--amd-primary-soft);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--amd-border);
+  color: var(--amd-text);
+}
+
+.btn-outline:hover {
+  background: #ffffff;
+}
+/* Hero: zweiter Button (Tagestouren) – jetzt rot wie der Hauptbutton */
+.hero-actions .btn-secondary {
+  background: var(--amd-primary);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+}
+
+.hero-actions .btn-secondary:hover {
+  background: var(--amd-primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.3);
+}
+
+
+/* ===================================================== */
+/* =====================   HERO   ======================= */
+/* ===================================================== */
+
+/* Haupt-Hero: links dunkler Bereich, rechts Bild (Option A) */
+
+.hero {
+  position: relative;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  padding: 4.5rem 0 4rem;
+  color: #ffffff;
+  overflow: hidden;
+  border-radius: 0 0 var(--amd-radius-lg) var(--amd-radius-lg);
+}
+
+/* Hintergrundbild (Fokus rechts) */
+
+.hero-bg-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+/* Weicher Gradient links → rechts transparent */
+
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(2, 6, 23, 0.95) 0%,
+    rgba(2, 6, 23, 0.88) 30%,
+    rgba(2, 6, 23, 0.55) 55%,
+    rgba(2, 6, 23, 0.12) 75%,
+    rgba(2, 6, 23, 0.00) 100%
+  );
+}
+
+/* Inhalt = „Schaufenster“ links */
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  margin-left: clamp(1.75rem, 7vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero-slogan,
+.hero-kicker {
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  font-weight: 500;
+  opacity: 0.9;
+  margin: 0 0 0.5rem;
+}
+
+.hero-title {
+  margin: 0.35rem 0 0.5rem;
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  margin: 0 0 1.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  max-width: 36rem;
+  opacity: 0.95;
+}
+
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+/* Flaggenreihe im Hero */
+
+.hero-flags {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-flag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.5);
+}
+
+.hero-flag-pill img {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+}
+
+/* Service-Zeile unten links im Hero */
+
+.hero-service-note {
+  position: absolute;
+  left: clamp(1.75rem, 7vw, 5rem);
+  bottom: 1.6rem;
+  font-size: 0.9rem;
+  color: #f9fafb;
+  z-index: 2;
+}
+
+.hero-service-note a {
+  color: #b91c1c;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hero-service-note a:hover {
+  text-decoration: underline;
+}
+
+.hero-service-phone{
+  direction: ltr;
+  unicode-bidi: isolate;   /* statt bidi-override */
+  white-space: nowrap;
+}
+
+/* HERO: Telefonhörer immer rot (Emoji auf Mobile oft grau) */
+.hero-service-note .amd-inline-icon{
+  display: inline-block !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 6px !important;
+  vertical-align: -3px !important;
+
+  font-size: 0 !important;   /* Emoji verstecken */
+  line-height: 0 !important;
+  overflow: hidden !important;
+
+  background: no-repeat center / contain url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20fill%3D%27%23b91c1c%27%20d%3D%276.62%2010.79a15.53%2015.53%200%200%200%206.59%206.59l2.2-2.2a1%201%200%200%201%201.02-.24c1.12.37%202.33.57%203.57.57a1%201%200%200%201%201%201V20a1%201%200%200%201-1%201A17%2017%200%200%201%203%204a1%201%200%200%201%201-1h3.5a1%201%200%200%201%201%201c0%201.24.2%202.45.57%203.57a1%201%200%200%201-.24%201.02l-2.2%202.2z%27/%3E%3C/svg%3E") !important;
+}
+
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 500px;              /* weniger “Luft” insgesamt */
+    padding: 3.0rem 0 2.4rem;       /* unten kompakter */
+    align-items: flex-start;
+  }
+
+  .hero-subtitle{
+    margin-bottom: 1.25rem;         /* war global 1.75rem -> mobile kompakter */
+  }
+
+  .hero-actions{
+    margin-top: 2.05rem;          /* Button minimal tiefer */
+    display: flex;
+    justify-content: center;      /* wirklich mittig */
+    width: 100%;
+  }
+
+  .hero-actions .btn{
+    margin-left: auto;            /* “hart” zentrieren */
+    margin-right: auto;
+    width: min(310px, 100%);      /* etwas kompakter */
+    padding: 11px 16px;           /* kompaktere Höhe */
+    font-size: 0.95rem;
+  }
+
+}
+
+
+
+  .hero-service-note {
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .hero-flag-pill {
+    background: rgba(15, 23, 42, 0.92);
+  }
+
+
+/* Kleine Hero-Variante für Unterseiten (ohne Bild) */
+
+.hero.hero-small {
+  min-height: 220px;
+  border-radius: 0 0 var(--amd-radius-lg) var(--amd-radius-lg);
+  background: linear-gradient(135deg, #001537, #003366);
+  color: #f9fafb;
+}
+
+.hero.hero-small .hero-inner {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+  padding: 2.6rem 0 2.4rem;
+}
+
+.hero.hero-small .hero-title {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+}
+
+/* ===================================================== */
+/* ========== Generische Sections & Intro ============== */
+/* ===================================================== */
+
+.section {
+  padding: 3.5rem 0;
+}
+
+.section-intro {
+  background: #f9fafb;
+}
+
+.section-header {
+  margin-bottom: 2rem;
+}
+
+.section-header--center {
+  text-align: center;
+}
+
+.section-header h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.7rem;
+  color: var(--amd-heading);
+}
+
+.section-subtitle {
+  margin: 0;
+  color: var(--amd-text-muted);
+}
+
+.section-title {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--amd-heading);
+}
+@media (max-width: 600px){
+  /* Dienstleistungen: 3-zeilige H2 auf Handy kleiner */
+  #leistungen.section-tours .section-title{
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+}
+
+/* Intro-Grid */
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+.intro-text h3,
+.intro-highlight h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.3rem;
+}
+
+.bullet-list {
+  margin: 0 0 1rem;
+  padding-left: 1.2rem;
+}
+
+.bullet-list li {
+  margin-bottom: 0.4rem;
+}
+
+.donation-text {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--amd-text-muted);
+}
+.intro-highlight {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 16px 32px rgba(15, 27, 45, 0.06);
+  /* linke Kante jetzt grün */
+  border-left: 4px solid var(--amd-accent, #1b6f5a);
+}
+
+
+/* Chips unter dem Intro-Text */
+
+.intro-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.intro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+}
+
+.intro-chip-icon {
+  font-size: 1rem;
+}
+/* Bullet-Points im Warum-Block grün */
+.intro-highlight .bullet-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.intro-highlight .bullet-list li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.intro-highlight .bullet-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--amd-accent); /* Zedern-Grün */
+}
+/* RTL Fix: Bulletpoints im Warum-Block auf die richtige Seite (AR) */
+html[dir="rtl"] .intro-highlight .bullet-list {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+html[dir="rtl"] .intro-highlight .bullet-list li {
+  padding-right: 1.1rem;
+  padding-left: 0;
+  text-align: right;
+}
+
+html[dir="rtl"] .intro-highlight .bullet-list li::before {
+  right: 0;
+  left: auto;
+}
+
+/* ============================= */
+/* Flaggen-Brücke Deutschland–Libanon */
+/* ============================= */
+
+.intro-flags-row {
+  margin-top: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.intro-flags {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.intro-flags-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--amd-text-muted);
+}
+
+/* Basis-Flaggen */
+
+.flag {
+  display: inline-block;
+  width: 46px;
+  height: 32px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Deutschland: schwarz-rot-gold */
+
+.flag-de {
+  background: linear-gradient(
+    to bottom,
+    #000000 0%,
+    #000000 33.33%,
+    #dd0000 33.33%,
+    #dd0000 66.66%,
+    #ffce00 66.66%,
+    #ffce00 100%
+  );
+}
+
+/* Libanon: rot-weiß-rot mit stilisierter Zeder */
+
+.flag-lb {
+  background: linear-gradient(
+    to bottom,
+    #d50000 0%,
+    #d50000 25%,
+    #ffffff 25%,
+    #ffffff 75%,
+    #d50000 75%,
+    #d50000 100%
+  );
+}
+
+.flag-lb::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  background: #0b8a3e;
+  /* einfache stilisierte Zeder */
+  clip-path: polygon(
+    50% 0%,
+    15% 30%,
+    30% 30%,
+    10% 50%,
+    35% 50%,
+    18% 70%,
+    40% 70%,
+    32% 100%,
+    68% 100%,
+    60% 70%,
+    82% 70%,
+    65% 50%,
+    90% 50%,
+    70% 30%,
+    85% 30%
+  );
+}
+
+/* Emoji-Handschlag etwas größer */
+
+.intro-flags-bridge {
+  font-size: 1.4rem;
+}
+
+/* Mobile: Text umbricht schön unter die Flaggen */
+
+@media (max-width: 640px) {
+  .intro-flags-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .intro-flags {
+    margin-bottom: 0.2rem;
+  }
+}
+
+
+/* Benefit-Card rechts etwas strukturierter */
+
+.intro-benefits {
+  border-left: 4px solid var(--amd-primary);
+  padding-left: 1.6rem;
+}
+
+.intro-benefits h3 {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+}
+
+.benefit-group + .benefit-group {
+  margin-top: 0.9rem;
+}
+
+.benefit-group h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--amd-heading);
+}
+
+.benefit-group ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--amd-text-muted);
+}
+
+.benefit-group li + li {
+  margin-top: 0.15rem;
+}
+
+/* Mobile: Intro-Spalten untereinander */
+
+@media (max-width: 900px) {
+  .intro-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-benefits {
+    border-left: none;
+    border-top: 3px solid var(--amd-primary);
+    padding-left: 1.8rem;
+    padding-top: 1.4rem;
+    margin-top: 1rem;
+  }
+}
+
+/* ===================================================== */
+/* ========== Tour-Karten (Übersicht) ================== */
+/* ===================================================== */
+
+.section-tours {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.tour-grid {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+/* Startseiten-Karten: ab 900px fix 2 Spalten → 2×2 */
+
+@media (min-width: 900px) {
+  .section-tours .tour-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Karte selbst */
+
+.tour-card {
+  background: var(--amd-card-bg);
+  border-radius: var(--amd-radius-lg);
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid #f3f4f6;
+  border-left: 4px solid var(--amd-accent); /* linke Seite grün */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Bild oben (per inline background-image) */
+
+.tour-card-image {
+  width: 100%;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+
+  margin-left: -4px;
+  width: calc(100% + 4px);
+
+  border-top-left-radius: var(--amd-radius-lg);
+  border-top-right-radius: var(--amd-radius-lg);
+}
+
+/* Airport Transfer: echtes Bild (kein Cropping, kein white padding) */
+.tour-card-image--img{
+  height: 280px;              /* passt zu deinem globalen Layout */
+  background: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tour-card-image--img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* wirkt “echt” und füllt die Fläche */
+  object-position: 50% 55%;   /* Fokus etwas tiefer (Menschen/Auto) */
+  display: block;
+}
+
+/* Tagestouren-Bild: Fokus nach unten (Menschen sichtbar) */
+.section-tours .tour-card-image[style*="Welterbe_edited.jpg"]{
+  background-position: center 78%;
+}
+
+.tour-card-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.00),
+    rgba(0,0,0,0.08)
+  );
+}
+/* Startseite: Audi-Bild nicht zoomen, sondern vollständig zeigen */
+.section-tours .tour-card-image[style*="audi1"]{
+  background-size: contain;     /* statt cover */
+  background-position: center;
+  background-color: #ffffff;    /* füllt die „freien“ Flächen sauber */
+}
+
+@media (max-width: 640px){
+  .section-tours .tour-card-image[style*="audi1"]{
+    height: 200px;
+  }
+}
+
+
+/* Textbereich */
+
+.tour-card-body {
+  padding: 1.2rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.tour-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.tour-origin,
+.tour-card .tour-meta {
+  font-size: 0.9rem;
+  color: var(--amd-text-muted);
+}
+
+.tour-card .tour-price {
+  font-weight: 600;
+}
+
+.tour-card .tour-location {
+  margin-top: 0.3rem;
+}
+
+/* Footer der Startseiten-Karten – Buttons mit Abstand zum Rand */
+.tour-card-footer {
+  margin-top: auto;
+  padding: 1.1rem 1.5rem 1.6rem; /* oben / seitlich / unten -> mehr Luft nach unten */
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+/* Alle Buttons in den Startseiten-Karten in Rot darstellen */
+.section-tours .tour-card-footer .btn,
+.section-tours .tour-card-body > .btn {
+  background: var(--amd-primary);
+  color: #ffffff;
+  border-color: var(--amd-primary);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.section-tours .tour-card-footer .btn:hover,
+.section-tours .tour-card-body > .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Falls Button direkt im Body liegt */
+
+.tour-card-body > .tour-card-button,
+.tour-card-body > .btn {
+  margin-top: auto;
+  align-self: center;
+}
+
+.tour-card-button,
+.tour-card .btn {
+  font-size: 0.88rem;
+}
+
+/* Individuelle Anfrage-Karte (Touren-App) */
+
+.tour-card--individual {
+  max-width: 380px;
+  width: 100%;
+  margin: 2rem auto 0;
+}
+
+.tour-card-image--individual {
+  background-image: url("../img/individuel.png");
+  background-position: center;
+}
+
+.tour-card--individual .tour-card-image {
+  height: 220px;
+}
+
+.tour-card--individual img {
+  display: block;
+  margin: 1.8rem auto 1rem;
+  max-width: 70%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.tour-card--individual .tour-card-body {
+  text-align: center;
+}
+
+.tour-card--individual .tour-card-button {
+  align-self: center;
+}
+
+/* ===================================================== */
+/* ========== Buchungsformular (Tagestouren) =========== */
+/* ===================================================== */
+
+.section-booking {
+  background: radial-gradient(circle at top, #fdf2f2 0, #f5f5f7 45%, #f5f5f7 100%);
+  border-top: 1px solid var(--amd-border);
+  border-bottom: 1px solid var(--amd-border);
+  display: none;
+}
+
+.section-booking.is-visible {
+  display: block;
+}
+
+body.booking-open .section-tours {
+  display: none;
+}
+
+body.booking-open .section-hero,
+body.booking-open .section-intro {
+  display: none;
+}
+
+.booking-form {
+  background: var(--amd-card-bg);
+  border-radius: 1.5rem;
+  padding: 2.2rem 2.4rem;
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid #e5e7eb;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.25fr);
+  gap: 2.2rem;
+  align-items: flex-start;
+}
+
+.booking-header {
+  margin-bottom: 1.4rem;
+}
+
+.booking-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.6rem;
+}
+
+.booking-lead {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--amd-text-muted);
+  max-width: 36rem;
+}
+
+.booking-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.booking-step {
+  border: 1px solid #e5e7eb;
+  border-radius: 1.1rem;
+  padding: 1.2rem 1.3rem 1.4rem;
+  margin: 0;
+  background: #f9fafb;
+  position: relative;
+}
+
+.booking-step + .booking-step {
+  margin-top: 1rem;
+}
+
+.booking-step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  bottom: 1rem;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--amd-accent);
+}
+
+.booking-step legend {
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0 0 0.5rem;
+  margin-left: 0.6rem;
+}
+
+.booking-step-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem 1.4rem;
+  margin-left: 0.6rem;
+}
+
+.booking-step-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.booking-step-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.92rem;
+}
+
+.field span {
+  font-weight: 500;
+}
+
+.field input,
+.field textarea,
+.field select {
+  border-radius: var(--amd-radius-sm);
+  border: 1px solid var(--amd-border);
+  padding: 0.55rem 0.6rem;
+  font-size: 0.93rem;
+  font-family: inherit;
+  background: #ffffff;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: 2px solid rgba(23, 111, 75, 0.25);
+  border-color: var(--amd-accent);
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: var(--amd-text-muted);
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+}
+
+.checkbox-field input[type="checkbox"] {
+  margin-top: 0.2rem;
+}
+
+.booking-note {
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+  margin-top: 0.5rem;
+}
+
+.booking-actions {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.booking-summary {
+  background: linear-gradient(135deg, #ffffff, #f7f7fb);
+  color: var(--amd-text);
+  border-radius: 1.4rem;
+  padding: 1.6rem 1.8rem;
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid var(--amd-border);
+}
+
+.booking-summary-title {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.summary-list {
+  margin: 0 0 1.4rem;
+  padding: 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed rgba(148, 163, 184, 0.6);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row dt {
+  margin: 0;
+  color: var(--amd-text-muted);
+  font-weight: 500;
+}
+
+.summary-row dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+  color: var(--amd-text);
+}
+
+.summary-price h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.summary-price p {
+  margin: 0 0 1.1rem;
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+}
+
+.summary-notes h4 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.summary-notes ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+}
+
+.summary-notes li + li {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 960px) {
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-summary {
+    order: -1;
+  }
+}
+
+/* ===================================================== */
+/* ========== Partner-Sektion (AMD Finanz) ============= */
+/* ===================================================== */
+
+.section-partner {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.partner-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.partner-text h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.partner-text p {
+  margin-top: 0;
+  margin-bottom: 1.1rem;
+  color: var(--amd-text-muted);
+  max-width: 32rem;
+}
+
+
+/* Klickfläche für AMD-Finanz-Banner */
+
+.partner-logo {
+  display: inline-block;
+  position: relative;
+  z-index: 5;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.partner-logo a {
+  display: block;
+}
+
+.partner-logo img {
+  display: block;
+  max-width: 100%;
+  border-radius: var(--amd-radius-md);
+  box-shadow: var(--amd-shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.partner-logo:hover img {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
+}
+
+@media (max-width: 900px) {
+  .partner-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================================================== */
+/* ======================= Footer ====================== */
+/* ===================================================== */
+
+.amd-footer {
+  margin-top: 2rem;
+  padding: 1.6rem 0 1.3rem;
+  background: #0b1120;
+  color: #e5e7eb;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* alle Spalten gleich breit */
+  gap: 2rem;
+  align-items: center;
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+  column-gap: 2.5rem;
+}
+
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-links li + li {
+  margin-top: 0.3rem;
+}
+
+.footer-links a {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-column--center {
+  text-align: center;
+}
+
+.footer-follow {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.footer-social {
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
+.footer-social img {
+  width: 26px;
+  height: 26px;
+}
+
+@media (min-width: 901px) {
+  .footer-column {
+    font-size: 0.9rem;
+  }
+
+  .footer-column:first-child {
+    text-align: left;
+  }
+
+  .footer-column--center {
+    text-align: center;
+  }
+
+  .footer-column:last-child {
+    text-align: right;
+  }
+}
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;   /* alles untereinander */
+    row-gap: 1.5rem;
+  }
+
+  .footer-column {
+    justify-self: center;
+    text-align: center;
+  }
+}
+
+/* ===================================================== */
+/* ==========   DETAILSEITE: TOUR-ANSICHT   ============ */
+/* ===================================================== */
+
+#tour-detail-root {
+  padding-top: 1.6rem;
+  padding-bottom: 3.2rem;
+  background: var(--amd-bg);
+}
+
+.tour-detail-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1.3fr);
+  gap: 2.5rem;
+  align-items: center;
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto 2.4rem;
+}
+
+@media (max-width: 900px) {
+  .tour-detail-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.tour-detail-hero-image {
+  position: relative;
+  min-height: 460px;
+  border-radius: 24px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+.tour-detail-hero-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45), transparent 55%);
+}
+
+.tour-detail-hero-text {
+  max-width: 42rem;
+}
+
+.tour-detail-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--amd-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.tour-detail-title {
+  font-size: clamp(2.2rem, 2.8vw, 2.8rem);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  color: var(--amd-heading);
+}
+
+.tour-detail-hero-text p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.detail-hero-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.tour-detail-hero-text .btn {
+  border-radius: 999px;
+  padding: 0.75rem 1.8rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tour-detail-hero-text .btn-primary {
+  background: var(--amd-primary);
+  color: #fff;
+  border: none;
+  box-shadow: 0 12px 30px rgba(193, 39, 45, 0.45);
+}
+
+.tour-detail-hero-text .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px rgba(193, 39, 45, 0.6);
+}
+
+.tour-detail-hero-text .btn-secondary {
+  background: #ffffff;
+  color: var(--amd-text);
+  border: 1px solid #e0e4ee;
+}
+
+@media (max-width: 600px) {
+  .tour-detail-hero-text .btn-secondary {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    display: inline-flex;
+  }
+}
+
+.tour-detail-main {
+  margin-top: 1rem;
+}
+
+.tour-detail-layout {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
+  gap: 2rem;
+}
+
+@media (max-width: 1000px) {
+  .tour-detail-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.detail-section {
+  margin-bottom: 2.5rem;
+}
+
+.detail-section h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--amd-heading);
+}
+
+.tour-detail-sidebar .sidebar-card {
+  position: sticky;
+  top: 5rem;
+  padding: 1.75rem 1.5rem;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid #f3f4f6;
+}
+
+.tour-detail-sidebar .sidebar-card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.tour-detail-sidebar .sidebar-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.detail-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.detail-tab {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: #eef1f7;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.detail-tab.is-active {
+  background: var(--amd-primary);
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(193, 39, 45, 0.4);
+}
+
+.detail-tab-panel {
+  display: none;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.detail-tab-panel.is-active {
+  display: block;
+}
+
+.detail-tab-panel h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.detail-tab-panel p {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-line;   /* \n in Texten = Zeilenumbruch */
+}
+
+.expect-section {
+  padding: 1.6rem 1.8rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ffffff, #f9fafb);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+}
+
+.expect-section h3 {
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+}
+
+.expect-section p {
+  margin-top: 0.15rem;
+  margin-bottom: 0.4rem;
+}
+
+.stops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.stop-card {
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: var(--amd-shadow-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.stop-card-image {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+}
+
+.stop-card-body {
+  padding: 1.2rem 1.35rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.stop-card-body h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+.stop-card-body p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.stop-card-body ul {
+  padding-left: 1.15rem;
+  margin: 0.35rem 0 0.9rem;
+  font-size: 0.95rem;
+}
+
+.stop-card-body .btn.btn-outline {
+  border-radius: 999px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* Untertitel-Zeile im Stop-Text hervorheben */
+.stop-card-body p:first-of-type {
+  font-weight: 600;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.stop-subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 6px 0 10px;
+  color: var(--amd-text);
+}
+
+#tour-detail-root .detail-section:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Arabische Packliste – alles untereinander, rechtsbündig */
+
+.packing-list-ar {
+  list-style: disc;
+  direction: rtl;
+  padding-left: 0;
+  padding-right: 1.4rem;
+  margin: 0.5rem 0 0;
+}
+
+.packing-list-ar li {
+  margin-bottom: 0.3rem;
+}
+
+/* ===================================================== */
+/* ==========   MIETWAGEN & ANFRAGEFORMULAR   ========== */
+/* ===================================================== */
+
+.amd-page main {
+  padding-bottom: 2rem;
+}
+
+/* Mietwagen-Karten */
+
+.section-services .car-grid {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-card.car-card {
+  background: var(--amd-card-bg);
+  border-radius: var(--amd-radius-lg);
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid #f3f4f6;
+  padding: 1.3rem 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.service-card.car-card h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.service-card.car-card .car-meta {
+  font-size: 0.9rem;
+  color: var(--amd-text-muted);
+}
+
+.service-card.car-card .btn {
+  margin-top: 0.8rem;
+  align-self: flex-start;
+  font-size: 0.88rem;
+}
+
+/* Formular-Layout */
+
+.section-form {
+  padding-top: 0;
+  padding-bottom: 3.5rem;
+}
+
+.amd-form {
+  background: var(--amd-card-bg);
+  border-radius: 1.5rem;
+  padding: 2rem 2.2rem;
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid #e5e7eb;
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .amd-form {
+    padding: 1.5rem 1.3rem;
+  }
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.form-row-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.6rem;
+}
+
+@media (max-width: 700px) {
+  .form-row-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.amd-form label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.amd-form input,
+.amd-form select,
+.amd-form textarea {
+  border-radius: var(--amd-radius-sm);
+  border: 1px solid var(--amd-border);
+  padding: 0.55rem 0.6rem;
+  font-size: 0.93rem;
+  font-family: inherit;
+  background: #ffffff;
+}
+
+.amd-form input:focus,
+.amd-form select:focus,
+.amd-form textarea:focus {
+  outline: 2px solid rgba(27, 111, 90, 0.26);
+  border-color: var(--amd-accent);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+.btn-whatsapp {
+  background: #25d366;
+  color: #ffffff;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe57;
+}
+
+.form-note {
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+}
+.section-partners {
+  background: #f5f5f7;
+  color: #0f172a;
+  padding: 3rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section-partners .section-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-partners .section-title {
+  color: #0f172a;
+}
+
+/* Card mit leichtem Farb-Rahmen (AMD-Rot / Zedern-Grün) */
+.partner-slider {
+  width: min(1000px, 100% - 2rem);
+  margin: 0 auto;
+}
+/* ==========================
+   Partner-Card mit grünem Rahmen
+   ========================== */
+
+.partner-card {
+  background: #ffffff;                  /* reine weiße Karte */
+  border-radius: 24px;
+  border: 4px solid #1b6f5a;            /* fetter Tannenbaum-Grün-Rahmen */
+  padding: 1.4rem 2.2rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+}
+
+/* Logos: dezent, beim Hover „aktiv“ */
+.partner-card .partner-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  animation: partner-scroll 22s linear infinite;
+  will-change: transform;
+}
+
+
+.partner-item {
+  flex: 0 0 auto;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partner-item img {
+  max-height: 62px;          /* ca. 60–65px, wie gewünscht */
+  max-width: 220px;
+  object-fit: contain;
+  filter: grayscale(35%);
+  opacity: 0.9;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    filter 0.18s ease;
+}
+
+
+.partner-item img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* AMD-Löwenlogo etwas größer darstellen */
+.partner-item img[src*="logo-60px.webp"] {
+  max-height: 64px;      /* bleibt leicht größer, kein permanenter Zoom */
+}
+
+/* Viator-Logo etwas dominanter */
+.partner-item img[src*="viator-logo-360x120-60px.webp"] {
+  max-height: 66px;      /* leicht > Basis */
+}
+
+/* Tarifcheck minimal höher */
+.partner-item img[src*="amd-tarifcheck-logo"] {
+  max-height: 64px;
+}
+
+
+/* Animation – wichtig: nur EIN Keyframes-Block, -50% */
+@keyframes partner-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Mobile: kompakter & schneller */
+@media (max-width: 640px) {
+  .section-partners {
+    padding: 2.7rem 0 3.2rem;
+  }
+
+  .partner-card {
+    border-radius: 20px;
+    padding: 1.1rem 1.5rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.32);
+  }
+
+  .partner-card .partner-track {
+    gap: 2rem;
+    animation-duration: 10s; /* schneller auf Handy */
+  }
+
+  .partner-item img {
+    max-height: 48px;
+    max-width: 190px;
+  }
+}
+
+.intro-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  font-size: 0.9rem;
+  color: var(--amd-text);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+/* Intro: Textbreite und schöner Block links */
+.intro-text {
+  max-width: 720px;
+}
+
+/* Extravagante Variante links */
+.intro-text--highlight {
+  position: relative;
+  padding: 1.75rem 2rem;
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(193, 39, 45, 0.06),
+    rgba(27, 111, 90, 0.02)
+  );
+  box-shadow: 0 18px 40px rgba(15, 27, 45, 0.06);
+}
+
+/* kleines Badge oben */
+.intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--amd-accent, #1b6f5a);
+  margin: 0 0 0.75rem;
+}
+
+/* Meta-Liste unter dem Text */
+.intro-meta-list {
+  list-style: none;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .intro-meta-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Karten / Chips */
+.intro-meta-card {
+  border-radius: 999px;
+  padding: 0.75rem 1.3rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 26px rgba(15, 27, 45, 0.06);
+}
+
+.intro-meta-heading {
+  margin: 0 0 0.1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.intro-meta-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Rechte Karte: rote Linie links, wie früher */
+.intro-highlight {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 16px 32px rgba(15, 27, 45, 0.06);
+  border-left: 4px solid var(--amd-primary, #c1272d);
+}
+
+/* Für sehr schmale Screens etwas enger */
+@media (max-width: 640px) {
+  .intro-text--highlight,
+  .intro-highlight {
+    padding: 1.25rem 1.4rem;
+  }
+}
+/* Karten / Meta-Items – elegant, NICHT rund! */
+.intro-meta-card {
+  background: #ffffff;
+  border-radius: 18px;        /* normale schöne Rundung */
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+  display: block;
+  height: auto;               /* verhindert runde Form */
+}
+
+/* Überschrift innerhalb der Karte */
+.intro-meta-heading {
+  margin: 0 0 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #0f1b2d;
+  opacity: 0.75;
+}
+
+/* Fließtext */
+.intro-meta-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #0f1b2d;
+}
+
+/* Gitter / Positionierung */
+.intro-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+/* ===== Brücken-Card: Deutschland ↔ Libanon ===== */
+
+.bridge-card {
+  max-width: 540px;
+  padding: 18px 22px;
+  margin: 24px auto 0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 0% 0%, #ffe5e5 0, #ffffff 55%, #e6f6f2 100%);
+  box-shadow: 0 18px 40px rgba(15, 27, 45, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.bridge-flags {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Rechteckige Flaggen mit sanft abgerundeten Ecken */
+.bridge-flag-rect {
+  width: 80px;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.bridge-flag-rect img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Symbol statt Emoji – bleibt scharf */
+.bridge-icon {
+  font-size: 26px;
+  font-weight: 600;
+  color: #c1272d; /* optional: AMD-Rot, kannst du ändern oder weglassen */
+}
+
+.bridge-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--amd-muted, #55637a);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .bridge-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 24px;
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+.br-mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .br-mobile {
+    display: inline;
+  }
+
+  .bridge-text {
+    text-align: center;
+  }
+}
+
+html[dir="rtl"] .hero .hero-bg-overlay{
+  opacity: .65; /* 0.55–0.75 testen */
+}
+.tour-card-image{
+  height: 280px; /* oder +40px zu deinem jetzigen Wert */
+  background-position: center 60%;
+}
+/* ================== FAQ – Premium Layout ================== */
+
+.faq-wrapper {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+/* Sprach-Card */
+.faq-lang {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 2.2rem 2.4rem;
+  box-shadow: var(--amd-shadow-card);
+  border: 1px solid var(--amd-border);
+}
+
+/* Überschrift Sprache */
+.faq-lang-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 .4rem;
+}
+
+.faq-lang-sub {
+  color: var(--amd-text-muted);
+  margin-bottom: 1.8rem;
+  font-size: 0.95rem;
+}
+
+/* FAQ-Fragen */
+.faq-lang h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 1.6rem 0 .4rem;
+  color: var(--amd-heading);
+}
+
+/* Texte */
+.faq-lang p,
+.faq-lang li {
+  color: #374151;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.faq-lang ul {
+  padding-left: 1.2rem;
+  margin: .4rem 0 1rem;
+}
+
+.faq-lang li {
+  margin-bottom: .35rem;
+}
+
+/* Feine Trennlinie innerhalb einer Sprache */
+.faq-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--amd-border),
+    transparent
+  );
+  margin: 2.2rem 0;
+}
+
+/* Arabisch RTL sauber */
+.faq-lang[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+.faq-lang[dir="rtl"] ul {
+  padding-right: 1.2rem;
+  padding-left: 0;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .faq-lang {
+    padding: 1.6rem 1.4rem;
+  }
+}
+/* ================= FAQ Accordion ================= */
+
+.faq-acc details {
+  border-top: 1px solid var(--amd-border);
+  padding: 1rem 0;
+}
+
+.faq-acc details:first-child {
+  border-top: none;
+}
+
+.faq-acc summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--amd-heading);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-acc summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-acc summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--amd-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.faq-acc details[open] summary::after {
+  content: "–";
+}
+
+.faq-acc .faq-answer {
+  margin-top: .6rem;
+  color: #374151;
+  line-height: 1.7;
+  font-size: .95rem;
+}
+/* Premium Document Link */
+.legal-doc {
+  margin-top: 1.05rem;
+  padding: 1.05rem 1.15rem;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, .10);
+  background:
+    radial-gradient(700px 240px at 14% 18%, rgba(193,39,45,.10), transparent 58%),
+    radial-gradient(700px 240px at 86% 30%, rgba(27,111,90,.08), transparent 58%),
+    rgba(255,255,255,.85);
+  box-shadow: 0 14px 40px rgba(15,23,42,.08);
+}
+
+.legal-doc .legal-doc__label {
+  display: block;
+  font-weight: 800;
+  color: rgba(17,24,39,.90);
+  margin-bottom: .65rem;
+}
+
+.legal-doc .legal-doc__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .72rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(17,24,39,.12);
+  background: rgba(255,255,255,.92);
+  text-decoration: none;
+  font-weight: 800;
+  color: rgba(17,24,39,.92);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  box-shadow: 0 10px 22px rgba(15,23,42,.10);
+}
+
+.legal-doc .legal-doc__link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(193,39,45,.35);
+  box-shadow: 0 16px 34px rgba(15,23,42,.14);
+  text-decoration: none;
+}
+
+.legal-doc .legal-doc__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(193,39,45,.10);
+  border: 1px solid rgba(193,39,45,.18);
+  font-size: .95rem;
+}
+
+.legal-doc .legal-doc__hint {
+  margin: .55rem 0 0;
+  color: rgba(17,24,39,.62);
+  font-size: .90rem;
+}
+
+/* RTL small tweak */
+.legal-card[dir="rtl"] .legal-doc .legal-doc__link {
+  flex-direction: row-reverse;
+}
+/* ================= Premium Document Link (PDF) ================= */
+
+.legal-doc {
+  margin-top: 1.05rem;
+  padding: 1.05rem 1.15rem;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, .10);
+  background:
+    radial-gradient(700px 240px at 14% 18%, rgba(193,39,45,.10), transparent 58%),
+    radial-gradient(700px 240px at 86% 30%, rgba(27,111,90,.08), transparent 58%),
+    rgba(255,255,255,.88);
+  box-shadow: 0 14px 40px rgba(15,23,42,.08);
+}
+
+.legal-doc__label {
+  display: block;
+  font-weight: 900;
+  letter-spacing: .01em;
+  color: rgba(17,24,39,.92);
+  margin-bottom: .7rem;
+}
+
+.legal-doc__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .78rem 1.05rem;
+  border-radius: 999px;
+  border: 1px solid rgba(17,24,39,.12);
+  background: rgba(255,255,255,.92);
+  text-decoration: none;
+  font-weight: 900;
+  color: rgba(17,24,39,.94);
+  box-shadow: 0 10px 22px rgba(15,23,42,.10);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.legal-doc__link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(193,39,45,.35);
+  box-shadow: 0 16px 34px rgba(15,23,42,.14);
+  text-decoration: none;
+}
+
+.legal-doc__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: rgba(193,39,45,.10);
+  border: 1px solid rgba(193,39,45,.18);
+  font-size: .95rem;
+}
+
+.legal-doc__hint {
+  margin: .6rem 0 0;
+  color: rgba(17,24,39,.62);
+  font-size: .90rem;
+}
+
+/* RTL tweak */
+.legal-card[dir="rtl"] .legal-doc__link {
+  flex-direction: row-reverse;
+}
+.section-tours .tour-card-image[style*="transfer-fahrer1"]{
+  background-position: 50% 45%;
+}
+/* Inline-Icon vor Nummern/Links */
+.amd-inline-icon{
+  display:inline-block;
+  margin-right:.45rem;
+  transform: translateY(-.02em);
+  font-size: 1.05em;
+  line-height: 1;
+}
+/* Button-Icons (WhatsApp etc.) */
+.btn.has-icon{
+  gap: .55rem;
+}
+.btn .btn-icon{
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+.amd-subnav{
+  width: min(980px, 100% - 2rem);
+  margin: 1rem auto 0;
+}
+.amd-backlink{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  font-weight:700;
+  text-decoration:none;
+  color: var(--amd-text, #111827);
+}
+.amd-backlink:hover{
+  text-decoration: underline;
+}
+/* =========================================================
+   iOS SAFARI – Global Fix (ganze Website)
+   (nur iPhone/iPad Safari, ohne Android/Chrome zu beeinflussen)
+   ========================================================= */
+
+@supports (-webkit-touch-callout: none){
+
+  /* iOS: keine automatische Text-Vergrößerung */
+  html{
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* iOS: stabile Viewport-Höhen (Adressleisten-“Springen” reduzieren) */
+  body{
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  /* iOS: Inputs -> kein Zoom beim Fokus */
+  input, select, textarea, button{
+    font-size: 16px;
+  }
+
+  /* iOS: Buttons/Inputs ohne Safari Default Look */
+  button,
+  input[type="button"],
+  input[type="submit"]{
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Safe-Area unten: damit Footer/Buttonleisten nicht in die iPhone-Leiste rutschen */
+  :root{
+    --safe-bottom: env(safe-area-inset-bottom);
+  }
+  .amd-footer{
+    padding-bottom: calc(24px + var(--safe-bottom));
+  }
+
+  /* Wenn sticky/fixed Elemente existieren: weniger “Überdecken/Flackern” */
+  .amd-header{
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* iOS: sauberes Scrollen in Overlays/Modals */
+  .pt-modal__panel,
+  .pt-modal__body{
+    -webkit-overflow-scrolling: touch;
+  }
+}
+/* =========================================
+   GLOBAL BACK BUTTON – GLASS PILL
+   gilt für ALLE Seiten (About, AGB, FAQ, etc.)
+   ========================================= */
+
+.amd-subnav{
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: saturate(140%) blur(6px);
+}
+
+.amd-backlink{
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+
+  padding: .55rem 1.05rem;
+  border-radius: 999px;
+
+  font-weight: 600;
+  font-size: .9rem;
+  text-decoration: none;
+
+  color: rgba(255,255,255,.95);
+  background: rgba(0,0,0,.28);
+
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 6px 18px rgba(0,0,0,.18);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: background .2s ease, transform .15s ease;
+}
+
+.amd-backlink:hover{
+  background: rgba(0,0,0,.38);
+  transform: translateY(-1px);
+}
+
+.amd-backlink:active{
+  transform: translateY(0);
+}
+/* =========================================
+   HERO BACK LINK – ROT (wie Car-Rental Back-Pill)
+   gilt z.B. für contact.html (DE/EN/AR)
+   ========================================= */
+
+a.hero-back{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  width: fit-content;
+  max-width: calc(100% - 24px);
+
+  background: #c81e1e;
+  color: #fff;
+
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+
+  text-decoration: none;
+  font-weight: 700;
+
+  /* kein Glas */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  /* Abstand nach unten */
+  margin: 0 0 16px;
+}
+
+a.hero-back:hover{
+  filter: brightness(1.05);
+}
+
+html[dir="rtl"] a.hero-back{
+  /* Arabisch: Pfeil/Spacing fühlt sich sonst “falsch herum” an */
+  flex-direction: row-reverse;
+}
+
+/* =====================================================
+   HERO PHONE – GLOBAL ROT (iOS/Android) + CONTACT BAR (unter Hero)
+   Gilt für DE/EN/AR
+   ===================================================== */
+
+/* 1) Global: Telefon/WhatsApp-Links immer rot (inkl. iOS Auto-Detectors) */
+a[x-apple-data-detectors],
+a[x-apple-data-detectors] *,
+a[href^="tel:"],
+a[href^="tel:"] *,
+a[href^="https://wa.me"],
+a[href^="https://wa.me"] *,
+.phone-link,
+.phone-link *,
+.hero-service-phone,
+.hero-service-phone *{
+  color: var(--amd-primary) !important;
+  -webkit-text-fill-color: var(--amd-primary) !important;
+  text-decoration: none !important;
+}
+
+/* 2) Global: 1 Zeile + sauberes Inline-Layout */
+.phone-link,
+.hero-service-phone,
+a[href^="tel:"],
+a[href^="https://wa.me"]{
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  white-space: nowrap;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+/* 3) Phone-Icon: SVG übernimmt immer Link-Farbe (kein Emoji!) */
+.phone-icon{
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-icon svg{
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* RTL (AR): Icon rechts, Nummer links */
+[dir="rtl"] .phone-link,
+[dir="rtl"] .hero-service-phone,
+[dir="rtl"] a[href^="tel:"],
+[dir="rtl"] a[href^="https://wa.me"]{
+  flex-direction: row-reverse;
+}
+
+/* 4) CONTACT BAR unter dem Hero */
+.hero-contact-bar{
+  width: min(1120px, 100% - 2rem);
+  margin: .9rem auto 0;
+  display: flex;
+  justify-content: flex-start;            /* links */
+  padding-left: clamp(22px, 6vw, 72px);   /* wie Hero-Content */
+}
+
+/* Hinweis: hero-service-note darf hier nicht absolut sein */
+.hero-contact-bar .hero-service-note{
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: .5rem !important;
+
+  padding: .55rem .85rem !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.92) !important;
+  border: 1px solid rgba(17,24,39,.08) !important;
+  box-shadow: 0 10px 26px rgba(2,6,23,.10) !important;
+
+  color: var(--amd-text) !important;
+}
+
+/* 5) Mobile: kompakter + 1 Zeile (und auf sehr kleinen Geräten nur Nummer) */
+@media (max-width: 720px){
+  .hero-contact-bar{
+  padding-left: 0;
+  justify-content: center;   /* ✅ Pill mittig im Bar-Container */
+}
+
+
+  .hero-contact-bar .hero-service-note{
+    width: 100% !important;
+    border-radius: 16px !important;
+    padding: .55rem .65rem !important;
+    gap: .45rem !important;
+    font-size: .9rem !important;
+
+    display: flex !important;
+    align-items: center !important;
+      justify-content: center !important;  /* ✅ Text mittig im Pill */
+  text-align: center;
+
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 390px){
+  .hero-contact-bar .hero-service-note{
+    justify-content: center !important;
+
+  }
+  /* alles außer dem Link (Nummer) ausblenden */
+  .hero-contact-bar .hero-service-note > :not(a){
+    display: none !important;
+  }
+}
+/* ===== FIX: Nummer passt sauber in die Pill (Mobile) ===== */
+@media (max-width: 720px){
+  .hero-contact-bar .hero-service-note{
+    padding-right: .55rem !important; /* etwas weniger rechts */
+  }
+
+  .hero-contact-bar .hero-service-note .amd-phone-ltr{
+    font-size: .88rem !important;     /* minimal kleiner */
+    letter-spacing: -0.01em;          /* optional: enger, ohne auffällig zu wirken */
+  }
+}
+/* ===== HERO CONTACT BAR – ULTRA KOMPAKT (Mobile, v.a. EN) ===== */
+@media (max-width: 720px){
+  .hero-contact-bar .hero-service-note{
+    padding: .42rem .52rem !important;
+    border-radius: 14px !important;
+    gap: .35rem !important;
+    font-size: .82rem !important;
+    box-shadow: 0 8px 18px rgba(2,6,23,.08) !important;
+  }
+
+  .hero-contact-bar .hero-service-note .phone-icon,
+  .hero-contact-bar .hero-service-note .phone-icon svg{
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .hero-contact-bar .hero-service-note .amd-phone-ltr{
+    font-size: .84rem !important;
+    letter-spacing: -0.015em !important;
+  }
+}
+
+/* EN/AR können sehr lang sein → ab sehr schmal nur Nummer + Icon
+   + Nummer etwas kleiner, damit nichts über die Pill hinausragt */
+@media (max-width: 480px){
+  .hero-contact-bar .hero-service-note{
+    padding: .38rem .48rem !important;
+    border-radius: 14px !important;
+    white-space: nowrap !important;
+  }
+
+  .hero-contact-bar .hero-service-note .amd-phone-ltr{
+    font-size: .80rem !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  /* Text vor der Nummer ausblenden → nur Icon + Nummer */
+  .hero-contact-bar .hero-service-note > :not(a){
+    display: none !important;
+  }
+}
+/* =========================================
+   SERVICES Intro – Premium Card (index.html)
+   Override: ganz unten
+   ========================================= */
+
+.section-tours p.section-intro{
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto 2.2rem;
+  padding: 1.25rem 1.6rem;
+  border-radius: 22px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(193, 39, 45, 0.06),
+    rgba(27, 111, 90, 0.02)
+  );
+
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 40px rgba(15, 27, 45, 0.06);
+
+  color: rgba(2, 6, 23, 0.78);
+  text-align: center;
+
+  font-size: clamp(0.98rem, 0.6vw + 0.9rem, 1.08rem);
+  line-height: 1.55;
+}
+
+/* kleiner „Luxury“-Akzent links, passt zu deinem Stil */
+.section-tours p.section-intro{
+  position: relative;
+  overflow: hidden;
+}
+.section-tours p.section-intro::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:14px;
+  bottom:14px;
+  width:4px;
+  border-radius: 999px;
+  background: rgba(193, 39, 45, 0.9);
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  .section-tours p.section-intro{
+    padding: 1.05rem 1.1rem;
+    border-radius: 18px;
+    margin-bottom: 1.6rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .section-tours p.section-intro::before{
+    top:12px;
+    bottom:12px;
+  }
+}
+
+/* RTL (AR): Akzentlinie rechts */
+html[dir="rtl"] .section-tours p.section-intro::before{
+  left: auto;
+  right: 0;
+}
+/* =========================================================
+   ABOUT Header (Über AMD German Center) – Premium Look
+   ========================================================= */
+
+#about-amd .section-header--center .section-subtitle{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem .85rem;
+  border-radius: 999px;
+
+  background: rgba(220,38,38,.08);
+  border: 1px solid rgba(220,38,38,.18);
+
+  font-weight: 750;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+#about-amd .section-header--center .section-title{
+  margin-top: 14px;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+/* Der Text direkt UNTER dem H2 (falls vorhanden) */
+#about-amd .section-header--center + p,
+#about-amd .section-header--center + .section-lead,
+#about-amd .section-header--center + .section-intro{
+  width: min(980px, 100% - 2rem);
+  margin: 16px auto 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+
+  background:
+    radial-gradient(900px 240px at 10% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+  border: 1px solid rgba(15,23,42,.06);
+  box-shadow: 0 14px 40px rgba(15,23,42,.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  text-align: center;
+  color: rgba(2,6,23,.78);
+  font-size: clamp(0.98rem, 0.5vw + 0.9rem, 1.08rem);
+  line-height: 1.55;
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  #about-amd .section-header--center + p,
+  #about-amd .section-header--center + .section-lead,
+  #about-amd .section-header--center + .section-intro{
+    padding: 12px 12px;
+    border-radius: 14px;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+}
+
+/* RTL: Subtitle bleibt gut lesbar */
+html[dir="rtl"] #about-amd .section-header--center .section-subtitle{
+  letter-spacing: 0;
+}
+/* ============================= */
+/* Mobile Burger Navigation      */
+/* ============================= */
+
+.amd-burger{
+  display:none;
+  background:none;
+  border:0;
+  font-size:1.6rem;
+  cursor:pointer;
+  line-height:1;
+
+  padding:.35rem .55rem;
+  border-radius:12px;
+
+  color: var(--amd-text);
+
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 900px){
+  /* damit das Dropdown-Menü sauber unter dem Header “ankert” */
+  .amd-header-inner{ position: relative; }
+
+  /* Pills bleiben sichtbar, Burger wandert ganz nach rechts */
+  .amd-header-right{
+    order: 2;
+    margin-left: auto;
+  }
+
+  .amd-burger{
+    display:block;
+    order: 3;
+    margin-left: .35rem;
+  }
+
+  .amd-nav{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    background:#fff;
+    flex-direction:column;
+    padding:0.8rem 1rem;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    z-index: 50;
+  }
+
+  .amd-nav.is-open{ display:flex; }
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="igGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f58529"/>
+      <stop offset="30%" stop-color="#feda77"/>
+      <stop offset="60%" stop-color="#dd2a7b"/>
+      <stop offset="100%" stop-color="#8134af"/>
+    </linearGradient>
+  </defs>
+  <!-- Hintergrund -->
+  <rect x="6" y="6" width="52" height="52" rx="16" ry="16" fill="url(#igGrad)"/>
+  <!-- Kamera-Rahmen -->
+  <rect x="18" y="18" width="28" height="28" rx="9" ry="9" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <!-- Linse -->
+  <circle cx="32" cy="32" r="7" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <!-- kleiner Punkt -->
+  <circle cx="40.5" cy="23.5" r="2.5" fill="#ffffff"/>
+</svg>

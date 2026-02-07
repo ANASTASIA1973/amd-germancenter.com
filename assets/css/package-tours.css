@@ -1,0 +1,1842 @@
+/* =====================================================
+   PACKAGE TOURS – CLEAN (deduped)
+   Only affects: .page-package-tours
+   ===================================================== */
+
+.page-package-tours {
+  background: radial-gradient(1200px 520px at 18% 22%, rgba(193,39,45,.10), transparent 60%),
+    radial-gradient(900px 460px at 82% 32%, rgba(27,111,90,.10), transparent 58%),
+    var(--amd-bg);
+  --pt-primary: var(--amd-primary);
+  --pt-primary-soft: var(--amd-primary-soft);
+  --pt-accent: var(--amd-accent);
+  --pt-bg: var(--amd-bg);
+  --pt-card: var(--amd-card-bg);
+  --pt-border: var(--amd-border);
+  --pt-ink: var(--amd-text);
+  --pt-muted: var(--amd-text-muted);
+  --pt-shadow-soft: var(--amd-shadow-soft);
+  --pt-shadow-card: var(--amd-shadow-card);
+}
+
+.page-package-tours .pt-container {
+  width: min(1120px, 100% - 2rem);
+  margin: 0 auto;
+}
+
+.page-package-tours .pt-section {
+  padding: 3rem 0;
+}
+
+.page-package-tours .pt-section + .pt-section {
+  padding-top: 0;
+}
+
+.page-package-tours .pt-kicker {
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: .78rem;
+  color: rgba(15,23,42,.78);
+  margin: 0 0 .75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.page-package-tours .pt-lead {
+  margin: 0;
+  color: var(--pt-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  max-width: 62ch;
+}
+
+.page-package-tours .pt-section-head {
+  margin-bottom: 1.25rem;
+}
+
+.page-package-tours .pt-section-title {
+  margin: 0 0 .25rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.page-package-tours .pt-section-sub {
+  margin: 0;
+  color: var(--amd-text-muted);
+}
+
+.page-package-tours .pt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 1.15rem;
+}
+
+/* HERO ------------------------------------------------ */
+/* Gemeinsame Zeile unten im Hero (Button + Preis-Pill) */
+
+.page-package-tours .pt-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  width: min(1240px, 100% - 2rem);
+  margin: 1.5rem auto 0;
+  box-shadow: 0 22px 70px rgba(15,23,42,.18);
+  border: 1px solid rgba(255,255,255,.65);
+}
+.page-package-tours .pt-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: .75rem;
+  margin-top: 1.4rem;
+}
+
+/* Abstand des "Reise entdecken" Buttons vom linken Kartenrand (Desktop) */
+.page-package-tours .pt-hero .pt-actions {
+  margin-left: 1.25rem;
+}
+
+.page-package-tours .pt-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url("/assets/img/hero-package-tours.jpg") 72% 50% / cover no-repeat;
+  filter: saturate(.95) contrast(1.05);
+  will-change: auto;
+}
+
+.page-package-tours .pt-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    92deg,
+    rgba(3,23,56,.72) 0%,
+    rgba(3,23,56,.58) 38%,
+    rgba(3,23,56,.30) 62%,
+    rgba(3,23,56,.08) 86%,
+    rgba(3,23,56,.04) 100%
+  );
+}
+/* Inhalt im Hero – Textblock über dem Overlay */
+.page-package-tours .pt-hero-content {
+  position: relative;      /* eigener Stack */
+  z-index: 2;              /* über dem Overlay */
+  padding: 1.8rem 1.8rem 1.6rem;
+  max-width: 720px;
+}
+
+/* Zurück-Button im Package-Tours-Hero: rote Pill */
+.page-package-tours .pt-back {
+  position: relative;
+  z-index: 3;               /* noch mal über dem Text / Overlay */
+
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+
+  padding: .45rem 1.1rem;
+  border-radius: 999px;
+
+  background: #c81e1e;        /* Rot */
+  color: #ffffff;             /* Text + Pfeil weiß */
+  text-decoration: none;
+  font-weight: 800;
+  font-size: .86rem;
+  box-shadow: 0 10px 26px rgba(0,0,0,.25);
+}
+
+
+.page-package-tours .pt-back:hover {
+  filter: brightness(1.05);
+  text-decoration: none;
+}
+
+
+.page-package-tours .pt-hero .pt-kicker {
+  color: rgba(255,255,255,.72);
+  margin-top: .85rem;
+}
+
+.page-package-tours .pt-title {
+  margin: 0 0 1rem;
+  color: #fff;
+  font-weight: 950;
+  font-size: clamp(2.05rem, 4.7vw, 3.55rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.page-package-tours .pt-subtitle {
+  margin: 0;
+  color: rgba(255,255,255,.88);
+  max-width: 58ch;
+}
+
+.page-package-tours .pt-trustline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: 1.05rem;
+}
+
+.page-package-tours .pt-trustline span {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .42rem .72rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.16);
+  color: rgba(255,255,255,.90);
+  font-weight: 750;
+  font-size: .93rem;
+  backdrop-filter: blur(10px);
+}
+
+.page-package-tours .pt-price-badge {
+  position: absolute;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  display: inline-flex;
+  align-items: flex-end;
+  gap: .35rem;
+  padding: .85rem .95rem;
+  border-radius: 18px;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+.page-package-tours .pt-price-badge__amount {
+  font-weight: 950;
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.page-package-tours .pt-price-badge__note {
+  color: rgba(255,255,255,.85);
+  font-weight: 800;
+  font-size: .78rem;
+  line-height: 1;
+  white-space: nowrap;
+  position: relative;
+  top: -0.55em;
+}
+/* Service-Pill unter dem Hero (Pauschalreisen) */
+.page-package-tours .pt-hero-contact-bar {
+  width: min(1120px, 100% - 2rem);
+  margin: 0.9rem auto 0;           /* etwas Luft unter dem Hero */
+  display: flex;
+  justify-content: center;
+}
+
+.page-package-tours .pt-hero-service-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  padding: 0.45rem 1.4rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(17,24,39,.08);
+  box-shadow: 0 10px 25px rgba(15,23,42,.16);
+
+  max-width: calc(100% - 2rem);
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.page-package-tours .pt-hero-service-note .pt-hero-service-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile: minimal kleiner, aber weiterhin eine Zeile auf iPhone/Android */
+@media (max-width: 720px) {
+  .page-package-tours .pt-hero-service-note {
+    font-size: 0.82rem;
+    padding: 0.4rem 1rem;
+  }
+}
+
+/* Sehr kleine Breite: Text darf umbrechen, Nummer bleibt sauber */
+@media (max-width: 420px) {
+  .page-package-tours .pt-hero-service-note {
+    flex-wrap: wrap;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .page-package-tours .pt-hero-service-note .pt-hero-service-text {
+    white-space: normal;
+  }
+}
+
+/* INTRO & SIDE CARD ----------------------------------- */
+
+.page-package-tours .pt-intro-card {
+  display: grid;
+  grid-template-columns: 1.35fr .65fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.page-package-tours .pt-intro-card > div {
+  position: relative;
+  border-radius: 22px;
+  padding: 1.35rem 1.35rem 1.25rem;
+  border: 1px solid rgba(17,24,39,.08);
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(193,39,45,.10), transparent 55%),
+    radial-gradient(900px 520px at 85% 35%, rgba(27,111,90,.08), transparent 58%),
+    rgba(255,255,255,.86);
+  box-shadow: 0 22px 70px rgba(15,23,42,.10);
+  overflow: hidden;
+}
+
+.page-package-tours .pt-intro-card > div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, rgba(27,111,90,.85), transparent);
+  opacity: .8;
+}
+
+.page-package-tours .pt-kicker::before {
+  content: "";
+  width: 18px;
+  height: 2px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--pt-accent), rgba(27,111,90,.12));
+}
+
+.page-package-tours .pt-side {
+  border-radius: 22px;
+  position: relative;
+}
+
+.page-package-tours .pt-side-box {
+  border-radius: 22px;
+  border: 1px solid rgba(17,24,39,.10);
+  background:
+    radial-gradient(520px 320px at 90% 15%, rgba(193,39,45,.14), transparent 55%),
+    radial-gradient(600px 360px at 10% 80%, rgba(27,111,90,.09), transparent 60%),
+    rgba(255,255,255,.92);
+  box-shadow: 0 26px 80px rgba(15,23,42,.14);
+  padding: 1.25rem;
+  position: sticky;
+  top: 1rem;
+  overflow: hidden;
+}
+
+.page-package-tours .pt-side-box::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(27,111,90,.20);
+  pointer-events: none;
+}
+
+.page-package-tours .pt-side-price {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: .75rem;
+  padding-bottom: .85rem;
+  margin-bottom: .9rem;
+  border-bottom: 1px solid rgba(15,23,42,.08);
+}
+
+.page-package-tours .pt-side-amount {
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--pt-ink);
+}
+
+.page-package-tours .pt-side-unit {
+  font-weight: 800;
+  color: rgba(15,23,42,.62);
+}
+
+.page-package-tours .pt-side-note {
+  margin: 0 0 1rem 0;
+  color: rgba(15,23,42,.72);
+  line-height: 1.55;
+}
+
+.page-package-tours .pt-side-actions {
+  display: grid;
+  gap: .75rem;
+}
+
+.page-package-tours .pt-side-actions .btn,
+.page-package-tours .pt-side-actions button.btn {
+  width: 100%;
+  justify-content: center;
+  padding: .92rem 1rem;
+  border-radius: 999px;
+}
+
+.page-package-tours #btnOpenInquiry {
+  background: var(--pt-primary);
+  color: #fff;
+  border-color: var(--pt-primary);
+  box-shadow: 0 10px 28px rgba(185,28,28,.25);
+  font-weight: 800;
+}
+
+.page-package-tours #btnOpenInquiry:hover {
+  box-shadow: 0 16px 40px rgba(185,28,28,.32);
+  transform: translateY(-1px);
+}
+
+.page-package-tours .pt-side-actions a.btn.btn-outline {
+  background: rgba(255,255,255,.96);
+  border-color: rgba(15,23,42,.10);
+  font-weight: 600;
+}
+
+/* PRIMARY BUTTON SHINE ------------------------------- */
+
+.page-package-tours .btn.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.page-package-tours .btn.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  transform: translateX(-120%);
+}
+
+.page-package-tours .btn.btn-primary:hover::after {
+  transform: translateX(120%);
+  transition: transform .8s ease;
+}
+
+/* Kids-Hinweis --------------------------------------- */
+
+.pt-side-kids {
+  margin: 0 0 1rem 0;
+  padding: .65rem .85rem;
+  border-radius: 14px;
+  border: 1px solid rgba(193,39,45,.28);
+  background: rgba(193,39,45,.08);
+  color: rgba(15,23,42,.78);
+  line-height: 1.4;
+}
+
+.pt-side-kids strong {
+  color: rgba(15,23,42,.92);
+}
+
+/* FEATURES ------------------------------------------- */
+
+.page-package-tours .pt-features {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.page-package-tours .pt-feature {
+  background: var(--amd-card-bg);
+  border-radius: 18px;
+  border: 1px solid rgba(17,24,39,.08);
+  box-shadow: var(--amd-shadow-card);
+  padding: 1.05rem 1.05rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-package-tours .pt-feature::before {
+  content: "";
+  position: absolute;
+  inset: -40px -40px auto auto;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle at 30% 30%, rgba(193,39,45,.18), transparent 62%);
+  transform: rotate(10deg);
+}
+
+.page-package-tours .pt-feature strong {
+  display: block;
+  font-size: 1.02rem;
+  margin-bottom: .35rem;
+}
+
+.page-package-tours .pt-feature p {
+  margin: 0;
+  color: rgba(17,24,39,.78);
+}
+
+/* ITINERARY / DAYS ----------------------------------- */
+
+.page-package-tours .pt-itinerary {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.35rem;
+}
+
+.page-package-tours details.pt-day {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.page-package-tours details.pt-day summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.15rem 1.25rem;
+  border-radius: 26px;
+  border: 1px solid rgba(17,24,39,.10);
+  background:
+    radial-gradient(900px 520px at 12% 15%, rgba(193,39,45,.12), transparent 58%),
+    radial-gradient(700px 420px at 88% 35%, rgba(193,39,45,.10), transparent 60%),
+    rgba(255,255,255,.92);
+  box-shadow:
+    0 24px 70px rgba(15,23,42,.10),
+    0 1px 0 rgba(255,255,255,.65) inset;
+  position: relative;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.page-package-tours details.pt-day summary::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, rgba(193,39,45,.9), transparent);
+  opacity: .85;
+}
+
+.page-package-tours details.pt-day summary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(193,39,45,.24);
+  box-shadow:
+    0 30px 90px rgba(15,23,42,.14),
+    0 0 0 6px rgba(193,39,45,.10);
+}
+
+.page-package-tours details.pt-day summary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 30px 90px rgba(15,23,42,.14),
+    0 0 0 6px rgba(193,39,45,.16);
+}
+
+.page-package-tours .pt-day-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .42rem .75rem;
+  border-radius: 999px;
+  font-weight: 950;
+  letter-spacing: .06em;
+  font-size: .78rem;
+  color: rgba(15,23,42,.86);
+  border: 1px solid rgba(27,111,90,.22);
+  background: linear-gradient(180deg, rgba(193,39,45,.10), rgba(255,255,255,.65));
+  box-shadow: 0 10px 28px rgba(15,23,42,.10);
+}
+
+.page-package-tours .pt-day-title {
+  margin: 0;
+  color: var(--pt-ink);
+  font-weight: 950;
+  font-size: 1.14rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.page-package-tours .pt-day-openhint {
+  margin-top: .22rem;
+  color: rgba(15,23,42,.66);
+  font-size: .95rem;
+}
+
+.page-package-tours .pt-day-meta {
+  color: rgba(15,23,42,.70);
+  font-weight: 850;
+  white-space: nowrap;
+  padding-left: .5rem;
+}
+
+.page-package-tours .pt-fold-icon {
+  opacity: .85;
+  color: rgba(17,24,39,.55);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.page-package-tours details.pt-day[open] summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: rgba(17,24,39,.06);
+  box-shadow: 0 18px 55px rgba(15,23,42,.10) !important;
+  border-bottom: 0 !important;
+}
+
+.page-package-tours .pt-day-body {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 1.2rem;
+  padding: 1.15rem 1.25rem 1.25rem;
+  border: 1px solid rgba(17,24,39,.10);
+  border-top: 0 !important;
+  border-bottom-left-radius: 26px;
+  border-bottom-right-radius: 26px;
+  background: rgba(255,255,255,.92) !important;
+  box-shadow: 0 22px 70px rgba(15,23,42,.12) !important;
+  margin-top: 0 !important;
+}
+
+.page-package-tours .pt-day-media {
+  border-radius: 22px;
+  border: 1px solid rgba(17,24,39,.08);
+  background:
+    radial-gradient(600px 340px at 20% 10%, rgba(193,39,45,.08), transparent 60%),
+    rgba(255,255,255,.86);
+  box-shadow: 0 18px 55px rgba(15,23,42,.10);
+  overflow: hidden;
+  padding: .9rem;
+}
+
+.page-package-tours .pt-day-media > img:first-child {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 18px;
+  border: 1px solid rgba(27,111,90,.18);
+  box-shadow: 0 16px 45px rgba(15,23,42,.12);
+}
+
+.page-package-tours .pt-thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem !important;
+  margin-top: .85rem;
+}
+
+.page-package-tours .pt-thumb {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(193,39,45,.16);
+  box-shadow: 0 12px 34px rgba(15,23,42,.10);
+  transform: translateY(0);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  aspect-ratio: 16 / 9;
+}
+
+.page-package-tours .pt-thumb:hover {
+  transform: translateY(-2px);
+  border-color: rgba(193,39,45,.28);
+  box-shadow: 0 18px 55px rgba(15,23,42,.14);
+}
+
+.page-package-tours .pt-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Blocks + Folds ------------------------------------- */
+
+.page-package-tours .pt-block {
+  border-radius: 22px;
+  border: 1px solid rgba(17,24,39,.08) !important;
+  background:
+    radial-gradient(700px 380px at 10% 0%, rgba(193,39,45,.06), transparent 55%),
+    rgba(255,255,255,.88) !important;
+  box-shadow: 0 18px 55px rgba(15,23,42,.08) !important;
+  padding: 1rem 1.05rem;
+}
+
+.page-package-tours .pt-block h4,
+.page-package-tours .pt-block strong {
+  color: var(--pt-ink);
+}
+
+.page-package-tours .pt-block p {
+  margin: .55rem 0 0;
+  color: rgba(15,23,42,.78);
+  line-height: 1.65;
+}
+
+.page-package-tours .pt-list {
+  margin: .55rem 0 0;
+  padding-left: 1.1rem;
+  color: rgba(15,23,42,.78);
+}
+
+.page-package-tours details.pt-fold {
+  padding: 0;
+  border-radius: 20px;
+  border: 1px solid rgba(17,24,39,.08) !important;
+  background:
+    radial-gradient(700px 380px at 12% 10%, rgba(193,39,45,.10), transparent 60%),
+    rgba(255,255,255,.90);
+  box-shadow: 0 16px 45px rgba(15,23,42,.10) !important;
+  overflow: hidden;
+}
+
+.page-package-tours details.pt-fold > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .9rem;
+  padding: 1rem;
+}
+
+.page-package-tours details.pt-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-package-tours .pt-fold-title {
+  font-weight: 950;
+  letter-spacing: -0.01em;
+  color: rgba(15,23,42,.90);
+}
+
+.page-package-tours details.pt-fold[open] .pt-fold-icon {
+  transform: rotate(180deg);
+}
+
+.page-package-tours .pt-fold-body {
+  padding: 0 1rem 1rem;
+}
+
+.page-package-tours details.pt-fold > summary.pt-fold-summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .95rem 1.05rem !important;
+  list-style: none;
+  position: relative;
+}
+
+.page-package-tours details.pt-fold > summary.pt-fold-summary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, rgba(193,39,45,.9), transparent);
+}
+
+.page-package-tours details.pt-fold[open] {
+  border-color: rgba(193,39,45,.22);
+  box-shadow:
+    0 22px 70px rgba(15,23,42,.12),
+    0 0 0 6px rgba(193,39,45,.08) !important;
+}
+
+.page-package-tours details.pt-fold .pt-list {
+  margin: 0;
+  padding: .15rem 1.25rem 1.1rem 2rem;
+}
+
+/* HOTEL SECTION -------------------------------------- */
+
+.page-package-tours .pt-hotel {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1.1fr .9fr;
+  align-items: start;
+}
+
+.page-package-tours .pt-video {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(17,24,39,.10);
+  box-shadow: 0 16px 60px rgba(0,0,0,.10);
+  background: #000;
+}
+
+
+.page-package-tours .pt-video iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: 0;
+  display: block;
+}
+
+.page-package-tours .pt-hotel-card {
+  background: var(--amd-card-bg);
+  border-radius: 22px;
+  border: 1px solid rgba(17,24,39,.08);
+  box-shadow: var(--amd-shadow-card);
+  padding: 1.1rem;
+}
+
+.page-package-tours .pt-hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.page-package-tours .pt-mini h4 {
+  margin: 0 0 .6rem;
+  font-size: 1rem;
+}
+
+.page-package-tours .pt-mini ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: rgba(17,24,39,.82);
+}
+
+/* HOTEL GALLERY + AWARD ------------------------------ */
+
+.page-package-tours .pt-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .6rem;
+  margin-top: 1rem;
+}
+
+.page-package-tours .pt-gallery img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid rgba(17,24,39,.10);
+  box-shadow: 0 14px 40px rgba(15,23,42,.12);
+}
+
+.page-package-tours .pt-gallery-hidden {
+  display: none;
+}
+
+.page-package-tours .pt-award {
+  margin-top: 1rem;
+  padding: .9rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(27,111,90,.22);
+  background: linear-gradient(180deg, rgba(27,111,90,.10), rgba(27,111,90,.02));
+  color: rgba(17,24,39,.82);
+  font-weight: 650;
+}
+
+/* IMPRESSIONS ---------------------------------------- */
+
+.page-package-tours .pt-impressions {
+  margin-top: .95rem;
+  border-radius: 22px;
+  border: 1px solid rgba(17,24,39,.08);
+  background:
+    radial-gradient(600px 340px at 18% 8%, rgba(193,39,45,.10), transparent 62%),
+    rgba(255,255,255,.88);
+  box-shadow: 0 18px 55px rgba(15,23,42,.10);
+  padding: .95rem;
+}
+
+.page-package-tours .pt-impressions__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .1rem .15rem .75rem;
+}
+
+.page-package-tours .pt-impressions__head h5 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+  color: rgba(15,23,42,.92);
+}
+
+.page-package-tours .pt-impressions__meta {
+  font-size: .9rem;
+  font-weight: 850;
+  color: rgba(15,23,42,.62);
+  white-space: nowrap;
+}
+
+.page-package-tours .pt-impressions__grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-auto-rows: 122px;
+  gap: .85rem;
+}
+
+.page-package-tours .pt-impressions__item {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(193,39,45,.16);
+  box-shadow: 0 14px 40px rgba(15,23,42,.10);
+  transform: translateY(0);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.page-package-tours .pt-impressions__item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(193,39,45,.28);
+  box-shadow: 0 18px 55px rgba(15,23,42,.14);
+}
+
+.page-package-tours .pt-impressions__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.page-package-tours .pt-impressions__item:nth-child(1) {
+  grid-row: span 2;
+}
+
+/* INSURANCE – GENERAL CARD (unten, mit Logo) --------- */
+
+.page-package-tours .pt-insurance-actions {
+  padding: 1.05rem 1.35rem 1.25rem;
+  display: grid;
+  gap: .55rem;
+  justify-items: start;
+}
+
+.page-package-tours .pt-insurance-btn {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.page-package-tours .pt-insurance-underlink {
+  display: inline-block;
+  max-width: 680px;
+  color: rgba(15,23,42,.62);
+  font-size: .95rem;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.page-package-tours .pt-insurance-underlink:hover {
+  text-decoration: underline;
+}
+
+/* INSURANCE TEASER IM HOTELBLOCK (Rest House Tyre) --- */
+/* → Fix: Karte + Button wirklich mittig, auch iPhone */
+
+.page-package-tours .pt-insurance-teaser {
+  border-radius: 22px;
+  border: 1px solid rgba(17,24,39,.10);
+  background:
+    radial-gradient(700px 360px at 12% 12%, rgba(193,39,45,.12), transparent 60%),
+    radial-gradient(800px 420px at 88% 20%, rgba(193,39,45,.10), transparent 62%),
+    rgba(255,255,255,.92);
+  box-shadow: 0 22px 70px rgba(15,23,42,.12);
+  padding: 1.05rem 1.1rem 1.05rem;
+  margin-top: 1rem;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-package-tours .pt-insurance-teaser__title {
+  margin: 0 0 .35rem;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+  color: rgba(15,23,42,.92);
+  font-size: 1.15rem;
+}
+
+.page-package-tours .pt-insurance-teaser__text {
+  margin: 0 0 .85rem;
+  color: rgba(15,23,42,.72);
+  line-height: 1.65;
+}
+
+.page-package-tours .pt-insurance-teaser__btn {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: .95rem 1.15rem;
+  box-shadow: 0 18px 55px rgba(193,39,45,.18);
+  display: inline-flex;
+  justify-content: center;
+}
+
+/* FIX – Untere Reiseversicherung-Karte zentrieren */
+.page-package-tours .pt-block.pt-insurance {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* LISTEN + FOOTER-LISTEN ------------------------------ */
+
+.page-package-tours ul {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.page-package-tours li {
+  position: relative;
+  padding-left: 1.05rem;
+}
+
+.page-package-tours li::before {
+  content: "";
+  position: absolute;
+  left: .15rem;
+  top: .62em;
+  width: .42rem;
+  height: .42rem;
+  border-radius: 999px;
+  background: var(--amd-accent);
+  box-shadow: 0 0 0 4px rgba(0,0,0,.06);
+}
+
+.page-package-tours li::marker {
+  color: var(--amd-accent);
+}
+
+.page-package-tours details.pt-day summary:focus,
+.page-package-tours details.pt-day summary:focus-visible {
+  outline: none !important;
+}
+
+.page-package-tours details.pt-fold > summary.pt-fold-summary::before {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--amd-accent),
+    transparent
+  ) !important;
+}
+
+.page-package-tours .amd-footer li::before {
+  content: none !important;
+}
+
+.page-package-tours .amd-footer ul {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.page-package-tours .amd-footer li {
+  padding-left: 0;
+}
+
+/* RTL LISTEN ----------------------------------------- */
+
+html[dir="rtl"] .page-package-tours ul {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+html[dir="rtl"] .page-package-tours li {
+  padding-right: 1.05rem;
+  padding-left: 0;
+  text-align: right;
+}
+
+html[dir="rtl"] .page-package-tours li::before {
+  right: .15rem;
+  left: auto;
+}
+
+/* RTL Hero / Badge Positions ------------------------- */
+
+html[dir="rtl"] .page-package-tours .pt-hero--premium .pt-hero-bg {
+  background-position: 22% 50%;
+}
+
+html[dir="rtl"] .page-package-tours .pt-price-badge {
+  left: 24px !important;
+  right: auto !important;
+  bottom: 26px !important;
+  z-index: 2;
+}
+
+/* LIGHTBOX ------------------------------------------- */
+
+.pt-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(10,12,16,.72);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+}
+
+.pt-lightbox.is-open {
+  display: flex;
+}
+
+.pt-lightbox__img {
+  max-width: min(1120px, 100%);
+  max-height: 86vh;
+  border-radius: 18px;
+  box-shadow: 0 22px 70px rgba(0,0,0,.45);
+}
+
+.pt-lightbox__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.pt-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.pt-lightbox__prev {
+  left: 14px;
+}
+
+.pt-lightbox__next {
+  right: 14px;
+}
+
+.pt-lightbox__nav:disabled {
+  opacity: .25;
+  cursor: not-allowed;
+}
+
+main img {
+  cursor: zoom-in;
+}
+
+/* MODAL / FORM (Inquiry) ----------------------------- */
+
+.pt-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 9998;
+  overflow: hidden; /* Hintergrund scrollt nicht */
+}
+
+.pt-modal.is-open {
+  display: block;
+}
+
+.pt-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,12,16,.62);
+  backdrop-filter: blur(6px);
+}
+
+.pt-modal__panel {
+  position: relative;
+  width: min(760px, calc(100% - 28px));
+  margin: 6vh auto;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(15,23,42,.10);
+  border-radius: 18px;
+  box-shadow: 0 26px 80px rgba(15,23,42,.25);
+  padding: 1.1rem 1.1rem 1rem;
+  height: auto;
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* iPhone */
+}
+
+.pt-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,.12);
+  background: rgba(255,255,255,.9);
+  font-size: 22px;
+  cursor: pointer;
+}
+/* Arabisch: Close-Button links, damit Text rechts frei bleibt */
+html[dir="rtl"] .page-package-tours .pt-modal__close {
+  right: auto;
+  left: 12px;
+}
+/* Mobile: mehr Abstand zum Rand + iPhone Safe-Area + Platz im Kopfbereich fürs X */
+@media (max-width: 520px) {
+  .page-package-tours .pt-modal__close {
+    top: calc(16px + env(safe-area-inset-top));
+    right: calc(16px + env(safe-area-inset-right));
+  }
+
+  html[dir="rtl"] .page-package-tours .pt-modal__close {
+    left: calc(16px + env(safe-area-inset-left));
+    right: auto;
+  }
+
+  /* damit Titel/Hint nicht "unter" dem X kleben (LTR) */
+  .page-package-tours .pt-modal__head {
+    padding-right: 3.25rem;
+  }
+
+  /* Arabisch: Platz auf der linken Seite fürs X */
+  html[dir="rtl"] .page-package-tours .pt-modal__head {
+    padding-left: 3.25rem;
+    padding-right: 1rem; /* bleibt sauber */
+  }
+}
+
+
+/* Arabisch: Kopfbereich klar rechts ausrichten */
+html[dir="rtl"] .page-package-tours .pt-modal__head {
+  text-align: right;
+  padding-right: 1.4rem;
+  padding-left: 1rem;
+}
+
+.pt-modal__title {
+  margin: 0 0 .15rem 0;
+}
+
+.pt-modal__hint {
+  margin: 0;
+  color: rgba(15,23,42,.72);
+}
+
+.pt-modal__head {
+  margin: -1.1rem -1.1rem .9rem;
+  padding: 1rem 1.1rem .85rem;
+  border-bottom: 1px solid rgba(15,23,42,.08);
+  background: linear-gradient(180deg, rgba(193,39,45,.10), rgba(255,255,255,0));
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+.pt-modal__panel::-webkit-scrollbar {
+  width: 10px;
+}
+
+.pt-modal__panel::-webkit-scrollbar-thumb {
+  background: rgba(15,23,42,.18);
+  border-radius: 999px;
+}
+
+.pt-modal__panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pt-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .85rem;
+}
+
+.pt-field {
+  display: grid;
+  gap: .35rem;
+}
+
+.pt-field span {
+  font-size: .88rem;
+  color: rgba(15,23,42,.82);
+}
+
+.pt-field input,
+.pt-field textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(15,23,42,.14);
+  padding: .75rem .85rem;
+  font: inherit;
+  background: rgba(255,255,255,.98);
+  outline: none;
+}
+
+.pt-field input:focus,
+.pt-field textarea:focus {
+  border-color: rgba(185,28,28,.55);
+  box-shadow: 0 0 0 4px rgba(185,28,28,.12);
+}
+
+.pt-field--full {
+  grid-column: 1 / -1;
+}
+
+/* Container für die beiden Anfrage-Buttons */
+.pt-form__actions {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* zwei exakt gleich breite Spalten */
+  gap: .75rem;
+  align-items: stretch;
+}
+
+
+.pt-form__mailto {
+  margin-left: auto;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pt-form__small {
+  margin: .75rem 0 0 0;
+  font-size: .82rem;
+  color: rgba(15,23,42,.65);
+}
+/* === INQUIRY MODAL BUTTONS – EINHEITLICH =================== */
+
+/* === INQUIRY MODAL BUTTONS – EINHEITLICH =================== */
+
+.page-package-tours .pt-form__actions .btn {
+  border-radius: 999px;
+  padding: .85rem 1rem;
+  font-weight: 800;
+  justify-content: center;
+  width: 100%;          /* nimmt immer die volle Spaltenbreite */
+}
+
+
+/* WhatsApp-Button: Farbe wie im Autovermietungs-Formular */
+.page-package-tours .pt-form__actions .btn.btn-whatsapp {
+  background: #047857;         /* dunkleres, sattes Grün wie im Referenzbild */
+  color: #fff;
+  border: none;
+  box-shadow: 0 10px 28px rgba(0,0,0,.16);
+}
+
+.page-package-tours .pt-form__actions .btn.btn-whatsapp:hover {
+  background: #036149;         /* leicht dunkler beim Hover */
+  transform: translateY(-1px);
+}
+
+
+/* E-Mail = rot (wie #btnOpenInquiry) */
+.page-package-tours .pt-form__actions .btn.btn-outline {
+  background: var(--pt-primary);
+  color: #fff;
+  border-color: var(--pt-primary);
+  box-shadow: 0 10px 28px rgba(185,28,28,.25);
+}
+
+.page-package-tours .pt-form__actions .btn.btn-outline:hover {
+  box-shadow: 0 16px 40px rgba(185,28,28,.32);
+  transform: translateY(-1px);
+}
+
+/* Icon neben Text sauber ausrichten */
+.page-package-tours .pt-form__actions .btn.has-icon .btn-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-right: .45rem;
+}
+
+html[dir="rtl"] .page-package-tours .pt-form__actions .btn.has-icon .btn-icon {
+  margin-right: 0;
+  margin-left: .45rem;
+}
+
+/* Handy: Buttons untereinander, gleiche Breite */
+@media (max-width: 720px) {
+  .page-package-tours .pt-form__actions {
+    grid-template-columns: 1fr; /* Buttons untereinander */
+  }
+
+  .page-package-tours .pt-form__actions .btn {
+    width: 100%; /* volle Breite, wie beim Autoverleih */
+  }
+}
+
+
+
+/* GENERELLES SUMMARY-FOCUS-OUTLINE ------------------- */
+
+.page-package-tours summary:focus,
+.page-package-tours summary:focus-visible {
+  outline: none !important;
+}
+
+/* RESPONSIVE BREAKPOINTS ----------------------------- */
+
+/* max-width: 980px – Features & Hotel-Grid            */
+@media (max-width: 980px) {
+
+  .page-package-tours .pt-features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-package-tours .pt-intro-card {
+    grid-template-columns: 1fr;
+  }
+
+  .page-package-tours .pt-hotel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* max-width: 920px – Day-Body einspaltig             */
+@media (max-width: 920px) {
+
+  .page-package-tours .pt-day-body {
+    grid-template-columns: 1fr;
+  }
+
+  .page-package-tours .pt-day-meta {
+    white-space: normal;
+    text-align: right;
+  }
+}
+/* max-width: 720px – iPhone-Fokus ------------------- */
+@media (max-width: 720px) {
+    /* Hero auf Handy etwas höher, damit Text nicht mit Buttons kollidiert */
+  .page-package-tours .pt-hero {
+    min-height: 380px;
+  }
+
+
+
+  .page-package-tours .pt-back {
+    position: absolute !important;
+    top: 12px !important;
+    left: 12px !important;
+    z-index: 6 !important;
+
+    /* Text */
+    font-size: 12px !important;
+    color: #fff !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+
+    /* Größe */
+    padding: .45rem 1rem !important;
+    max-width: none !important;
+  }
+
+  /* RTL-Variante für Arabisch */
+  html[dir="rtl"] .page-package-tours .pt-back {
+    left: auto !important;
+    right: 12px !important;
+  }
+
+  /* Hero-Textblock: kompakter auf iPhone */
+  .page-package-tours .pt-hero-content {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 3.2rem 1.1rem 3.2rem !important;
+  }
+
+
+  /* H1 & Untertitel etwas kleiner auf iPhone */
+  .page-package-tours .pt-title {
+    font-size: 1.60rem !important;
+    line-height: 1.05 !important;
+  }
+
+
+  .page-package-tours .pt-subtitle {
+    font-size: .95rem !important;
+    line-height: 1.5 !important;
+  }
+  /* Hero-Actions: unten links neben der Preis-Pill, aber kleiner */
+  .page-package-tours .pt-hero .pt-actions {
+    position: absolute !important;
+    left: 12px !important;
+    bottom: 12px !important;
+    z-index: 4 !important;
+    margin: 0;
+    padding: 0;
+    gap: .5rem;
+    justify-content: flex-start;
+  }
+
+  .page-package-tours .pt-hero .pt-actions .btn.btn-primary {
+    font-size: .9rem !important;
+    padding: .7rem 1.1rem !important;
+    white-space: nowrap;
+  }
+
+
+
+  .page-package-tours .pt-intro-card {
+    grid-template-columns: 1fr;
+  }
+
+  .page-package-tours .pt-features {
+    grid-template-columns: 1fr;
+  }
+
+  .page-package-tours .pt-hotel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-package-tours .pt-gallery img {
+    height: 120px;
+  }
+
+  .pt-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-package-tours .pt-insurance-actions {
+    justify-items: stretch;
+  }
+
+  .page-package-tours .pt-insurance-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-package-tours .pt-insurance-underlink {
+    max-width: 100%;
+  }
+
+  /* iPhone / kleine Screens: Versicherungskarte wirklich mittig */
+  .page-package-tours .pt-insurance-teaser {
+    width: calc(100% - 2.5rem);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Button in der Teaserkarte auf Mobile vollbreit + kleiner */
+.page-package-tours .pt-insurance-teaser__btn {
+    width: 100%;
+    font-size: .8rem !important;
+    line-height: 1.1 !important;
+    padding: .65rem .85rem !important;
+    font-weight: 700 !important;
+    -webkit-text-size-adjust: 100%;
+}
+
+
+
+  /* Preis-Pill auf Handys kleiner + flexibler */
+  .page-package-tours .pt-price-badge {
+    padding: .5rem .65rem;
+    border-radius: 14px;
+    right: .75rem;
+    bottom: .9rem;
+    max-width: calc(100% - 1.5rem); /* bleibt immer im Bild */
+  }
+
+  .page-package-tours .pt-price-badge__amount {
+    font-size: 1.25rem;
+    white-space: normal; /* darf umbrechen */
+  }
+
+  .page-package-tours .pt-price-badge__note {
+    font-size: .7rem;
+    top: -0.3em;
+    white-space: normal; /* darf umbrechen */
+  }
+
+  /* Versicherungskarte – Schrift auf Handy etwas kleiner */
+  .page-package-tours .pt-insurance-teaser__title {
+    font-size: 1.0rem !important;
+  }
+
+  .page-package-tours .pt-insurance-teaser__text {
+    font-size: .9rem !important;
+    line-height: 1.55 !important;
+  }
+
+}
+
+
+/* max-width: 520px – Features 1-spaltig              */
+@media (max-width: 520px) {
+
+  .page-package-tours .pt-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FIX: Service-Pill – immer nebeneinander (Android + iPhone), ohne Kollision */
+@media (max-width: 720px) {
+
+  .page-package-tours .pt-hero-service-note{
+    font-size: 0.74rem !important;
+    padding: 0.35rem 0.9rem !important;
+    gap: 0.45rem !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+
+    /* WICHTIG: Container NICHT clippen (sonst wirkt die Nummer “kaputt”) */
+    overflow: visible !important;
+
+    max-width: calc(100% - 2rem) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* Text darf schrumpfen + wird sauber gekürzt (statt zu kollidieren) */
+  .page-package-tours .pt-hero-service-note .pt-hero-service-text{
+    display: block !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Telefon darf NIE schrumpfen */
+  .page-package-tours .pt-hero-service-note .hero-service-phone{
+    flex: 0 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    white-space: nowrap !important;
+  }
+
+  .page-package-tours .pt-hero-service-note .amd-phone-ltr{
+    white-space: nowrap !important;
+    font-size: 0.82rem !important;
+  }
+}
+
+/* =====================================================
+   FIX: Arabisch (RTL) – Service-Pill sauber nebeneinander (Mobile)
+   ===================================================== */
+
+/* Arabisch-Seite */
+html[lang="ar"] .page-package-tours .pt-hero-service-note{
+  direction: rtl;
+}
+
+/* Mobile (inkl. iPhone/Android Breiten) */
+@media (max-width: 720px){
+
+  html[lang="ar"] .page-package-tours .pt-hero-service-note{
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 0.55rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+
+    /* wichtig: dein allgemeiner Fix setzt overflow:hidden !important → das killt RTL oft */
+    overflow: visible !important;
+  }
+
+  /* Text bleibt RTL, darf aber NICHT in die Nummer drücken */
+  html[lang="ar"] .page-package-tours .pt-hero-service-note .pt-hero-service-text{
+    direction: rtl !important;
+    unicode-bidi: isolate !important;
+    white-space: nowrap !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* Telefonnummer immer LTR + stabil nebeneinander */
+  html[lang="ar"] .page-package-tours .pt-hero-service-note .hero-service-phone{
+    direction: ltr !important;
+    unicode-bidi: isolate !important;
+    white-space: nowrap !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+
+    flex: 0 0 auto !important;
+  }
+}
+/* =====================================================
+   FIX: Mobile Hero Bottom Row – Button + Preis nebeneinander
+   (Desktop bleibt unangetastet)
+   ===================================================== */
+@media (max-width: 720px){
+
+  .page-package-tours .pt-bottom-row{
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    gap: .75rem !important;
+  }
+
+  /* Button: absolute aushebeln */
+  .page-package-tours .pt-hero .pt-actions{
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  /* Preis-Pill: absolute + RTL-left aushebeln */
+  .page-package-tours .pt-price-badge{
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+  }
+
+  /* RTL: Reihenfolge tauschen (damit es natürlich wirkt) */
+  html[dir="rtl"] .page-package-tours .pt-bottom-row{
+    flex-direction: row-reverse !important;
+  }
+}
+
+/* =========================================================
+   EN/DE/AR: Premium-Textkarten für pt-section-text
+   (nur Package Tours Seite)
+   ========================================================= */
+
+body.page-package-tours .pt-section--why .pt-section-text,
+body.page-package-tours #vip .pt-section-head > .pt-section-text,
+body.page-package-tours .pt-section > .pt-container > .pt-section-text{
+  display: inline-block;
+  max-width: 980px;
+  margin: 14px 0 0 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+
+  /* Premium "glass" look */
+  background:
+    radial-gradient(900px 280px at 10% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow:
+    0 14px 40px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  position: relative;
+  overflow: hidden;
+
+  /* Typo */
+  font-size: 16px;
+  line-height: 1.75;
+  opacity: .94;
+}
+
+/* Luxus-Akzent links (wie bei deinen anderen Cards) */
+body.page-package-tours .pt-section--why .pt-section-text::before,
+body.page-package-tours #vip .pt-section-head > .pt-section-text::before,
+body.page-package-tours .pt-section > .pt-container > .pt-section-text::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(220,38,38,1), rgba(220,38,38,.25));
+  opacity: .95;
+}
+
+/* Mobile sauber */
+@media (max-width: 720px){
+  body.page-package-tours .pt-section--why .pt-section-text,
+  body.page-package-tours #vip .pt-section-head > .pt-section-text,
+  body.page-package-tours .pt-section > .pt-container > .pt-section-text{
+    display: block;
+    padding: 14px 14px;
+    border-radius: 14px;
+    font-size: 15.5px;
+    line-height: 1.72;
+  }
+}
+/* =========================================================
+   MOBILE NAV (Package Tours only)
+   Burger sichtbar auf Handy, Links im Dropdown
+   ========================================================= */
+
+body.page-package-tours .amd-header-inner{ position: relative; }
+
+body.page-package-tours .amd-burger{
+  display:none;
+  background:none;
+  border:none;
+  font-size:1.6rem;
+  line-height:1;
+  padding:10px 12px;
+  cursor:pointer;
+}
+
+/* Mobile */
+@media (max-width: 900px){
+  body.page-package-tours .amd-burger{ display:block; }
+
+  body.page-package-tours .amd-nav{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:12px;
+    right:12px;
+    background:#fff;
+    flex-direction:column;
+    padding:10px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    z-index:9999;
+  }
+
+  body.page-package-tours .amd-nav.is-open{ display:flex; }
+
+  /* RTL (AR): Text rechts */
+  html[dir="rtl"] body.page-package-tours .amd-nav{ text-align:right; }
+}
+

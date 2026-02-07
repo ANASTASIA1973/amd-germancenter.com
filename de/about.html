@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>AMD German Center – Über uns</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Website-Styles (wie Startseite) -->
+<link rel="stylesheet" href="../assets/css/styles.css" />
+
+
+  <style>
+    .about-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--amd-bg, #f5f5f7);
+    }
+
+    .about-main {
+      flex: 1;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .about-container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .about-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .about-heading h1 {
+      margin: 0;
+      font-size: 1.9rem;
+      color: var(--amd-heading, #111827);
+    }
+
+    .about-heading p {
+      margin-top: 0.4rem;
+      color: var(--amd-text-muted, #6b7280);
+    }
+
+    .team-section {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .team-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: var(--amd-card-bg, #ffffff);
+      border-radius: var(--amd-radius-lg, 18px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+.team-card{
+  overflow: hidden;
+}
+.team-card{
+  height: auto !important;
+  align-items: flex-start !important;
+}
+
+
+.team-info{
+  flex: 1;
+  min-width: 0;
+}
+.team-info{
+  width: 100%;
+}
+
+ .team-photo{
+  width: 150px;
+  height: 150px;
+  border-radius: 14px;
+  object-fit: cover;          /* ✅ füllt den Rahmen perfekt */
+  object-position: center;    /* ✅ sauber zentriert */
+  border: 3px solid var(--amd-primary, #c1272d);
+  flex-shrink: 0;
+  display: block;
+}
+
+
+
+    .team-info h3 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--amd-heading, #111827);
+        flex: 1;                   /* Text bleibt im Kartenbereich */
+  min-width: 0;              /* verhindert komische Überläufe */
+    }
+
+    .team-role {
+      margin: 0.15rem 0 0.8rem 0;
+      color: var(--amd-accent, #1b6f5a);
+      font-weight: 600;
+    }
+
+    .team-bio-block {
+      margin-bottom: 0.9rem;
+    }
+
+    .team-bio-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--amd-text-muted, #6b7280);
+      margin-bottom: 0.2rem;
+    }
+
+    .team-bio-block p {
+      margin: 0;
+      line-height: 1.45;
+      color: var(--amd-text, #111827);
+      font-size: 0.97rem;
+    }
+
+    .team-bio-block[dir="rtl"] p {
+      text-align: right;
+    }
+
+    .about-back-link {
+      margin-top: 2rem;
+    }
+
+    .about-back-link a {
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--amd-border, #e5e7eb);
+    }
+
+    .about-back-link a:hover {
+      background: var(--amd-primary-soft, #fbe6e9);
+    }
+
+  @media (max-width: 700px) {
+  .team-photo{
+    display: block;
+    margin: 0 auto;      /* Bild wirklich zentriert */
+  }
+
+  .team-info{
+    width: 100%;         /* Textblock unter Bild sauber */
+  }
+
+
+      .team-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+         overflow: hidden;          /* verhindert “rauslaufen” */
+  align-items: flex-start;
+      }
+
+      .team-photo {
+        width: 170px;
+        height: 170px;
+      }
+
+      .team-bio-block[dir="rtl"] p {
+        text-align: center;
+      }
+      /* FORCE: Sprachumschalter immer anzeigen (falls anderes CSS ihn versteckt) */
+.amd-header-inner{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+}
+
+.amd-header-right{
+  display:flex !important;
+  align-items:center !important;
+}
+
+.amd-lang-switch{
+  display:inline-flex !important;
+  align-items:center !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+.lang-btn{
+  display:inline-flex !important;
+}
+
+    }
+  </style>
+</head>
+<body class="amd-page">
+  <div class="about-page-wrapper">
+    <!-- HEADER wie auf der Website -->
+   <header class="amd-header">
+  <div class="amd-header-inner">
+    <a href="./index.html" class="amd-logo">
+      <img src="../assets/img/logo-amd-lion.png" alt="AMD German Center Logo" width="140" height="140" decoding="async" />
+
+    </a>
+
+    <div class="amd-header-right">
+      <div class="amd-lang-switch" aria-label="Sprache wählen">
+        <a href="../de/about.html" class="lang-btn is-active" aria-current="page">
+          <span class="lang-flag lang-flag-de" aria-hidden="true"></span>
+          <span class="lang-label">DE</span>
+        </a>
+
+        <a href="../en/about.html" class="lang-btn">
+          <span class="lang-flag lang-flag-en" aria-hidden="true"></span>
+          <span class="lang-label">EN</span>
+        </a>
+
+        <a href="../ar/about.html" class="lang-btn">
+          <span class="lang-flag lang-flag-ar" aria-hidden="true"></span>
+          <span class="lang-label">AR</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<nav class="amd-subnav" aria-label="Zurück zur Hauptseite">
+  <div class="amd-subnav-inner">
+    <a class="amd-backlink" href="./index.html">← Zurück zur Hauptseite</a>
+  </div>
+</nav>
+    <!-- HAUPTINHALT -->
+    <main class="about-main">
+      <div class="about-container">
+        <div class="about-heading">
+          <h1>Über uns</h1>
+          <p>AMD German Center – Persönlich. Fair. Digital.</p>
+        </div>
+
+        <section class="team-section">
+          <!-- ALI MOHSEN AHMAD – Owner / CEO -->
+          <article class="team-card">
+            <img
+              src="../assets/img/ali-ahmad.jpg"
+              alt="Ali Mohsen Ahmad – Owner / CEO AMD German Center"
+              class="team-photo"
+            />
+
+            <div class="team-info">
+              <h3>Ali Mohsen Ahmad</h3>
+              <p class="team-role">
+                Owner / CEO<br />
+                AMD German Center
+              </p>
+
+              <!-- Deutsch -->
+              <div class="team-bio-block">
+                <div class="team-bio-label">Deutsch</div>
+                <p>
+                  Geboren und aufgewachsen im hohen Norden Deutschlands, wo das herzliche
+                  „Moin Moin“ Teil des Alltags ist, kann ich auf eine langjährige Karriere von
+                  20 Jahren in der Tourismus-, Versicherungs- und Finanzbranche zurückblicken.
+                  Doch schon als Kind legte mein Vater mir nahe, die Wurzeln zu ehren und
+                  zurückzukehren – zurück in die Heimat des Libanon, wo ich heute lebe.
+                </p>
+                <p>
+                  Hier, im Süden des Libanon, vereine ich meine deutsche Herkunft und
+                  berufliche Erfahrung mit der Lebensfreude, Gastfreundschaft und Kultur
+                  dieses einzigartigen Landes. Dieser kulturelle Brückenschlag prägt nicht nur
+                  meinen Alltag, sondern auch meine Arbeit.
+                </p>
+                <p>
+                  Mein Ziel ist es, Ihnen als Kunde maßgeschneiderte, exklusive
+                  Dienstleistungen zu bieten, die höchsten Ansprüchen gerecht werden. Mit
+                  meinem Team und einem engen Netzwerk sowohl in Deutschland als auch im
+                  Libanon stelle ich sicher, dass Ihre Reise oder Ihr Aufenthalt unvergesslich
+                  wird.
+                </p>
+                <p>
+                  Ob exklusive Tagestouren, individuelle Pauschalreisen oder komfortable
+                  Flughafentransfers – alle Angebote zeichnen sich durch erstklassigen Service
+                  und eine authentische Begegnung mit dem Libanon aus.
+                </p>
+                <p>
+                  Vertrauen Sie auf meine jahrelange Erfahrung und die perfekte Balance
+                  zwischen deutscher Präzision und der herzlichen Gastfreundschaft des
+                  Libanon. Lassen Sie uns gemeinsam Ihre Wünsche verwirklichen und Ihnen ein
+                  maßgeschneidertes Erlebnis bieten, das Sie so schnell nicht vergessen werden.
+                </p>
+              </div>
+
+            </div>
+          </article>
+
+     <!-- FRANCIS LANGE – Vertriebsleitung -->
+<article class="team-card">
+  <img
+    src="../assets/img/francis-lange.jpg"
+    alt="Francis Lange – Vertriebsleitung"
+    class="team-photo"
+  />
+
+  <div class="team-info">
+    <h3>Francis Lange</h3>
+    <p class="team-role">
+      Vertriebsleitung<br />
+      Tourismus und Marketing
+    </p>
+
+    <!-- Deutsch -->
+    <div class="team-bio-block">
+      <div class="team-bio-label">Deutsch</div>
+      <p>
+        Geboren in Berlin, bringe ich seit 2010 umfassende Erfahrung im Vertrieb mit,
+        insbesondere in den Bereichen Tourismus und Marketing. Mit einer Leidenschaft
+        für innovative Vertriebskonzepte und einem ausgeprägten Verständnis für die
+        Bedürfnisse der Kunden habe ich zahlreiche Projekte erfolgreich begleitet und
+        nachhaltig zum Unternehmenswachstum beigetragen.
+      </p>
+    </div>
+
+  </div>
+</article>
+
+<!-- MOHAMMAD ALI AL HAGH – Tourenmanagement -->
+<article class="team-card">
+  <img
+    src="../assets/img/Mohammad-ali-al-hagh_square_v4_headmore.jpg"
+    alt="Mohammad Ali Al Hagh – Tourenmanagement"
+    class="team-photo"
+  />
+
+  <div class="team-info">
+    <h3>Mohammad Ali Al Hagh</h3>
+    <p class="team-role">Tourenmanagement</p>
+
+    <!-- Deutsch -->
+    <div class="team-bio-block">
+      <div class="team-bio-label">Deutsch</div>
+      <p>
+        Ich bin im Süden des Libanons geboren und lebe bis heute dort. Seit über zehn
+        Jahren arbeite ich im Bereich Tagestouren und geführte Wanderungen und kenne
+        sowohl den Süden als auch den Norden des Landes sehr genau.
+      </p>
+      <p>
+        Mein Schwerpunkt liegt auf individuell geplanten Touren, bei denen Sicherheit,
+        lokale Kultur und die Nähe zur Natur im Vordergrund stehen. Bei AMD haben die
+        Sicherheit unserer Gäste sowie deutsche Zuverlässigkeit höchste Priorität.
+      </p>
+      <p>
+        Alle Touren werden von mir persönlich begleitet und professionell geführt.
+        Sie werden stets an die Bedürfnisse, Erwartungen und körperlichen Grenzen
+        unserer Gäste angepasst. Unsere Angebote sind flexibel, verantwortungsbewusst
+        gestaltet und darauf ausgerichtet, authentische und nachhaltige Erlebnisse
+        zu ermöglichen.
+      </p>
+    </div>
+
+  </div>
+</article>
+
+        </section>
+
+        <div class="about-back-link">
+          <a href="./index.html">← Zurück zur Startseite</a>
+        </div>
+      </div>
+    </main>
+
+  
+    <!-- ====================================== -->
+    <!-- FOOTER                                 -->
+    <!-- ====================================== -->
+   <footer class="amd-footer">
+  <div class="footer-grid">
+    <!-- Linke Spalte: Leistungen + AMD Tarifcheck -->
+    <div class="footer-column">
+      <ul class="footer-links">
+        <li>
+          <a
+            href="https://transfer.amd-germancenter.com/booking"
+            target="_blank"
+            rel="noopener"
+          >
+            Airport Transfer
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://tours.amd-germancenter.com/index.html"
+            target="_blank"
+            rel="noopener"
+          >
+            Tagestouren
+          </a>
+        </li>
+        <li><a href="./car-rental.html">Mietwagen</a></li>
+        <li><a href="./package-tours.html">Pauschalreisen</a></li>
+        <li>
+          <a href="https://amd-tarifcheck.de/" target="_blank" rel="noopener">
+            AMD Tarifcheck
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+        <!-- Mitte: Social Media mit echten Links -->
+        <div class="footer-column footer-column--center">
+          <p class="footer-title">Folgen Sie uns auf:</p>
+          <div class="footer-social">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/96181622668" target="_blank" rel="noopener">
+              <img src="../assets/img/icon-whatsapp.svg" alt="WhatsApp" />
+            </a>
+            <!-- Instagram -->
+            <a
+              href="https://www.instagram.com/amd.german.center/"
+              target="_blank"
+              rel="noopener"
+            >
+              <img src="../assets/img/icon-instagram.svg" alt="Instagram" />
+            </a>
+            <!-- Facebook -->
+            <a
+              href="https://www.facebook.com/p/AMD-German-Center-61575238540217/"
+              target="_blank"
+              rel="noopener"
+            >
+              <img src="../assets/img/icon-facebook.svg" alt="Facebook" />
+            </a>
+            <!-- TikTok -->
+            <a
+              href="https://www.tiktok.com/@amdgermancenter"
+              target="_blank"
+              rel="noopener"
+            >
+              <img src="../assets/img/icon-tiktok.svg" alt="TikTok" />
+            </a>
+          </div>
+        </div>
+
+       <!-- Rechte Spalte: Info-Seiten -->
+<div class="footer-column">
+  <ul class="footer-links">
+    <li><a href="./faq.html">FAQ Libanon</a></li>
+    <li><a href="./about.html">Über uns</a></li>
+    <li><a href="./imprint.html">Impressum</a></li>
+    <li><a href="./datenschutz.html">Datenschutzerklärung</a></li>
+    <li><a href="./agb.html">AGB</a></li>
+  </ul>
+</div>
+
+      </div>
+    </footer>
+  </div>
+
+
+
+</body>
+</html>

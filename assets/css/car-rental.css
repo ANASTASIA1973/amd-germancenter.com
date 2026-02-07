@@ -1,0 +1,3568 @@
+/* =========================================================
+   AMD – CAR RENTAL (scoped)
+   Only affects: body.page-car-rental
+   ========================================================= */
+
+body.page-car-rental{
+  background:
+    radial-gradient(1200px 600px at 50% -200px, rgba(220,38,38,.08), transparent 60%),
+    var(--amd-bg, #f6f7fb);
+}
+
+/* Make sure generic img rules from global CSS don't blow up assets */
+body.page-car-rental img{ max-width:100%; height:auto; }
+
+/* ---------------- HERO (uses your .cr-hero markup) ---------------- */
+
+body.page-car-rental .cr-hero{
+  position: relative;
+  overflow:hidden;
+  border-radius: 0 0 28px 28px;
+  min-height: 540px;
+  display:flex;
+  align-items: flex-end;
+}
+
+body.page-car-rental .cr-hero .hero-bg-image{
+  position:absolute;
+  inset:0;
+}
+body.page-car-rental .cr-hero .hero-bg-image img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  transform: scale(1.02);
+}
+
+body.page-car-rental .cr-hero .hero-bg-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg, rgba(2,6,23,.92) 0%, rgba(2,6,23,.72) 46%, rgba(2,6,23,.18) 74%, rgba(2,6,23,0) 100%),
+    linear-gradient(180deg, rgba(2,6,23,.0) 0%, rgba(2,6,23,.45) 100%);
+  pointer-events:none;
+}
+
+body.page-car-rental .cr-hero .hero-content{
+  position:relative;
+  max-width: 1160px;
+  margin: 0;
+  margin-left: clamp(22px, 6vw, 72px);
+  margin-right: auto;
+  padding: 100px 0 56px;
+  color:#fff;
+  text-align:left;
+}
+
+body.page-car-rental .cr-hero .hero-kicker{ max-width: 680px; }
+body.page-car-rental .cr-hero .hero-title{ max-width: 720px; }
+body.page-car-rental .cr-hero .hero-lead{ max-width: 620px; }
+
+
+body.page-car-rental .cr-hero .hero-back{
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  color: rgba(255,255,255,.9);
+  text-decoration:none;
+  font-weight:600;
+  margin-bottom: 14px;
+}
+body.page-car-rental .cr-hero .hero-back:hover{ color:#fff; }
+
+body.page-car-rental .cr-hero .hero-slogan{
+  margin: 0 0 10px;
+  font-weight: 700;
+  opacity:.92;
+}
+
+body.page-car-rental .cr-hero .hero-title{
+  margin:0 0 14px;
+  font-size: clamp(42px, 5vw, 68px);
+  line-height: 1.02;
+  letter-spacing:-0.02em;
+}
+
+body.page-car-rental .cr-hero .hero-subtitle{
+  max-width: 720px;
+  margin: 0 0 24px;
+  opacity:.92;
+  line-height:1.6;
+}
+
+body.page-car-rental .cr-hero .hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+}
+
+/* Buttons (don’t fight global button styles, keep simple + premium) */
+body.page-car-rental .cr-hero .btn{
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: 800;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width: 220px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.22);
+  border:1px solid rgba(255,255,255,.14);
+}
+body.page-car-rental .cr-hero .btn.btn-primary{
+  background: #c81e1e;
+  color:#fff;
+}
+body.page-car-rental .cr-hero .btn.btn-primary:hover{
+  filter: brightness(1.05);
+}
+body.page-car-rental .cr-hero .btn.btn-secondary{
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  backdrop-filter: blur(8px);
+}
+body.page-car-rental .cr-hero .btn.btn-secondary:hover{
+  background: rgba(255,255,255,.14);
+}
+
+/* ---------------- 3 Pill line (no icons) ---------------- */
+
+body.page-car-rental .cr-service-strip{
+  padding: 18px 0;
+  background: rgba(255,255,255,.75);
+  border-bottom: 1px solid rgba(17,24,39,.06);
+  backdrop-filter: blur(10px);
+}
+body.page-car-rental .cr-service-strip__inner{
+  width:min(1160px, calc(100% - 48px));
+  margin:0 auto;
+  text-align:center;
+}
+body.page-car-rental .cr-service-strip__line{
+  margin:0;
+  font-weight:800;
+  color: rgba(17,24,39,.82);
+}
+body.page-car-rental .cr-service-strip__sep{
+  display:inline-block;
+  margin: 0 10px;
+  opacity:.5;
+}
+
+/* ---------------- Sections / Containers ---------------- */
+
+body.page-car-rental .section{
+  width:min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 34px 0;
+}
+
+body.page-car-rental .section-header--center{
+  text-align:center;
+  margin-bottom: 18px;
+}
+body.page-car-rental .section-subtitle{
+  margin:0 0 6px;
+  opacity:.7;
+  font-weight:700;
+}
+body.page-car-rental .section-title{
+  margin:0;
+  font-size: clamp(28px, 3vw, 40px);
+  letter-spacing:-0.02em;
+}
+
+/* ---------------- Trust block ---------------- */
+
+body.page-car-rental .cr-trust-section{ padding-top: 26px; }
+
+body.page-car-rental .cr-trust{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding: 22px 22px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(17,24,39,.07);
+  box-shadow: 0 18px 44px rgba(2,6,23,.06);
+}
+
+body.page-car-rental .cr-trust h3{
+  margin:0 0 6px;
+  font-size: 18px;
+}
+body.page-car-rental .cr-trust p{
+  margin:0;
+  opacity:.82;
+  line-height:1.55;
+  max-width: 680px;
+}
+
+body.page-car-rental .cr-trust-logo{
+  flex: 0 0 260px;
+  max-width: 260px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(17,24,39,.08);
+  background:#fff;
+  overflow:hidden;
+}
+body.page-car-rental .cr-trust-logo img{
+  width:100%;
+  max-height: 72px;
+  object-fit: contain;
+  display:block;
+}
+
+/* ---------------- Vehicle Grid / Cards ---------------- */
+
+body.page-car-rental .cr-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+body.page-car-rental .cr-card{
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(17,24,39,.07);
+  border-radius: 18px;
+  box-shadow: 0 18px 46px rgba(2,6,23,.07);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height: 560px;
+}
+
+body.page-car-rental .cr-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding: 18px 18px 10px;
+}
+
+body.page-car-rental .cr-card-title{ margin:0; font-size:18px; }
+body.page-car-rental .cr-card-sub{ margin:4px 0 0; opacity:.72; font-weight:600; }
+
+body.page-car-rental .cr-verified{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+  opacity:.7;
+  font-size: 12px;
+  font-weight:800;
+}
+body.page-car-rental .cr-verified img{
+  width: 64px;
+  max-height: 20px;
+  object-fit: contain;
+  display:block;
+}
+
+body.page-car-rental .cr-img{
+  padding: 10px 18px 0;
+}
+body.page-car-rental .cr-img img{
+  width:100%;
+  height: 220px;
+  object-fit: contain;
+  display:block;
+  background: rgba(255,255,255,.55);
+  border-radius: 14px;
+}
+
+body.page-car-rental .cr-body{
+  padding: 12px 18px 14px;
+  flex:1;
+}
+
+body.page-car-rental .cr-use{
+  margin: 0 0 10px;
+  font-weight:700;
+  opacity:.9;
+}
+
+body.page-car-rental .cr-features{
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(17,24,39,.84);
+  line-height: 1.7;
+}
+
+body.page-car-rental .cr-footer{
+  padding: 16px 18px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-top: 1px solid rgba(17,24,39,.06);
+  background: linear-gradient(180deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.7) 100%);
+}
+
+body.page-car-rental .cr-tag{
+  display:inline-flex;
+  align-items:center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight:800;
+  font-size: 12px;
+  border: 1px solid rgba(17,24,39,.10);
+  background:#fff;
+  opacity:.9;
+}
+
+/* Make card button match hero primary */
+body.page-car-rental .cr-footer .btn.btn-primary{
+  border-radius: 999px;
+  padding: 12px 18px;
+  background:#c81e1e;
+  color:#fff;
+  border: 1px solid rgba(0,0,0,.05);
+  box-shadow: 0 10px 26px rgba(2,6,23,.12);
+}
+body.page-car-rental .cr-footer .btn.btn-primary:hover{ filter:brightness(1.05); }
+
+/* ---------------- Request section tweaks + Footer gap fix ---------------- */
+
+body.page-car-rental #request{ scroll-margin-top: 110px; }
+
+body.page-car-rental main{
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+body.page-car-rental main > section:last-of-type{
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+body.page-car-rental footer{
+  margin-top: 0 !important;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 980px){
+  body.page-car-rental .cr-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  body.page-car-rental .cr-hero{ min-height: 520px; }
+  body.page-car-rental .cr-hero .hero-content{ padding: 110px 0 52px; }
+}
+
+@media (max-width: 640px){
+  body.page-car-rental .cr-grid{ grid-template-columns: 1fr; }
+  body.page-car-rental .cr-trust{ flex-direction:column; align-items:flex-start; }
+  body.page-car-rental .cr-trust-logo{ width:100%; max-width:100%; }
+  body.page-car-rental .cr-hero .hero-content{ margin-left: 16px; margin-right: 16px; }
+  body.page-car-rental .cr-hero .btn{ width:100%; min-width: 0; }
+}
+/* Header-Logo auf Car-Rental immer stabil */
+body.page-car-rental .amd-header .amd-logo{
+  display:flex;
+  align-items:center;
+}
+
+body.page-car-rental .amd-header .amd-logo img{
+  width: auto !important;
+  height: 46px !important;
+  max-width: none !important;
+  object-fit: contain;
+  display:block;
+}
+/* ===== HERO: stabil auf allen Screens ===== */
+body.page-car-rental .cr-hero{
+  min-height: 0 !important;
+  height: clamp(520px, 70vh, 680px); /* nicht mehr riesig */
+}
+
+body.page-car-rental .cr-hero .hero-content{
+  padding: 90px 0 42px !important;   /* weniger "Luft" oben/unten */
+  width: min(1160px, calc(100% - 48px));
+}
+
+/* Textblock begrenzen -> keine leeren Flächen */
+body.page-car-rental .cr-hero .hero-title,
+body.page-car-rental .cr-hero .hero-subtitle{
+  max-width: 720px;
+}
+
+/* Headline minimal kleiner -> wirkt edler + passt in 1 Screenshot */
+body.page-car-rental .cr-hero .hero-title{
+  font-size: clamp(38px, 4.2vw, 60px) !important;
+}
+@media (max-height: 780px){
+  body.page-car-rental .cr-hero{ height: 560px; }
+  body.page-car-rental .cr-hero .hero-content{ padding: 74px 0 34px !important; }
+}
+/* ===== HERO komplett linksbündig ===== */
+body.page-car-rental .cr-hero .hero-content{
+  position:relative;
+  max-width: 1160px;
+  margin: 0;
+  margin-left: clamp(22px, 6vw, 72px);
+  margin-right: auto;
+  padding: 100px 0 56px;
+  color:#fff;
+  text-align:left;
+}
+
+body.page-car-rental .cr-hero .hero-back{
+  justify-content: flex-start !important;
+}
+
+body.page-car-rental .cr-hero .hero-actions{
+  justify-content: flex-start !important;
+}
+
+/* Textblock bewusst links “ankern” */
+body.page-car-rental .cr-hero .hero-title,
+body.page-car-rental .cr-hero .hero-subtitle{
+  max-width: 620px; /* enger = wirkt hochwertiger + klar links */
+}
+body.page-car-rental .cr-hero .hero-content{
+  padding-left: 0 !important;
+}
+/* =========================================================
+   FIX: Hero-Layout für deine echten Klassen (.cr-hero / .hero-content)
+   ========================================================= */
+body.page-car-rental .cr-hero{
+  min-height: 0 !important;
+  height: clamp(520px, 70vh, 680px) !important;
+}
+
+/* komplett linksbündig */
+body.page-car-rental .cr-hero .hero-content{
+  text-align: left !important;
+  width: min(1160px, calc(100% - 48px)) !important;
+  margin: 0 auto !important;
+  padding: 90px 0 42px !important;
+}
+
+body.page-car-rental .cr-hero .hero-back,
+body.page-car-rental .cr-hero .hero-slogan,
+body.page-car-rental .cr-hero .hero-title,
+body.page-car-rental .cr-hero .hero-subtitle{
+  text-align: left !important;
+}
+
+/* Textblock bewusst links “ankern” (nicht mittig breit werden lassen) */
+body.page-car-rental .cr-hero .hero-title,
+body.page-car-rental .cr-hero .hero-subtitle{
+  max-width: 620px !important;
+}
+
+body.page-car-rental .cr-hero .hero-actions{
+  justify-content: flex-start !important;
+}
+
+/* für kleinere Bildschirmhöhen */
+@media (max-height: 780px){
+  body.page-car-rental .cr-hero{ height: 560px !important; }
+  body.page-car-rental .cr-hero .hero-content{ padding: 74px 0 34px !important; }
+}
+/* ===============================
+   TRUST (Variante B – Luxury / Container)
+   Override – ganz unten lassen
+   =============================== */
+
+body.page-car-rental .cr-trust-section{
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+body.page-car-rental .cr-trust{
+  /* statt "Info-Box": ruhige Signature-Zone */
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 26px;
+
+  align-items:center;
+  padding: 30px 34px;
+
+  border-radius: 22px;
+
+  /* sehr subtil, wirkt wie Papier/Stein */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.78) 100%);
+
+  border: 1px solid rgba(2,6,23,.08);
+
+  /* softer, tiefer Schatten (kein "Card-Billiglook") */
+  box-shadow:
+    0 26px 70px rgba(2,6,23,.08),
+    0 2px 0 rgba(255,255,255,.55) inset;
+
+  position: relative;
+  overflow:hidden;
+}
+
+/* ultra-feine vertikale Trennung (nur fühlbar) */
+body.page-car-rental .cr-trust::after{
+  content:"";
+  position:absolute;
+  top: 22px;
+  bottom: 22px;
+  right: 280px;              /* exakt Logo-Spalte */
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(2,6,23,.10) 18%,
+    rgba(2,6,23,.06) 50%,
+    rgba(2,6,23,.10) 82%,
+    transparent 100%
+  );
+  opacity: .55;
+}
+
+/* Headline: klein, souverän, international */
+body.page-car-rental .cr-trust h3{
+  margin: 0 0 10px;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: rgba(2,6,23,.70);
+}
+
+/* Text: kürzer wirkt noch besser – aber Styling macht’s auch so edler */
+body.page-car-rental .cr-trust p{
+  margin: 0;
+  max-width: 58ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(2,6,23,.78);
+}
+
+/* Logo wird zum "Siegel": kein Kasten-Feeling */
+body.page-car-rental .cr-trust-logo{
+  width: 280px;
+  max-width: 280px;
+  padding: 18px 18px;
+
+  border-radius: 18px;
+
+  background:
+    radial-gradient(120px 60px at 50% 40%, rgba(2,6,23,.06), transparent 70%),
+    rgba(255,255,255,.88);
+
+  border: 1px solid rgba(2,6,23,.10);
+
+  box-shadow:
+    0 18px 44px rgba(2,6,23,.08),
+    0 1px 0 rgba(255,255,255,.75) inset;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+body.page-car-rental .cr-trust-logo img{
+  width: 100%;
+  max-height: 64px;
+  object-fit: contain;
+  display:block;
+
+  /* minimal zurücknehmen → wirkt wie Zertifikat, nicht Werbung */
+  filter: saturate(.95) contrast(1.05);
+  opacity: .95;
+}
+
+/* Responsive: bleibt premium, ohne zu kippen */
+@media (max-width: 820px){
+  body.page-car-rental .cr-trust{
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 26px 22px;
+  }
+  body.page-car-rental .cr-trust::after{ display:none; }
+  body.page-car-rental .cr-trust-logo{
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+  }
+}
+/* ==================================================
+   TRUST – FINAL LUXURY OVERRIDE (styles.css safe)
+   ================================================== */
+
+body.page-car-rental .cr-trust-section{
+  padding-top: 2.6rem;      /* wieder Luft */
+  padding-bottom: 2.2rem;
+}
+
+/* Headline bewusst vom restlichen System lösen */
+body.page-car-rental .cr-trust h3{
+  margin: 0 0 12px !important;
+
+  font-size: 11px;          /* kleiner = edler */
+  letter-spacing: .22em;    /* Editorial-Spaced */
+  text-transform: uppercase;
+  font-weight: 900;
+
+  color: rgba(2,6,23,.72);
+}
+
+/* Text ruhiger & internationaler */
+body.page-car-rental .cr-trust p{
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(2,6,23,.78);
+}
+
+/* Logo minimal zurücknehmen → Siegel-Effekt */
+body.page-car-rental .cr-trust-logo img{
+  max-height: 58px;
+  opacity: .94;
+}
+/* ===== Service-Strip unter Hero: Premium Bar ===== */
+body.page-car-rental .cr-service-strip{
+  position: sticky;
+  top: 70px;                 /* wenn Header fixed ist: wirkt hochwertig */
+  z-index: 20;
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(15,23,42,.08);
+  border-bottom: 1px solid rgba(15,23,42,.08);
+}
+
+body.page-car-rental .cr-service-strip__inner{
+  width: min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 14px 0;
+}
+
+body.page-car-rental .cr-service-strip__line{
+  letter-spacing: .2px;
+  color: rgba(15,23,42,.85);
+}
+
+body.page-car-rental .cr-service-strip__sep{
+  opacity: .45;
+}
+/* ===== Trust-Section: Card edler machen ===== */
+body.page-car-rental .cr-trust{
+  border-radius: 20px;
+  border: 1px solid rgba(15,23,42,.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86));
+  box-shadow: 0 18px 50px rgba(2,6,23,.08);
+  padding: 28px 28px;
+  gap: 24px;
+  align-items: center;
+}
+
+/* Titel/Text etwas “Premium” */
+body.page-car-rental .cr-trust h3{
+  letter-spacing: .2px;
+  margin-bottom: 6px;
+}
+body.page-car-rental .cr-trust p{
+  color: rgba(15,23,42,.72);
+  max-width: 56ch;
+}
+/* ===== Souleiman Logo: Badge-Frame + bessere Präsenz ===== */
+body.page-car-rental .cr-trust-logo{
+  border-radius: 16px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(15,23,42,.08);
+  box-shadow: 0 10px 30px rgba(2,6,23,.10);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo selbst: nicht zu klein, nicht zu groß, immer “clean” */
+body.page-car-rental .cr-trust-logo img{
+  width: min(320px, 100%);
+  height: auto;
+  display: block;
+  filter: contrast(1.05) saturate(1.02);
+}
+/* ===== Trust-Card: mehr Farbe, aber premium ===== */
+body.page-car-rental .cr-trust{
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(15,23,42,.08);
+  border-radius: 20px;
+
+  /* subtile Farbe (Navy + warmes Rot) */
+  background:
+    radial-gradient(900px 320px at 18% 30%,
+      rgba(10, 35, 90, .10) 0%,
+      rgba(10, 35, 90, 0) 60%),
+    radial-gradient(520px 280px at 86% 40%,
+      rgba(200, 30, 30, .08) 0%,
+      rgba(200, 30, 30, 0) 65%),
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86));
+  box-shadow: 0 18px 50px rgba(2,6,23,.08);
+}
+
+/* dünne Accent-Line links (wirkt wie “Branding”) */
+body.page-car-rental .cr-trust::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:16px;
+  bottom:16px;
+  width:3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg,
+    rgba(200,30,30,.95),
+    rgba(200,30,30,.35));
+  opacity: .95;
+}
+
+/* Logo-Badge mit leichtem Farbstich */
+body.page-car-rental .cr-trust-logo{
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
+  border: 1px solid rgba(15,23,42,.10);
+  box-shadow: 0 14px 34px rgba(2,6,23,.12);
+}
+/* ===== Trust-Badge rechts: “Certified” Look ===== */
+body.page-car-rental .cr-trust-logo{
+  position: relative;
+  overflow: hidden;
+  padding: 18px 18px 16px;
+}
+
+/* dezentes Muster/Struktur im Badge */
+body.page-car-rental .cr-trust-logo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(280px 180px at 70% 35%,
+      rgba(10,35,90,.10) 0%,
+      rgba(10,35,90,0) 70%),
+    radial-gradient(240px 160px at 30% 70%,
+      rgba(200,30,30,.08) 0%,
+      rgba(200,30,30,0) 72%),
+    repeating-linear-gradient(135deg,
+      rgba(15,23,42,.06) 0 1px,
+      rgba(15,23,42,0) 1px 10px);
+  opacity: .55;
+  pointer-events:none;
+}
+
+/* kleines Label oben links */
+body.page-car-rental .cr-trust-logo::after{
+  content:"GEPRÜFT";
+  position:absolute;
+  left: 14px;
+  top: 12px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  font-weight: 800;
+  color: rgba(15,23,42,.72);
+  background: rgba(255,255,255,.70);
+  border: 1px solid rgba(15,23,42,.10);
+  padding: 6px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events:none;
+}
+
+/* Logo sauber zentriert, etwas mehr Präsenz */
+body.page-car-rental .cr-trust-logo img{
+  position: relative;
+  z-index: 2;
+  transform: translateY(2px);
+  width: min(340px, 100%);
+  opacity: .98;
+}
+/* ===== Trust-Badge rechts: ohne Text, nur Icon + Accent ===== */
+body.page-car-rental .cr-trust-logo{
+  position: relative;
+  overflow: hidden;
+}
+
+/* entfernt den Text-Label (überschreibt alles, was vorher ::after war) */
+body.page-car-rental .cr-trust-logo::after{
+  content:"" !important;
+}
+
+/* dezente rote Accent-Line im Badge */
+body.page-car-rental .cr-trust-logo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    /* dünne Accent-Line */
+    linear-gradient(90deg,
+      rgba(200,30,30,0) 0%,
+      rgba(200,30,30,.75) 28%,
+      rgba(200,30,30,.75) 72%,
+      rgba(200,30,30,0) 100%) 0 0 / 100% 2px no-repeat,
+
+    /* sehr dezentes Muster */
+    repeating-linear-gradient(135deg,
+      rgba(15,23,42,.05) 0 1px,
+      rgba(15,23,42,0) 1px 12px),
+
+    /* weiche Lichtfläche */
+    radial-gradient(260px 160px at 70% 40%,
+      rgba(10,35,90,.10) 0%,
+      rgba(10,35,90,0) 70%);
+  opacity: .55;
+}
+
+/* kleines Check-Wasserzeichen (ohne Text) */
+body.page-car-rental .cr-trust-logo{
+  background:
+    radial-gradient(32px 32px at 24px 24px,
+      rgba(200,30,30,.10) 0%,
+      rgba(200,30,30,0) 70%),
+    linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
+}
+
+/* Logo bleibt “oben”, sauber */
+body.page-car-rental .cr-trust-logo img{
+  position: relative;
+  z-index: 2;
+}
+/* ===== Trust-Badge: CLEAN (keine Streifen/Lines) ===== */
+body.page-car-rental .cr-trust-logo::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  pointer-events:none !important;
+
+  /* NUR weicher Glow, kein Pattern */
+  background:
+    radial-gradient(260px 160px at 70% 40%,
+      rgba(10,35,90,.10) 0%,
+      rgba(10,35,90,0) 70%),
+    radial-gradient(220px 140px at 30% 70%,
+      rgba(200,30,30,.08) 0%,
+      rgba(200,30,30,0) 70%) !important;
+
+  opacity: .55 !important;
+}
+
+body.page-car-rental .cr-trust-logo{
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78)) !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 14px 34px rgba(2,6,23,.12) !important;
+}
+/* ===== Trust-Badge: alle Pseudo-Overlays AUS (oval + Linie weg) ===== */
+body.page-car-rental .cr-trust-logo::before,
+body.page-car-rental .cr-trust-logo::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* optional: absolut clean */
+body.page-car-rental .cr-trust-logo{
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78)) !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 14px 34px rgba(2,6,23,.12) !important;
+}
+/* =========================================================
+   Car-Rental Cards – Premium (nur diese Seite)
+   ========================================================= */
+
+/* Grid */
+body.page-car-rental .cr-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+@media (max-width: 980px){
+  body.page-car-rental .cr-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px){
+  body.page-car-rental .cr-grid{ grid-template-columns: 1fr; }
+}
+
+/* Card Base */
+body.page-car-rental .cr-card{
+  border-radius: 22px;
+  border: 1px solid rgba(15,23,42,.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86));
+  box-shadow: 0 18px 55px rgba(2,6,23,.08);
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+
+/* Hover (subtil) */
+@media (hover:hover){
+  body.page-car-rental .cr-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 28px 75px rgba(2,6,23,.12);
+  }
+}
+
+/* Top Row */
+body.page-car-rental .cr-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 14px;
+  padding: 18px 18px 10px;
+}
+
+/* Title / Sub */
+body.page-car-rental .cr-card-title{
+  margin: 0 0 4px;
+  font-size: 18px;
+  letter-spacing: .2px;
+  color: rgba(15,23,42,.92);
+}
+body.page-car-rental .cr-card-sub{
+  margin: 0;
+  font-size: 13px;
+  color: rgba(15,23,42,.62);
+}
+
+/* Verified Badge (rechts oben) – clean & klein */
+body.page-car-rental .cr-verified{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,.10);
+  background: rgba(255,255,255,.75);
+  box-shadow: 0 10px 24px rgba(2,6,23,.10);
+  white-space: nowrap;
+}
+body.page-car-rental .cr-verified span{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(15,23,42,.70);
+}
+body.page-car-rental .cr-verified img{
+  height: 18px;
+  width: auto;
+  display:block;
+  opacity: .95;
+}
+
+/* Image Area – wirkt wie “Showroom” */
+body.page-car-rental .cr-img{
+  padding: 10px 16px 6px;
+  background:
+    radial-gradient(560px 240px at 30% 10%,
+      rgba(10,35,90,.06) 0%,
+      rgba(10,35,90,0) 70%),
+    linear-gradient(180deg, rgba(248,250,252,1), rgba(255,255,255,1));
+  border-top: 1px solid rgba(15,23,42,.04);
+  border-bottom: 1px solid rgba(15,23,42,.04);
+}
+body.page-car-rental .cr-img img{
+  width: 100%;
+  height: 210px;
+  object-fit: contain;
+  display:block;
+  filter: contrast(1.03) saturate(1.02);
+}
+
+/* Body */
+body.page-car-rental .cr-body{
+  padding: 14px 18px 6px;
+}
+body.page-car-rental .cr-use{
+  margin: 0 0 10px;
+  color: rgba(15,23,42,.78);
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+/* Features */
+body.page-car-rental .cr-features{
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(15,23,42,.70);
+}
+body.page-car-rental .cr-features li{
+  margin: 6px 0;
+}
+
+/* Footer */
+body.page-car-rental .cr-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  padding: 14px 18px 18px;
+  background: rgba(255,255,255,.65);
+}
+
+/* Tag pill */
+body.page-car-rental .cr-tag{
+  display:inline-flex;
+  align-items:center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,.10);
+  background: rgba(255,255,255,.78);
+  color: rgba(15,23,42,.78);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: .2px;
+}
+
+/* CTA Button – premium, aber AMD-Style */
+body.page-car-rental .cr-footer .btn.btn-primary{
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  box-shadow: 0 14px 30px rgba(200,30,30,.22);
+}
+/* =========================================================
+   Bilder angleichen: gleiche Bühne + Zentrierung
+   ========================================================= */
+
+/* feste, identische Bühne für ALLE Karten */
+body.page-car-rental .cr-img{
+  height: 240px;                 /* hier kannst du 230–260 testen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bild immer mittig, gleiche maximale Höhe */
+body.page-car-rental .cr-img img{
+  max-height: 200px;             /* kontrolliert die “Optik” */
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+/* ================================
+   Card images – optisch angleichen
+   ================================ */
+
+body.page-car-rental .cr-img{
+  height: 260px;                 /* feste Bühne */
+  display: flex;
+  align-items: flex-end;         /* Autos stehen "auf dem Boden" */
+  justify-content: center;
+  padding: 12px 16px 18px;       /* unten etwas mehr Luft */
+  background: #fff;
+}
+
+body.page-car-rental .cr-img img{
+  max-height: 220px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  transition: transform .25s ease;
+}
+
+
+body.page-car-rental .cr-img img[src*="picanto"]{
+  transform: scale(1.10);
+}
+
+/* Kia Sportage minimal */
+body.page-car-rental .cr-img img[src*="sportage"]{
+  transform: scale(1.04);
+}
+body.page-car-rental .cr-img::after{
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 20%;
+  right: 20%;
+  height: 6px;
+  background: radial-gradient(ellipse at center,
+    rgba(0,0,0,.18) 0%,
+    rgba(0,0,0,0) 70%);
+  pointer-events: none;
+}
+/* ===== Feintuning einzelner Bilder ===== */
+
+/* Picanto: zu groß -> kleiner */
+body.page-car-rental .cr-img img[src*="picanto"]{
+  transform: scale(1.03) translateY(2px) !important;
+}
+
+/* Range Rover: wirkt zu hoch -> leicht nach unten + minimal kleiner */
+body.page-car-rental .cr-img img[src*="land-rover-sport"]{
+  transform: scale(0.96) translateY(10px) !important;
+}
+
+/* Nissan: falls noch klein -> leicht größer (optional) */
+body.page-car-rental .cr-img img[src*="Nissan"]{
+  transform: scale(1.06) translateY(6px) !important;
+}
+/* ===== Roter Accent pro Karte (subtil) ===== */
+body.page-car-rental .cr-card{
+  position: relative; /* nötig für Accent-Linie */
+}
+
+body.page-car-rental .cr-card::before{
+  content:"";
+  position:absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg,
+    rgba(220,38,38,.95) 0%,
+    rgba(220,38,38,.45) 60%,
+    rgba(220,38,38,.15) 100%);
+  opacity: .85;
+}
+
+/* ganz leichter “Premium”-Schimmer (fast unsichtbar, aber wirkt) */
+body.page-car-rental .cr-card::after{
+  content:"";
+  position:absolute;
+  inset: 0;
+  pointer-events:none;
+  background: radial-gradient(800px 260px at 15% 0%,
+    rgba(220,38,38,.06) 0%,
+    rgba(220,38,38,0) 60%);
+}
+/* =========================================
+   PRICING – Luxury Card (Variante B)
+   ========================================= */
+
+body.page-car-rental .cr-pricing{
+  /* Premium-Card statt Textblock */
+  padding: 30px 34px;
+  border-radius: 22px;
+
+  background:
+    radial-gradient(900px 260px at 15% 0%, rgba(193,39,45,.06), transparent 55%),
+    radial-gradient(700px 240px at 100% 20%, rgba(27,111,90,.05), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.78) 100%);
+
+  border: 1px solid rgba(2,6,23,.08);
+  box-shadow:
+    0 26px 70px rgba(2,6,23,.08),
+    0 2px 0 rgba(255,255,255,.55) inset;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Überschrift: Editorial-Label (wie Luxury) */
+body.page-car-rental .cr-pricing h3{
+  margin: 0 0 10px;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: rgba(2,6,23,.72);
+}
+
+/* Text: ruhiger, nicht “Fließtext-lastig” */
+body.page-car-rental .cr-pricing p{
+  margin: 0 0 16px;
+  max-width: 66ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(2,6,23,.78);
+}
+
+/* Liste: clean + “premium bullets” (ohne Icons) */
+body.page-car-rental .cr-pricing ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+
+  color: rgba(2,6,23,.82);
+  font-weight: 600;
+}
+
+body.page-car-rental .cr-pricing li{
+  position: relative;
+  padding-left: 18px;
+}
+
+body.page-car-rental .cr-pricing li::before{
+  width: 5px;
+  height: 5px;
+  background: var(--amd-accent, #1b6f5a);
+  box-shadow: 0 0 0 2px rgba(27,111,90,.10);
+}
+body.page-car-rental .cr-pricing li{
+  font-weight: 500;
+  color: rgba(2,6,23,.78);
+}
+body.page-car-rental .cr-pricing h3{
+  margin-bottom: 18px;
+}
+body.page-car-rental .cr-pricing::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.6) 0%,
+    transparent 40%
+  );
+  pointer-events:none;
+}
+
+
+
+/* Desktop: 2 Spalten → wirkt “structured” */
+@media (min-width: 900px){
+  body.page-car-rental .cr-pricing ul{
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    column-gap: 26px;
+  }
+}
+
+/* Mobile: etwas kompakter */
+@media (max-width: 640px){
+  body.page-car-rental .cr-pricing{
+    padding: 24px 20px;
+  }
+}
+/* PRICING – untereinander + Grün als Luxury-Akzent (ohne Bullet-Punkt) */
+
+body.page-car-rental .cr-pricing ul{
+  display: grid;
+  grid-template-columns: 1fr !important;
+  gap: 10px;
+}
+
+body.page-car-rental .cr-pricing li{
+  padding-left: 0 !important;
+  position: relative;
+  padding-left: 14px !important;                 /* Platz für die Linie */
+}
+
+body.page-car-rental .cr-pricing li::before{
+  content: "" !important;                        /* wieder aktiv */
+  display: block !important;
+  position: absolute;
+  left: 0;
+  top: .35em;
+  bottom: .35em;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--amd-accent, #1b6f5a);        /* DAS ist das Grün */
+  box-shadow: 0 0 0 3px rgba(27,111,90,.10);     /* subtile Aura */
+}
+/* PRICING – Premium Bullet */
+body.page-car-rental .cr-pricing li{
+  position: relative;
+  padding-left: 18px !important;
+}
+
+body.page-car-rental .cr-pricing li::before{
+  content: "" !important;
+  position: absolute;
+  left: 0;
+  top: .62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--amd-accent, #1b6f5a);
+  box-shadow: 0 0 0 2px rgba(27,111,90,.10);
+}
+
+/* =========================================
+   HERO – Luxury refinement (B) – nur Car Rental
+   Override: ganz unten
+   ========================================= */
+
+/* Overlay: ruhiger, weniger “hart” */
+body.page-car-rental .cr-hero .hero-bg-overlay{
+  background:
+    linear-gradient(90deg,
+      rgba(2,6,23,.92) 0%,
+      rgba(2,6,23,.80) 34%,
+      rgba(2,6,23,.45) 58%,
+      rgba(2,6,23,.14) 76%,
+      rgba(2,6,23,0) 100%),
+    linear-gradient(180deg, rgba(2,6,23,.08) 0%, rgba(2,6,23,.35) 100%) !important;
+}
+
+/* Kicker (“Autovermietung in Libanon”) edler */
+body.page-car-rental .cr-hero .hero-slogan{
+  font-size: 12px !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  font-weight: 900 !important;
+  opacity: .78 !important;
+}
+
+/* Headline: etwas “teurer” (Spacing + leicht enger) */
+body.page-car-rental .cr-hero .hero-title{
+  letter-spacing: -0.02em !important;
+  line-height: 1.04 !important;
+  text-shadow: 0 24px 70px rgba(0,0,0,.35);
+}
+
+/* Subtitle: ruhiger, besser lesbar */
+body.page-car-rental .cr-hero .hero-subtitle{
+  color: rgba(255,255,255,.88) !important;
+  max-width: 52ch !important;
+}
+
+/* WICHTIG: globales styles.css macht btn-secondary rot → hier zurück auf “Glass” */
+body.page-car-rental .cr-hero .hero-actions .btn.btn-secondary{
+  background: rgba(255,255,255,.10) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: 0 18px 46px rgba(0,0,0,.22) !important;
+  backdrop-filter: blur(10px);
+}
+body.page-car-rental .cr-hero .hero-actions .btn.btn-secondary:hover{
+  background: rgba(255,255,255,.14) !important;
+}
+
+/* Primary: weniger “plastik”, mehr premium */
+body.page-car-rental .cr-hero .hero-actions .btn.btn-primary{
+  box-shadow: 0 18px 46px rgba(0,0,0,.24) !important;
+}
+
+/* Buttons: gleiche Höhe, mehr Ruhe */
+body.page-car-rental .cr-hero .hero-actions .btn{
+  padding: 14px 22px !important;
+  font-weight: 800 !important;
+  min-width: 210px !important;
+}
+
+/* Back-Link: etwas dezenter, wirkt “editorial” */
+body.page-car-rental .cr-hero .hero-back{
+  font-size: 12px !important;
+  letter-spacing: .08em;
+  text-transform: none;
+  opacity: .82;
+}
+body.page-car-rental .cr-hero .hero-back:hover{
+  opacity: 1;
+}
+/* =========================================
+   HERO Service Strip – nicht wie Slogan wirken
+   ========================================= */
+
+body.page-car-rental .cr-service-strip{
+  background: rgba(255,255,255,.92) !important;
+  border-top: 1px solid rgba(2,6,23,.06);
+  border-bottom: 1px solid rgba(2,6,23,.06);
+  padding: 10px 16px !important;
+}
+
+body.page-car-rental .cr-service-strip__line{
+  font-size: 12px !important;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: rgba(2,6,23,.58) !important;
+  opacity: 1 !important;
+}
+
+/* Punkte/Separatoren ruhiger */
+body.page-car-rental .cr-service-strip__sep{
+  opacity: .35 !important;
+}
+
+/* “Strong” darf nicht wie zweiter Slogan aussehen */
+body.page-car-rental .cr-service-strip__line strong{
+  font-weight: 800 !important;
+  color: rgba(2,6,23,.60) !important;
+}
+/* =========================================
+   TRUST – Logo rechts: premium “seal” look
+   ========================================= */
+
+body.page-car-rental .cr-trust-logo{
+  /* weniger “Kasten”, mehr Siegel */
+  padding: 10px 14px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.92) !important;
+  border: 1px solid rgba(2,6,23,.10) !important;
+
+  /* Schatten ruhiger, nicht wie ein Widget */
+  box-shadow:
+    0 14px 36px rgba(2,6,23,.10),
+    0 1px 0 rgba(255,255,255,.70) inset !important;
+
+  /* Breite etwas schlanker, damit es nicht “leer” wirkt */
+  flex: 0 0 240px !important;
+  max-width: 240px !important;
+
+  align-self: center;
+}
+
+/* Bild selbst: größer + weniger “Rand” */
+body.page-car-rental .cr-trust-logo img{
+  width: 100% !important;
+  max-height: 56px !important;      /* wirkt kompakter */
+  object-fit: contain !important;
+  display: block;
+  margin: 0 auto;
+
+  /* weniger “sticker”-haft */
+  filter: contrast(1.06) saturate(.95);
+}
+body.page-car-rental .cr-trust-logo img{
+  transform: scale(1.08);
+  transform-origin: center;
+}
+
+/* =====================================
+   MOBILE FIXES – Car Rental
+   ===================================== */
+@media (max-width: 768px){
+
+  /* 1️⃣ Trust-Line nur einmal (nach Hero ausblenden) */
+  body.page-car-rental .cr-service-strip{
+    display: none;
+  }
+
+  /* 2️⃣ Hero-Höhe reduzieren */
+  body.page-car-rental .cr-hero{
+    min-height: 78vh !important;
+    padding-bottom: 20px;
+  }
+
+  /* Headline etwas kompakter */
+  body.page-car-rental .hero-title{
+    font-size: clamp(28px, 7vw, 36px) !important;
+    line-height: 1.08 !important;
+  }
+
+  /* 3️⃣ Buttons: klare Hierarchie */
+  body.page-car-rental .hero-actions{
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  body.page-car-rental .hero-actions .btn{
+    width: 100%;
+    min-width: unset !important;
+  }
+
+  /* Secondary deutlich ruhiger */
+  body.page-car-rental .hero-actions .btn-secondary{
+    background: rgba(255,255,255,.08) !important;
+    border: 1px solid rgba(255,255,255,.22) !important;
+    box-shadow: none !important;
+  }
+
+  /* 4️⃣ Trust-Box mobil neu ordnen */
+  body.page-car-rental .cr-trust{
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+    text-align: left;
+  }
+
+  body.page-car-rental .cr-trust-logo{
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  body.page-car-rental .cr-trust-logo img{
+    max-height: 44px;
+  }
+
+  /* 5️⃣ Header kompakter */
+  body.page-car-rental .site-header{
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  body.page-car-rental .lang-switch{
+    transform: scale(.9);
+  }
+}
+/* =========================
+   MOBILE: Telefonnummer sauber untereinander
+   ========================= */
+@media (max-width: 768px){
+  body.page-car-rental .form-note{
+    display: flex;
+    flex-direction: column;   /* Text + Nummer untereinander */
+    gap: 6px;
+    line-height: 1.35;
+  }
+
+  /* falls die Nummer in einem <a href="tel:..."> steckt */
+  body.page-car-rental .form-note a[href^="tel"]{
+    white-space: nowrap;      /* Nummer bleibt am Stück */
+    font-weight: 800;
+    color: rgba(2,6,23,.72);
+  }
+}
+/* =========================
+   MOBILE: Hero kompakter
+   ========================= */
+@media (max-width: 768px){
+  body.page-car-rental .cr-hero{
+    min-height: 68vh !important;     /* vorher zu hoch */
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  body.page-car-rental .hero-title{
+    font-size: clamp(26px, 7vw, 34px) !important;
+    margin-bottom: 10px !important;
+  }
+
+  body.page-car-rental .hero-subtitle{
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
+  }
+
+  body.page-car-rental .hero-actions .btn{
+    padding: 12px 18px !important;  /* Buttons etwas weniger “fett” */
+  }
+}
+/* FINAL MOBILE HERO SIZE – nicht splashig */
+@media (max-width: 768px){
+  body.page-car-rental .cr-hero{
+    min-height: 52vh !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  body.page-car-rental .hero-title{
+    font-size: clamp(24px, 6.5vw, 32px) !important;
+    line-height: 1.06 !important;
+  }
+
+  body.page-car-rental .hero-subtitle{
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+  }
+}
+/* =========================================
+   MOBILE HERO – FINAL, KONTROLLIERT
+   ========================================= */
+@media (max-width: 768px){
+
+  body.page-car-rental .cr-hero{
+    height: auto !important;        /* DAS ist der Schlüssel */
+    min-height: 52vh !important;    /* realistische Hero-Höhe */
+    border-radius: 0 0 22px 22px;
+  }
+
+  body.page-car-rental .cr-hero .hero-content{
+    padding: 18px 0 16px !important;
+  }
+
+  body.page-car-rental .hero-title{
+    font-size: clamp(24px, 6.5vw, 32px) !important;
+    line-height: 1.05 !important;
+  }
+
+  body.page-car-rental .hero-subtitle{
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+  }
+}
+/* MOBILE: Service-Strip direkt unter Hero wieder sichtbar */
+@media (max-width: 768px){
+  body.page-car-rental .cr-service-strip{
+    display: block !important;
+    margin-top: -10px;                  /* sitzt optisch direkt unter dem Hero */
+    position: relative;
+    z-index: 2;
+    padding: 10px 14px !important;
+    background: rgba(255,255,255,.94) !important;
+    border-top: 1px solid rgba(2,6,23,.06);
+    border-bottom: 1px solid rgba(2,6,23,.06);
+  }
+
+  body.page-car-rental .cr-service-strip__line{
+    font-size: 11px !important;
+    letter-spacing: .18em !important;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: rgba(2,6,23,.58) !important;
+  }
+
+  body.page-car-rental .cr-service-strip__sep{
+    opacity: .35 !important;
+  }
+}
+
+/* MOBILE: Service-Strip nicht auf die nächste Karte kleben */
+@media (max-width: 768px){
+  body.page-car-rental .cr-service-strip{
+    margin-top: 0 !important;        /* kein reindrücken */
+    margin-bottom: 18px !important;  /* Luft zur Trust-Card */
+    padding: 10px 14px !important;
+  }
+
+  /* falls die nächste Section noch zu nah dran ist */
+  body.page-car-rental .cr-trust-section{
+    padding-top: 14px !important;
+  }
+}
+/* MOBILE: Service-Strip näher an den Hero, ohne auf die Karte zu kleben */
+@media (max-width: 768px){
+  body.page-car-rental .cr-service-strip{
+    margin-top: 0 !important;
+    margin-bottom: 18px !important;
+
+    transform: translateY(-30px);   /* zieht hoch, ohne Layout-Kollision */
+    position: relative;
+    z-index: 3;
+  }
+
+  /* Karte darunter bekommt etwas Luft, damit nichts “klebt” */
+  body.page-car-rental .cr-trust-section{
+    padding-top: 24px !important;
+  }
+}
+/* ===== Elegant Pricing Block (Car Rental) ===== */
+.cr-price {
+  margin: 1.2rem 0 1rem;
+  padding: .9rem 1rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f6f4 100%);
+  border: 1px solid var(--amd-border, #e6e2df);
+}
+
+.cr-price-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: .5rem;
+  align-items: baseline;
+  padding: .25rem 0;
+  font-size: .95rem;
+}
+
+.cr-price-row:not(:last-child) {
+  border-bottom: 1px dashed #e1ddd9;
+}
+
+.cr-price .lbl {
+  color: var(--amd-text-muted);
+  font-weight: 500;
+}
+
+.cr-price .val {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--amd-primary);
+}
+
+.cr-price .meta {
+  font-size: .85rem;
+  color: var(--amd-text-muted);
+}
+
+.cr-price-note {
+  margin-top: .5rem;
+  font-size: .8rem;
+  color: var(--amd-text-muted);
+}
+/* =========================
+   HERO IMAGE FOCUS – FINAL FIX
+   ========================= */
+
+/* Desktop / Tablet */
+body.page-car-rental .cr-hero .hero-bg-image img{
+  object-position: 28% 50%; /* mehr Auto, weniger Hand */
+}
+
+/* Mobile: stärkerer Eingriff */
+@media (max-width: 768px){
+  body.page-car-rental .cr-hero .hero-bg-image img{
+    object-position: 40% 42%;
+    transform: scale(1.08); /* verhindert leere Ränder */
+  }
+}
+/* TEST: Hero Bild-Fokus erzwingen (muss sichtbar sein) */
+body.page-car-rental .cr-hero .hero-bg-image img{
+  object-position: 0% 50% !important;   /* ganz links */
+  transform: scale(1.20) !important;    /* deutlich */
+}
+/* === HERO BACKGROUND IMAGE (FINAL) === */
+.hero-bg-car-rental{
+  position:absolute;
+  inset:0;
+  background-image: url("../img/hero-car-rental.jpg");
+  background-size: cover;
+  background-position: 35% center; /* Fokus Richtung Fahrzeug */
+  z-index:0;
+}
+
+/* Mobile gezielt nachjustieren */
+@media (max-width: 768px){
+  .hero-bg-car-rental{
+    background-position: 45% 45%;
+  }
+}
+/* HERO – Bild sichtbar machen */
+body.page-car-rental .cr-hero .hero-bg-image img{
+  filter: brightness(1.00) contrast(1.00) saturate(1.00);
+}
+
+/* Overlay weniger stark (damit Bild durchkommt) */
+body.page-car-rental .cr-hero .hero-bg-overlay{
+  opacity: .50; /* vorher wirkt es wie 0.75+ */
+}
+
+/* ===== HERO HEIGHT FIX (final) ===== */
+body.page-car-rental .cr-hero{
+  height: clamp(420px, 60vh, 560px) !important;
+  min-height: unset !important;
+}
+body.page-car-rental .cr-hero .hero-content{
+  padding-top: 110px !important;
+}
+/* Bild nicht künstlich weichzeichnen */
+body.page-car-rental .cr-hero .hero-bg-image img{
+  transform: none !important;
+  filter: contrast(1.05) saturate(1.05);
+}
+body.page-car-rental .cr-hero .hero-bg-overlay{
+  background:
+    linear-gradient(90deg,
+      rgba(2,6,23,.85) 0%,
+      rgba(2,6,23,.55) 45%,
+      rgba(2,6,23,.20) 70%,
+      rgba(2,6,23,0) 100%),
+    linear-gradient(180deg,
+      rgba(2,6,23,.05) 0%,
+      rgba(2,6,23,.35) 100%);
+}
+@media (max-width: 640px){
+  body.page-car-rental .cr-hero{
+    height: 420px !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-title{
+    font-size: 32px !important;
+    line-height: 1.1;
+  }
+}
+/* =========================
+   HERO – FINAL (clean)
+   - Text nie abgeschnitten
+   - Bild nicht dunkler
+   - Kein “nur unterer Teil”
+   ========================= */
+
+body.page-car-rental .cr-hero{
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 28px 28px;
+  height: clamp(420px, 58vh, 560px);
+  display: flex;
+  align-items: center;
+}
+
+/* Hintergrundbild (DIV, kein <img>) */
+body.page-car-rental .cr-hero .hero-bg-image.hero-bg-car-rental{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  /* WICHTIG: Pfad korrekt zu assets/img/ */
+  background-image: url("../img/hero-car-rental.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;          /* keine Balken */
+  background-position: 35% center; /* Fokus weg von “nur Hand” */
+}
+
+/* Overlay aus (nicht dunkler) */
+body.page-car-rental .cr-hero .hero-bg-overlay{
+  background: transparent !important;
+  opacity: 1 !important;
+}
+
+/* Textlayout: sauber, immer sichtbar */
+body.page-car-rental .cr-hero .hero-content{
+  position: relative;
+  z-index: 2;
+  width: min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 92px 0 44px;  /* Abstand zum Header */
+  color: #fff;
+}
+
+/* Lesbarkeit ohne Overlay (nur leichter Schatten) */
+body.page-car-rental .cr-hero .hero-title,
+body.page-car-rental .cr-hero .hero-subtitle,
+body.page-car-rental .cr-hero .hero-back,
+body.page-car-rental .cr-hero .hero-slogan{
+  text-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+
+@media (max-width: 640px){
+  body.page-car-rental .cr-hero{
+    height: 460px;
+  }
+  body.page-car-rental .cr-hero .hero-content{
+    width: calc(100% - 24px);
+    padding: 84px 0 28px;
+  }
+  body.page-car-rental .cr-hero .hero-bg-image.hero-bg-car-rental{
+    background-position: 28% 35%;
+  }
+}
+
+/* HERO: Buttons wieder sichtbar + mehr Schlüssel oben */
+body.page-car-rental .cr-hero{
+  height: clamp(420px, 58vh, 560px); /* Rahmen bleibt */
+}
+
+body.page-car-rental .cr-hero .hero-bg-image.hero-bg-car-rental{
+  background-size: cover;
+  background-position: 55% 18%; /* <<< mehr nach OBEN = Schlüssel eher sichtbar */
+}
+
+body.page-car-rental .cr-hero .hero-content{
+  padding: 92px 0 70px;  /* <<< unten mehr Platz, damit Buttons nicht abgeschnitten werden */
+}
+
+body.page-car-rental .cr-hero .hero-actions{
+  margin-top: 18px;
+  position: relative;
+  z-index: 3;            /* <<< sicher über Bild/Overlay */
+}
+/* HERO: Buttons garantiert sichtbar (ohne Bildänderung) */
+body.page-car-rental .cr-hero .hero-content{
+  padding-bottom: 110px !important; /* mehr Platz für die Buttons */
+}
+
+body.page-car-rental .cr-hero .hero-actions{
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-top: 18px !important;
+  position: relative;
+  z-index: 5; /* sicher über Background/Overlay */
+}
+
+/* Falls irgendwo noch ein Overlay “drüber” liegt */
+body.page-car-rental .cr-hero .hero-bg-overlay{
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+body.page-car-rental .cr-hero .hero-bg-image{
+  z-index: 0 !important;
+}
+body.page-car-rental .cr-hero .hero-content{
+  z-index: 2 !important;
+}
+/* Back-Link immer sichtbar (oben links im Hero) */
+body.page-car-rental .cr-hero .hero-back{
+  position: absolute !important;
+  top: 16px;
+  left: 18px;
+  z-index: 10;
+
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.92) !important; /* dein rgba(...,9) ist falsch */
+  text-decoration: none !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body.page-car-rental .cr-hero .hero-back:hover{
+  background: rgba(0,0,0,.30);
+  color: #fff !important;
+}
+
+/* AR (RTL): oben rechts */
+html[dir="rtl"] body.page-car-rental .cr-hero .hero-back{
+  left: auto;
+  right: 18px;
+}
+/* ===== HERO: oben nicht abschneiden + Buttons etwas höher ===== */
+
+/* 1) Mehr Luft oben, damit Slogan nicht halb abgeschnitten ist */
+body.page-car-rental .cr-hero .hero-content{
+  padding-top: 118px !important;   /* war 90px */
+  padding-bottom: 58px !important; /* genug Platz, aber nicht “zu tief” */
+}
+
+/* 2) Buttons minimal nach oben ziehen */
+body.page-car-rental .cr-hero .hero-actions{
+  transform: none !important;
+  justify-content: center;
+  margin-top: 16px;
+  margin-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+}
+
+body.page-car-rental .cr-hero .hero-actions .btn.btn-primary{
+  min-width: 0;
+  width: min(320px, 100%);
+  padding: 11px 16px;
+  font-size: 15px;
+  border-radius: 999px;
+}
+
+/* 3) Zurück-Link immer sichtbar: aus dem Flow raus */
+body.page-car-rental .cr-hero .hero-back{
+  position: absolute !important;
+  top: 14px;
+  left: 18px;
+  z-index: 50;
+
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.92) !important;
+  text-decoration: none !important;
+}
+/* CTA wirklich mittig */
+body.page-car-rental .cr-hero .hero-actions{
+  transform: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: center !important;
+}
+
+body.page-car-rental .cr-hero .hero-actions .btn.btn-primary{
+  display: inline-flex !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: min(320px, 100%) !important;
+}
+
+/* RTL (AR): rechts */
+html[dir="rtl"] body.page-car-rental .cr-hero .hero-back{
+  left: auto;
+  right: 18px;
+}
+
+/* sehr kleine Höhen */
+@media (max-height: 780px){
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 104px !important;
+  }
+}
+
+/* Hero Bild */
+body.page-car-rental .cr-hero .hero-bg-image.hero-bg-car-rental{
+  filter:contrast(1.05) saturate(1.03);
+  transform:none;
+}
+
+
+/* =========================================================
+   3) FORM BUTTONS – identische Größe (rot + WhatsApp)
+   ========================================================= */
+
+body.page-car-rental .form-actions{
+  display:grid;
+  gap:.8rem;
+}
+
+body.page-car-rental .form-actions .btn{
+  width:100%;
+  height:56px;
+  min-height:56px;
+  padding:0 18px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  border-radius:999px;
+  line-height:1;
+  box-sizing:border-box;
+
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+body.page-car-rental .btn-whatsapp .btn-icon{
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+}
+
+
+
+/* ===== Car Rental: Anfrage-CTA Button mittig (iPhone + überall sauber) ===== */
+body.page-car-rental .cr-request-cta__actions{
+  display: flex;
+  justify-content: center;
+}
+
+body.page-car-rental .cr-request-cta__actions .btn{
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Back-Pill etwas weiter runter (unter Header) */
+body.page-car-rental .cr-hero .hero-back{
+  top: 66px !important; /* vorher 10px – jetzt sauber unter dem Logo */
+}
+
+/* Content minimal anpassen, damit nichts überdeckt */
+body.page-car-rental .cr-hero .hero-content{
+  padding-top: 140px !important;
+}
+/* AR (RTL): Close (X) im Car-Rental-Modal LINKS, damit kein Text überdeckt wird */
+html[dir="rtl"] .page-car-rental #crInquiryModal .pt-modal__panel{
+  position: relative;
+}
+
+html[dir="rtl"] .page-car-rental #crInquiryModal .pt-modal__close{
+  left: 16px !important;
+  right: auto !important;
+}
+/* =====================================================
+   CAR RENTAL – DESKTOP FIX (Back-Pill sichtbar + Button mit Luft)
+   NUR Desktop/Tablet, Mobile bleibt wie jetzt.
+   ===================================================== */
+@media (min-width: 721px){
+
+  /* Hero-Content sauber unter Header starten */
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 110px !important;
+    padding-bottom: 84px !important;
+  }
+
+  /* Back-Pill NICHT absolut (sonst landet er unter dem Header) */
+  body.page-car-rental .cr-hero .hero-back{
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 0 16px !important;
+    padding: 8px 12px !important;
+    border-radius: 999px !important;
+
+    background: rgba(0,0,0,.22) !important;
+    border: 1px solid rgba(255,255,255,.22) !important;
+    color: rgba(255,255,255,.92) !important;
+    text-decoration: none !important;
+
+    z-index: 20 !important;
+  }
+
+  /* Button nicht mehr “hochziehen” (transform killen) + unten Luft */
+  body.page-car-rental .cr-hero .hero-actions{
+    transform: none !important;
+    margin-top: 18px !important;
+    margin-bottom: 12px !important;
+  }
+}
+/* =====================================================
+   CAR RENTAL – DESKTOP HERO FIX (Mobile bleibt wie jetzt)
+   Ziel: Back-Pill sichtbar + Button höher + keine Overlays
+   ===================================================== */
+@media (min-width: 721px){
+
+  /* Hero-Content startet sauber unter dem Header */
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 110px !important;   /* nicht zu groß, sonst rutscht alles runter */
+    padding-bottom: 78px !important; /* unten Luft, ohne dass Button abgeschnitten wirkt */
+  }
+
+  /* Zurück-Pill: NICHT absolut, sonst verschwindet er unter dem Header */
+  body.page-car-rental .cr-hero .hero-back{
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 0 16px !important;
+  }
+
+  /* Button: kein Hochziehen/kein Transform – saubere Position */
+  body.page-car-rental .cr-hero .hero-actions{
+    transform: none !important;
+    margin-top: 16px !important;
+  }
+}
+/* =====================================================
+   CAR RENTAL – HERO VISIBILITY FIX (DESKTOP)
+   Ziel: Back-Pill + Button NICHT verdeckt / NICHT abgeschnitten
+   MUSS ganz ans Ende von car-rental.css
+   ===================================================== */
+@media (min-width: 721px){
+
+  /* genug “Bühne” oben/unten, damit nichts vom Header/Radius geclippt wird */
+  body.page-car-rental .cr-hero{
+    height: clamp(560px, 72vh, 720px) !important;
+    overflow: hidden !important; /* Radius bleibt sauber */
+  }
+
+  /* Content sitzt sicher unter dem Header + unten Platz für CTA */
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 140px !important;
+    padding-bottom: 110px !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
+
+  /* Back-Pill bleibt im Flow (nicht unter Header “festgenagelt”) */
+  body.page-car-rental .cr-hero .hero-back{
+    position: static !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 0 18px !important;
+    padding: 8px 12px !important;
+    border-radius: 999px !important;
+
+    background: rgba(0,0,0,.22) !important;
+    border: 1px solid rgba(255,255,255,.22) !important;
+    color: rgba(255,255,255,.92) !important;
+    text-decoration: none !important;
+
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+     /* verhindert “vollbreit”-Stretch auf Desktop */
+  width: fit-content !important;
+  max-width: calc(100% - 24px) !important;
+  flex: 0 0 auto !important;
+  align-self: flex-start !important;
+  justify-self: start !important;
+  white-space: nowrap !important;
+
+  }
+
+  /* CTA darf NIE negativ verschoben werden -> sonst clip am Hero-Rand */
+  body.page-car-rental .cr-hero .hero-actions{
+    transform: none !important;
+    margin-top: 18px !important;
+    margin-bottom: 0 !important;
+    position: relative !important;
+    z-index: 6 !important;
+  }
+}
+/* ===== WhatsApp Button: Text immer weiß ===== */
+body.page-car-rental #btnRentalWhatsApp{
+  color: #fff !important;
+  text-decoration: none !important;
+}
+/* ===== WhatsApp Button: Text immer weiß ===== */
+body.page-car-rental #btnRentalWhatsApp{
+  color: #fff !important;
+}
+
+/* ===== Telefon-Link (Nummer) überall rot – aber NICHT der WhatsApp-Button ===== */
+body.page-car-rental a[href*="wa.me/96181622668"]:not(#btnRentalWhatsApp){
+  color: #c81e1e !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+/* roter Hörer (SVG) übernimmt currentColor vom Link */
+body.page-car-rental a[href*="wa.me/96181622668"]:not(#btnRentalWhatsApp) .amd-phone-icon{
+  width: 16px !important;
+  height: 16px !important;
+  vertical-align: -2px !important;
+  margin-right: 8px !important;
+}
+body.page-car-rental a[href*="wa.me/96181622668"]:not(#btnRentalWhatsApp) .amd-phone-icon path{
+  fill: currentColor !important;
+}
+/* ===== HARD OVERRIDE: WhatsApp-Button Text IMMER weiß ===== */
+body.page-car-rental .pt-modal .form-actions a#btnRentalWhatsApp.btn.btn-whatsapp.has-icon,
+body.page-car-rental .pt-modal .form-actions a#btnRentalWhatsApp.btn.btn-whatsapp.has-icon:visited,
+body.page-car-rental .pt-modal .form-actions a#btnRentalWhatsApp.btn.btn-whatsapp.has-icon:hover{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important; /* iOS/Safari + harte Button-Styles */
+}
+
+/* falls ein globales Rule die Kinder färbt */
+body.page-car-rental .pt-modal .form-actions a#btnRentalWhatsApp *{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+/* ===== AR: Telefonnummer immer LTR (nicht gespiegelt) ===== */
+body[dir="rtl"] .amd-phone-ltr{
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+/* =========================================
+   PHONE LINE – AR: Nummer immer korrekt LTR + 1 Zeile
+   ========================================= */
+
+body.page-car-rental .form-note{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+body.page-car-rental .form-note-label{
+  white-space: nowrap !important;
+}
+
+body.page-car-rental .form-note-phone{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+
+  color: #c81e1e !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+}
+
+/* Nummer in RTL wirklich LTR erzwingen (das ist der entscheidende Punkt) */
+body[dir="rtl"] .amd-phone-ltr{
+  direction: ltr !important;
+ unicode-bidi: isolate !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+
+/* Icon rot über currentColor */
+body.page-car-rental .form-note-phone .amd-phone-icon{
+  width: 16px !important;
+  height: 16px !important;
+  flex: 0 0 16px !important;
+}
+body.page-car-rental .form-note-phone .amd-phone-icon path{
+  fill: currentColor !important;
+}
+
+/* Sehr kleine Screens: minimal kleiner, aber bleibt 1 Zeile */
+@media (max-width: 380px){
+  body.page-car-rental .form-note{ font-size: 0.85rem !important; }
+}
+/* FIX: Telefonnummern korrekt in RTL (Modal, Footer, überall) */
+body[dir="rtl"] .amd-phone-ltr{
+
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+/* FIX: Telefonnummer im AR-Buchungsdialog korrekt darstellen */
+.phone-ltr{
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  white-space: nowrap !important;
+  display: inline-block;
+  text-align: left;
+}
+/* Partner-ID – Label immer oberhalb des Feldes (auch auf iPhone) */
+.partner-row{
+  display: flex;
+  flex-direction: column;      /* untereinander statt nebeneinander */
+  align-items: flex-start;
+  gap: 4px;
+  margin: 10px 0 18px;
+}
+
+.partner-label{
+  font-size: .85rem;
+  font-weight: 500;
+  color: #6b7280;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.partner-input{
+  width: 100%;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 0 14px;
+  font-size: .95rem;
+  font-weight: 400;
+  background: #fff;
+}
+
+/* RTL nur Ausrichtung anpassen, nicht mehr die Richtung drehen */
+html[dir="rtl"] .partner-row{
+  align-items: flex-end;
+}
+
+/* Partner-Zeile im Modal-Kopf (Car Rental) */
+body.page-car-rental .pt-modal__head{
+  position: relative;
+  padding-right: 60px;     /* Platz für das X rechts */
+}
+
+/* RTL: X ist links, also Platz links schaffen */
+html[dir="rtl"] body.page-car-rental .pt-modal__head{
+  padding-right: 1.1rem;
+  padding-left: 60px;
+}
+
+body.page-car-rental .pt-modal__partner{
+  position: static;        /* NICHT absolut → normale Zeile */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  white-space: nowrap;     /* eine Linie, kein Umbruch */
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+/* AR: Text+Logo nach links ausrichten */
+html[dir="rtl"] body.page-car-rental .pt-modal__partner{
+  justify-content: flex-start;
+}
+
+body.page-car-rental .pt-modal__partner-label{
+  opacity: 0.75;
+}
+
+body.page-car-rental .pt-modal__partner img{
+  max-height: 20px;
+  width: auto;
+  display: block;
+}
+/* Apple CarPlay – dezent hervorheben */
+body.page-car-rental .cr-feature-apple{
+  font-weight: 700;
+  color: #c81e1e; /* AMD Rot */
+  position: relative;
+}
+
+body.page-car-rental .cr-feature-apple::before{
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 0.55em;
+  transform: translateY(-50%);
+  background: rgba(200,30,30,.08);
+  border-radius: 999px;
+  z-index: -1;
+}
+/* Fahrzeugbilder – gleiche Bühne für alle Karten */
+body.page-car-rental .cr-img{
+  height: 260px;
+  padding: 14px 18px 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+body.page-car-rental .cr-img img{
+  max-height: 220px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* Feintuning je Karte – minimal, damit sie optisch auf einer Linie stehen */
+body.page-car-rental .cr-card:nth-child(1) .cr-img img{ transform: translateY(4px); }  /* Audi Q7 */
+body.page-car-rental .cr-card:nth-child(2) .cr-img img{ transform: translateY(6px); }  /* Range Rover */
+body.page-car-rental .cr-card:nth-child(3) .cr-img img{ transform: translateY(2px); }  /* Tucson */
+body.page-car-rental .cr-card:nth-child(4) .cr-img img{ transform: translateY(4px); }  /* Sportage */
+body.page-car-rental .cr-card:nth-child(5) .cr-img img{ transform: translateY(4px); }  /* Qashqai */
+body.page-car-rental .cr-card:nth-child(6) .cr-img img{ transform: translateY(6px); }  /* Picanto */
+/* AR-Spezial: Bullets rechts statt links im Pricing-Block */
+html[lang="ar"] body.page-car-rental .cr-pricing ul{
+  direction: rtl;              /* Textfluss rechts -> links */
+}
+
+html[lang="ar"] body.page-car-rental .cr-pricing li{
+  padding-right: 18px !important;
+  padding-left: 0 !important;
+  text-align: right;           /* Text sauber rechts ausrichten */
+}
+
+html[lang="ar"] body.page-car-rental .cr-pricing li::before{
+  right: 0;                    /* Bullet rechts */
+  left: auto;
+}
+/* ========================
+   AR: Hero-Text rechtsbündig
+   ======================== */
+html[dir="rtl"] body.page-car-rental .cr-hero .hero-content{
+  text-align: right !important;
+}
+
+html[dir="rtl"] body.page-car-rental .cr-hero .hero-slogan,
+html[dir="rtl"] body.page-car-rental .cr-hero .hero-title,
+html[dir="rtl"] body.page-car-rental .cr-hero .hero-subtitle{
+  text-align: right !important;
+}
+
+
+
+html[dir="rtl"] body.page-car-rental .cr-pricing li{
+  padding-left: 0 !important;
+  padding-right: 20px !important;
+}
+
+html[dir="rtl"] body.page-car-rental .cr-pricing li::before{
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* ========================
+   Anfrage-Text mittig (alle Sprachen)
+   ======================== */
+body.page-car-rental .cr-request-cta{
+  text-align: center;
+}
+
+body.page-car-rental .cr-request-cta__text{
+  max-width: 52rem;
+  margin: 0 auto 1.1rem;
+}
+/* ===== MOBILE: Partner-ID bleibt im Rahmen ===== */
+@media (max-width: 480px){
+  body.page-car-rental .partner-row{
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  body.page-car-rental .partner-label{
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  body.page-car-rental .partner-input{
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+body.page-car-rental .pt-modal__partner[hidden]{
+  display: none !important;
+}
+body.page-car-rental .amd-form .form-actions{
+  width: 100%;
+}
+
+body.page-car-rental .amd-form .form-actions .btn{
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Abstand unter dem roten "Anfrage öffnen" Button (Car Rental) */
+body.page-car-rental main > .section.section-form:last-of-type{
+  padding-bottom: 80px !important;  /* mehr Luft unter dem Button */
+  margin-bottom: 32px !important;
+}
+
+
+/* FINAL: Buttons im Car-Rental-Modal – kleinere Schrift, 2 Zeilen möglich */
+body.page-car-rental .amd-form .form-actions .btn{
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  height: auto;              /* nicht mehr fix */
+  min-height: 48px;
+
+  padding: 0.65rem 1.4rem;
+  font-size: 0.9rem !important;   /* kleiner als die 16px-Standardregel */
+  line-height: 1.25;
+  white-space: normal;            /* Text darf umbrechen */
+}
+
+/* 7) Abstand zum Footer – roter Button hat Luft */
+body.page-car-rental main > .section.section-form:last-of-type {
+  padding-bottom: 40px !important;
+  margin-bottom: 20px !important;
+}
+
+/* 8) iOS-Zoom verhindern – Basis-Schriftgröße */
+body.page-car-rental input,
+body.page-car-rental select,
+body.page-car-rental textarea,
+body.page-car-rental button {
+  font-size: 16px;
+}
+.cr-no-match{
+  text-align: center;
+  margin: 28px 0 10px;
+}
+
+.cr-no-match-text{
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.cr-no-match-text a{
+  color: #c81e1e;
+  text-decoration: none;
+  font-weight: 700;
+}
+/* =========================================================
+   CAR RENTAL – BUCHUNGSBEREICH (clean, iPhone-freundlich)
+   ========================================================= */
+
+/* ---------- Anfrage-Section & CTA ---------- */
+
+body.page-car-rental .section.section-form {
+  padding-top: 18px;
+  padding-bottom: 56px;
+}
+
+body.page-car-rental .section-form .section-header--center {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+body.page-car-rental .section-form .section-subtitle {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: rgba(15,23,42,.55);
+}
+
+body.page-car-rental .section-form .section-title {
+  letter-spacing: -0.02em;
+}
+
+body.page-car-rental .cr-request-cta {
+  text-align: center;
+}
+
+body.page-car-rental .cr-request-cta__text {
+  max-width: 52rem;
+  margin: 0 auto 1.1rem;
+}
+
+body.page-car-rental .cr-request-cta__actions {
+  display: flex;
+  justify-content: center;
+}
+
+body.page-car-rental .cr-request-cta__actions .btn {
+  min-width: 220px;
+}
+
+/* ---------- Modal-Grundstruktur ---------- */
+
+body.page-car-rental .pt-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 9998;
+  padding: 16px;
+  overflow-y: auto;              /* EIN Scroll-Bereich */
+  -webkit-overflow-scrolling: touch;
+}
+
+body.page-car-rental .pt-modal.is-open {
+  display: block;
+}
+
+body.page-car-rental .pt-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,12,16,.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Panel: Karte, die bei Bedarf IN SICH scrollt */
+body.page-car-rental .pt-modal__panel {
+  position: relative;
+  max-width: 760px;
+  margin: 32px auto;
+  background: #ffffff;
+  border: 1px solid rgba(15,23,42,.10);
+  border-radius: 20px;
+  box-shadow: 0 26px 80px rgba(15,23,42,.25);
+  padding: 20px 20px 22px;
+
+  /* NEU: sichtbarer Scrollbalken im Dialog */
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 600px) {
+  body.page-car-rental .pt-modal__panel {
+    margin: 18px auto;
+    border-radius: 18px;
+    padding: 16px 14px 18px;
+
+    /* auf kleineren Screens etwas mehr Höhe erlauben */
+    max-height: calc(100vh - 36px);
+  }
+}
+
+body.page-car-rental .pt-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,.12);
+  background: #ffffff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* RTL: Close links */
+html[dir="rtl"] body.page-car-rental .pt-modal__close {
+  right: auto;
+  left: 10px;
+}
+
+/* ---------- Modal-Kopf (Titel + Partner) ---------- */
+
+body.page-car-rental .pt-modal__head {
+  padding: 4px 4px 14px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(15,23,42,.06);
+}
+
+body.page-car-rental .pt-modal__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+body.page-car-rental .pt-modal__hint {
+  font-size: .88rem;
+  color: rgba(15,23,42,.70);
+  margin: 0;
+}
+
+/* Partner-Logo-Zeile */
+body.page-car-rental .pt-modal__partner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  font-size: .78rem;
+  opacity: .85;
+}
+
+html[dir="rtl"] body.page-car-rental .pt-modal__partner {
+  justify-content: flex-start;
+}
+
+body.page-car-rental .pt-modal__partner[hidden] {
+  display: none !important;
+}
+
+body.page-car-rental .pt-modal__partner-label {
+  opacity: .75;
+}
+
+body.page-car-rental .pt-modal__partner img {
+  max-height: 20px;
+  width: auto;
+  display: block;
+}
+
+/* ---------- Formular-Karte ---------- */
+
+body.page-car-rental .amd-form {
+  margin-top: 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(15,23,42,.10);
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15,23,42,.10);
+  padding: 22px 20px;
+}
+
+@media (max-width: 700px) {
+  body.page-car-rental .amd-form {
+    padding: 18px 14px 20px;
+    border-radius: 20px;
+  }
+}
+
+/* Sicherheit: kein animiertes Gezappel */
+body.page-car-rental .amd-form,
+body.page-car-rental .amd-form * {
+  box-sizing: border-box;
+  transition: none !important;
+}
+
+/* ---------- Reihen & Felder ---------- */
+
+body.page-car-rental .amd-form .form-row,
+body.page-car-rental .amd-form .form-row-two {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+body.page-car-rental .amd-form .form-field {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* Desktop: zwei Spalten für .form-row-two */
+@media (min-width: 768px) {
+  body.page-car-rental .amd-form .form-row-two .form-field {
+    flex: 1 1 0;
+  }
+}
+
+/* Mobile: wirklich alles einspaltig */
+@media (max-width: 767px) {
+  body.page-car-rental .amd-form .form-row,
+  body.page-car-rental .amd-form .form-row-two {
+    flex-direction: column;
+  }
+
+  body.page-car-rental .amd-form .form-row .form-field,
+  body.page-car-rental .amd-form .form-row-two .form-field {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}
+
+/* ---------- Labels ---------- */
+
+body.page-car-rental .amd-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(15,23,42,.78);
+}
+
+/* ---------- Eingabefelder ---------- */
+
+body.page-car-rental .amd-form input,
+body.page-car-rental .amd-form select,
+body.page-car-rental .amd-form textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(15,23,42,.16);
+  background: #ffffff;
+  padding: .70rem .95rem;
+  font-size: 1rem;              /* ~16px → kein iOS-Zoom */
+  line-height: 1.3;
+  color: #111827;
+  -webkit-text-fill-color: #111827;
+}
+
+body.page-car-rental .amd-form input[type="date"],
+body.page-car-rental .amd-form input[type="time"],
+body.page-car-rental .amd-form select{
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 14px;
+  border: 1px solid rgba(15,23,42,.16);
+  padding: .70rem .95rem;
+  font-size: 1rem;
+  line-height: 1.3;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+body.page-car-rental .amd-form input[type="date"],
+body.page-car-rental .amd-form select {
+  font-size: 1rem;
+}
+
+body.page-car-rental .amd-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ---------- Checkbox (Datenschutz / AGB) ---------- */
+
+body.page-car-rental .amd-form label.pt-check {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  margin: 10px 0 10px;
+  padding: .35rem .75rem .45rem;
+  border-radius: 14px;
+  border: 1px solid rgba(15,23,42,.16);
+  background: #ffffff;
+  font-size: .82rem;
+  line-height: 1.35;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+body.page-car-rental .amd-form label.pt-check input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin-top: .10rem;
+}
+
+/* Fake-Box vor dem Text (optional, aber hübsch) */
+body.page-car-rental .amd-form label.pt-check span::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: .25rem;
+  border-radius: 4px;
+  border: 1.5px solid #9ca3af;
+  background: #ffffff;
+  vertical-align: text-top;
+}
+
+/* Haken bei :checked */
+body.page-car-rental .amd-form label.pt-check input:checked + span::before {
+  background: #c1272d;
+  border-color: #c1272d;
+  box-shadow: 0 0 0 2px rgba(193,39,45,.25);
+}
+
+/* Text darf umbrechen */
+body.page-car-rental .amd-form label.pt-check span {
+  display: inline-block;
+  white-space: normal;
+  max-width: 100%;
+}
+
+/* ---------- Partner-ID ---------- */
+
+body.page-car-rental .amd-form .partner-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin: 12px 0 16px;
+}
+
+body.page-car-rental .amd-form .partner-label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: rgba(15,23,42,.75);
+  margin-bottom: 0;
+}
+
+body.page-car-rental .amd-form .partner-input {
+  width: 100%;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 0 .85rem;
+  font-size: .95rem;
+  background: #ffffff;
+}
+
+/* RTL-Variante */
+html[dir="rtl"] body.page-car-rental .amd-form .partner-row {
+  align-items: flex-end;
+}
+
+/* ---------- Buttons unten ---------- */
+
+body.page-car-rental .amd-form .form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 18px;
+  width: 100%;
+}
+
+body.page-car-rental .amd-form .form-actions .btn {
+  width: 100%;
+  min-height: 50px;
+  padding: .6rem 1.3rem;
+  font-size: .95rem;
+  line-height: 1.25;
+  border-radius: 999px;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+/* Farben wie gehabt */
+body.page-car-rental .amd-form .form-actions .btn.btn-primary {
+  box-shadow: 0 16px 40px rgba(193,39,45,.30);
+}
+body.page-car-rental .amd-form .form-actions .btn.btn-whatsapp {
+  background: #1b6f5a;
+  color: #fff;
+  box-shadow: 0 16px 40px rgba(15,23,42,.22);
+}
+
+/* Desktop: Buttons nebeneinander */
+@media (min-width: 768px) {
+  body.page-car-rental .amd-form .form-actions {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  body.page-car-rental .amd-form .form-actions .btn {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 220px;
+  }
+}
+
+/* ---------- iOS-Safety allgemein im Car-Rental ---------- */
+
+body.page-car-rental,
+body.page-car-rental * {
+  box-sizing: border-box;
+}
+
+body.page-car-rental input,
+body.page-car-rental select,
+body.page-car-rental textarea,
+body.page-car-rental button {
+  font-size: 16px; /* verhindert iOS-Auto-Zoom bei Fokus */
+}
+/* =========================================
+   BUCHUNGSBEREICH – iPhone Felder + Checkbox
+   ========================================= */
+
+/* Alle Inputs im Car-Rental-Formular gleich hoch & symmetrisch */
+body.page-car-rental .amd-form input,
+body.page-car-rental .amd-form select,
+body.page-car-rental .amd-form textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 14px !important;
+  border: 1px solid rgba(15,23,42,.16) !important;
+  background: #ffffff !important;
+  padding: .70rem .95rem !important;
+  font-size: 1rem !important;        /* ~16px → kein iOS-Zoom */
+  line-height: 1.3 !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+
+  height: auto !important;
+  min-height: 44px !important;
+}
+
+/* Textarea etwas höher, aber gleiche Optik */
+body.page-car-rental .amd-form textarea {
+  min-height: 120px !important;
+  resize: vertical !important;
+}
+
+/* ---------- Checkbox-Layout ---------- */
+
+body.page-car-rental .amd-form label.pt-check {
+  position: relative;
+  display: block;
+  margin: 10px 0 12px !important;
+  padding: .45rem .75rem .5rem !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(15,23,42,.16) !important;
+  background: #ffffff !important;
+  font-size: .82rem !important;
+  line-height: 1.35 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+}
+
+/* Native Checkbox komplett verstecken (damit nur EIN Kästchen existiert) */
+body.page-car-rental .amd-form label.pt-check input {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+/* Text mit Platz für das künstliche Quadrat links */
+body.page-car-rental .amd-form label.pt-check span {
+  display: inline-block !important;
+  position: relative !important;
+  padding-left: 26px !important;
+  white-space: normal !important;
+  max-width: 100% !important;
+}
+
+/* Quadratisches Kästchen */
+body.page-car-rental .amd-form label.pt-check span::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid #9ca3af;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Haken-Zustand */
+body.page-car-rental .amd-form label.pt-check input:checked + span::before {
+  background: #c1272d;
+  border-color: #c1272d;
+  box-shadow: 0 0 0 2px rgba(193,39,45,.25);
+}
+
+/* Links im Text normal umbrechen lassen */
+body.page-car-rental .amd-form label.pt-check a {
+  white-space: normal !important;
+  text-decoration: underline;
+}
+
+/* Partner-ID bleibt sauber unter der Checkbox */
+body.page-car-rental .amd-form .partner-row {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  margin: 8px 0 16px !important;
+}
+
+body.page-car-rental .amd-form .partner-label {
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0 !important;
+}
+/* === FINAL iOS FIX: Date / Time / Select exakt wie die anderen Felder === */
+@supports (-webkit-touch-callout: none) {
+  /* Nur auf der Car-Rental-Seite, nur im Formular */
+  body.page-car-rental .amd-form input[type="date"],
+  body.page-car-rental .amd-form input[type="time"],
+  body.page-car-rental .amd-form select {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+
+    /* gleiche Höhe wie Textfelder erzwingen */
+    height: 48px !important;
+    min-height: 48px !important;
+
+    /* Innenabstände nach vorne/hinten – lieber etwas mehr als zu wenig */
+    padding: 0.7rem 0.95rem !important;
+
+    line-height: 1.3 !important;
+    font-size: 16px !important;
+
+    border-radius: 14px !important;
+    border: 1px solid #e5e7eb !important;
+    background-color: #ffffff !important;
+
+    /* iOS-eigene Gradient/Shadow/Arrow weg */
+    background-image: none !important;
+    box-shadow: none !important;
+
+    box-sizing: border-box !important;
+  }
+}
+/* === Hinweis, wenn Fahrzeug/Alter nicht zusammenpassen === */
+body.page-car-rental .amd-form .age-warning {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: #b91c1c; /* dunkles Rot */
+}
+/* ===== HERO-HOTLINE-PILL (unter dem Hero) ===== */
+
+body.page-car-rental .cr-hero-hotline-wrap{
+  padding: 10px 16px 0;
+}
+
+body.page-car-rental .cr-hero-hotline{
+  max-width: 520px;
+  margin: 0 auto 18px;         /* unter dem Hero, mittig */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  background: #ffffff;
+  box-shadow: 0 14px 40px rgba(15,23,42,.18);
+
+  font-size: 14px;
+}
+
+body.page-car-rental .cr-hero-hotline-label{
+  white-space: nowrap;
+  font-weight: 500;
+  color: rgba(15,23,42,.85);
+}
+
+body.page-car-rental .cr-hero-hotline-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #dc2626; /* rote Nummer */
+}
+
+body.page-car-rental .cr-hero-hotline-link:active{
+  transform: translateY(1px);
+}
+
+body.page-car-rental .cr-hero-hotline .amd-phone-icon{
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Desktop: darf eher am linken Inhalt kleben */
+@media (min-width: 960px){
+  body.page-car-rental .cr-hero-hotline-wrap{
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+  body.page-car-rental .cr-hero-hotline{
+    margin-left: 0;
+  }
+}
+
+/* Kleine Handys: wirklich mittig + Abstand vom Rand */
+@media (max-width: 600px){
+  body.page-car-rental .cr-hero-hotline-wrap{
+    padding-left: 20px;
+    padding-right: 20px; /* etwas Luft, nicht klebend am Rand */
+  }
+  body.page-car-rental .cr-hero-hotline{
+    justify-content: center;
+    text-align: center;
+  }
+  body.page-car-rental .cr-hero-hotline-label{
+    white-space: normal; /* darf umbrechen, wenn wenig Platz */
+  }
+}
+/* Hotline-Pill: DE & EN auf kleinen Screens EINZEILIG */
+@media (max-width: 480px) {
+  html[lang="de"] body.page-car-rental .cr-hero-hotline,
+  html[lang="en"] body.page-car-rental .cr-hero-hotline {
+    font-size: 12px;        /* etwas kleinere Schrift */
+    padding: 8px 14px;      /* weniger Padding, damit es reinpasst */
+    gap: 6px;               /* kleinerer Abstand zwischen Text und Nummer */
+  }
+
+  html[lang="de"] body.page-car-rental .cr-hero-hotline-label,
+  html[lang="en"] body.page-car-rental .cr-hero-hotline-label,
+  html[lang="de"] body.page-car-rental .cr-hero-hotline-number,
+  html[lang="en"] body.page-car-rental .cr-hero-hotline-number {
+    white-space: nowrap;    /* kein Zeilenumbruch */
+  }
+}
+/* HERO: Zurück-Pill in Rot (Override, ganz unten lassen) */
+body.page-car-rental .cr-hero .hero-back{
+  background: #c81e1e !important;                     /* Rot */
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,.40) !important;
+  color: #ffffff !important;                          /* Text weiß */
+  padding: 8px 16px !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+}
+
+body.page-car-rental .cr-hero .hero-back:hover{
+  filter: brightness(1.05);
+}
+/* =========================================================
+   FINAL HERO FIX (CR) – NUR ganz unten lassen
+   Ziel: Back-Button + roter CTA sauber auf Laptop + iPhone
+   ========================================================= */
+
+/* Desktop / Laptop */
+@media (min-width: 721px){
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 110px !important;
+    padding-bottom: 110px !important; /* genug Platz, egal wie lang der Text ist */
+  }
+
+  body.page-car-rental .cr-hero .hero-back{
+    position: static !important;  /* nicht absolute -> bleibt sauber im Flow */
+    margin: 0 0 16px !important;
+    width: fit-content !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-actions{
+    transform: none !important;   /* killt alle alten translateY-Experimente */
+    margin-top: 18px !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+/* Mobile inkl. iPhone */
+@media (max-width: 720px){
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 132px !important;   /* damit nichts unter Header/Back-Pill hängt */
+    padding-bottom: 62px !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-back{
+    position: absolute !important;
+    top: calc(env(safe-area-inset-top, 0px) + 66px) !important; /* iPhone-safe */
+    left: 18px !important;
+    right: auto !important;
+    z-index: 50 !important;
+  }
+
+  html[dir="rtl"] body.page-car-rental .cr-hero .hero-back{
+    left: auto !important;
+    right: 18px !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-actions{
+    transform: none !important;
+    margin-top: 16px !important;
+  }
+}
+/* =========================================================
+   HERO – FONT + LEFT OFFSET TUNING
+   MUSS GANZ UNTEN stehen
+   ========================================================= */
+
+/* Desktop / Laptop */
+@media (min-width: 721px){
+  body.page-car-rental .cr-hero .hero-content{
+    /* weniger “nach innen” */
+    margin-left: clamp(18px, 4vw, 54px) !important;
+    padding-top: 104px !important;
+    padding-bottom: 72px !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-title{
+    /* wieder größer */
+    font-size: clamp(42px, 4.2vw, 66px) !important;
+    line-height: 1.02 !important;
+    margin-bottom: 14px !important;
+  }
+}
+
+/* Mobile inkl. iPhone */
+@media (max-width: 720px){
+  body.page-car-rental .cr-hero .hero-content{
+    /* sauber am Rand, aber nicht klebend */
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+    padding-top: 118px !important;
+    padding-bottom: 54px !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-title{
+    /* größer als vorher, aber noch sicher */
+    font-size: clamp(30px, 7.2vw, 40px) !important;
+    line-height: 1.05 !important;
+    margin-bottom: 12px !important;
+  }
+
+  body.page-car-rental .cr-hero .hero-actions .btn{
+    font-size: 16px !important;
+    padding: 13px 20px !important;
+  }
+}
+
+/* Sehr kleine Höhen (iPhone quer / kleine Viewports) */
+@media (max-height: 740px){
+  body.page-car-rental .cr-hero .hero-content{
+    padding-top: 108px !important;
+    padding-bottom: 46px !important;
+  }
+  body.page-car-rental .cr-hero .hero-title{
+    font-size: clamp(28px, 6.6vw, 36px) !important;
+  }
+}
+/* =========================================================
+   SEO-Intro (cr-seo-text) – premium / extravagant + responsive
+   ========================================================= */
+
+body.page-car-rental .cr-seo-text{
+  padding: clamp(22px, 3.2vw, 46px) 0 !important;
+}
+
+body.page-car-rental .cr-seo-text-inner{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(18px, 2.6vw, 34px) clamp(16px, 3.2vw, 40px);
+  border-radius: 22px;
+
+  /* “Extravagant” Card-Look */
+  background:
+    radial-gradient(900px 280px at 10% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* linke “Luxury” Akzentlinie */
+body.page-car-rental .cr-seo-text-inner::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(220,38,38,1), rgba(220,38,38,.25));
+  opacity: .95;
+}
+
+/* dezente Glow-Ecke */
+body.page-car-rental .cr-seo-text-inner::after{
+  content: "";
+  position: absolute;
+  right: -120px;
+  top: -120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(220,38,38,.20), rgba(220,38,38,0) 60%);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+body.page-car-rental .cr-seo-text-inner h2{
+  margin: 0 0 10px 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.08;
+}
+
+body.page-car-rental .cr-seo-text-inner p{
+  margin: 0;
+  max-width: 78ch;
+  opacity: .92;
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.7;
+}
+
+/* Mobile Feinschliff (iPhone) */
+@media (max-width: 720px){
+  body.page-car-rental .cr-seo-text-inner{
+    border-radius: 18px;
+    padding: 18px 16px;
+  }
+  body.page-car-rental .cr-seo-text-inner::before{
+    top: 12px;
+    bottom: 12px;
+  }
+  body.page-car-rental .cr-seo-text-inner h2{
+    font-size: clamp(20px, 5.2vw, 26px);
+  }
+  body.page-car-rental .cr-seo-text-inner p{
+    font-size: 15.5px;
+    line-height: 1.72;
+  }
+}
+/* =========================================
+   SEO-Intro – Text-Alignment pro Sprache
+   ========================================= */
+
+/* Default: DE/EN links */
+body.page-car-rental .cr-seo-text-inner{
+  text-align: left;
+}
+
+/* AR: RTL + rechtsbündig */
+html[lang="ar"] body.page-car-rental .cr-seo-text-inner{
+  direction: rtl;
+  text-align: right;
+}
+
+/* Optional: Bullet/Listen in AR sauber (falls du später ULs nutzt) */
+html[lang="ar"] body.page-car-rental .cr-seo-text-inner ul{
+  padding-right: 18px;
+  padding-left: 0;
+}
+/* =========================================================
+   MOBILE NAV (Car-Rental only)
+   Burger sichtbar auf Handy, Links im Dropdown
+   ========================================================= */
+
+body.page-car-rental .amd-header-inner{ position: relative; }
+
+body.page-car-rental .amd-burger{
+  display:none;
+  background:none;
+  border:none;
+  font-size:1.6rem;
+  line-height:1;
+  padding:10px 12px;
+  cursor:pointer;
+}
+
+/* Mobile */
+@media (max-width: 900px){
+  body.page-car-rental .amd-burger{ display:block; }
+
+  /* Nav als Dropdown statt komplett weg */
+  body.page-car-rental .amd-nav{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:12px;
+    right:12px;
+    background:#fff;
+    flex-direction:column;
+    padding:10px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    z-index:9999;
+  }
+
+  body.page-car-rental .amd-nav.is-open{ display:flex; }
+
+  /* RTL (AR): Text rechts */
+  html[dir="rtl"] body.page-car-rental .amd-nav{ text-align:right; }
+}
+/* =========================================================
+   iPhone: Overflow killen + Cards exakt mittig
+   Ganz unten in car-rental.css lassen
+   ========================================================= */
+
+/* 1) Wenn IRGENDWAS minimal übersteht: kein horizontaler Scroll */
+body.page-car-rental{
+  overflow-x: hidden;
+}
+
+/* 2) Cards auf Mobile optisch perfekt zentrieren (auch wenn irgendwo overflow wäre) */
+@media (max-width: 640px){
+  body.page-car-rental .cr-card{
+    width: 100%;
+    max-width: 560px;   /* “Premium” Breite, mittig */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* 3) Hotline darf niemals den Viewport sprengen */
+body.page-car-rental .cr-hero-hotline{
+  max-width: min(520px, calc(100% - 32px));
+}
+body.page-car-rental .cr-hero-hotline,
+body.page-car-rental .cr-hero-hotline *{
+  max-width: 100%;
+}
+body.page-car-rental .cr-hero-hotline-number{
+  white-space: normal !important;    /* überschreibt dein nowrap auf kleinen Screens */
+  overflow-wrap: anywhere;
+}
+
+/* 4) “Kein passendes Auto gefunden? Anfrage senden”
+   Link unter dem Text + mittig */
+body.page-car-rental .cr-no-match-text{
+  text-align: center;
+  line-height: 1.4;
+}
+
+body.page-car-rental .cr-no-match-text a{
+  display: block;          /* <-- dadurch steht der Link in der nächsten Zeile */
+  margin-top: 8px;
+  text-align: center;
+  white-space: normal;
+}
+
+
+/* 5) Footer: falls ein Link/Icon minimal übersteht → kein rechter Weißrand */
+body.page-car-rental .amd-footer{
+  overflow-x: hidden;
+}
+body.page-car-rental .amd-footer a{
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+/* =========================================================
+   FINAL OVERRIDE: Back-Button OHNE Glas (nur rot)
+   MUSS GANZ UNTEN stehen
+   ========================================================= */
+body.page-car-rental .cr-hero a.hero-back{
+  background: #c81e1e !important;      /* solid red */
+  color: #fff !important;
+  border: 0 !important;
+  opacity: 1 !important;
+
+  /* kill glass effect everywhere */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  /* falls irgendwo Filter/Blur draufliegt */
+  filter: none !important;
+
+  border-radius: 999px !important;
+  padding: 10px 14px !important;
+  box-shadow: none !important;
+}
+body.page-car-rental .cr-hero a.hero-back:hover{
+  background: #b81818 !important;
+}
+/* FINAL: keine per-Karte Bild-Verschiebungen -> Cards wirken gerade */
+body.page-car-rental .cr-card .cr-img img{
+  transform: none !important;
+}
+/* FINAL: iPhone Overflow killen (lange Links/Text umbrechen) */
+body.page-car-rental{
+  overflow-x: hidden;
+}
+
+body.page-car-rental .cr-request-cta,
+body.page-car-rental .cr-request-cta a,
+body.page-car-rental .amd-footer,
+body.page-car-rental .amd-footer a{
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+/* FIX iOS Safari: Hero-Content wirklich zentrieren */
+@media (max-width: 768px){
+  body.page-car-rental .cr-hero .hero-content{
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    width: 100% !important;
+  }
+}
