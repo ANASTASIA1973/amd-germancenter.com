@@ -25,3 +25,4 @@
   to = "/ar/index.html"
   status = 301
   force = true
+# deploy bump
