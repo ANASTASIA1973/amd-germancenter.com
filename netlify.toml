@@ -9,7 +9,19 @@
   force = true
 
 [[redirects]]
-  from = "/r"
-  to = "/.netlify/functions/r"
-  status = 200
+  from = "/en/qr.html"
+  to = "/en/index.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/qr.html"
+  to = "/de/index.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ar/qr.html"
+  to = "/ar/index.html"
+  status = 301
   force = true
