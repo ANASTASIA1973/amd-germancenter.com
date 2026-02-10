@@ -942,6 +942,9 @@ ${fd.get("message")}
     let leadAction = "";
 
 function postLeadToSheet() {
+  const FORCE_DEBUG_FETCH = new URLSearchParams(location.search).get("debugLead") === "1";
+  const rid = "L" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
   const fd = new FormData(form);
 
   const payload = {
@@ -978,7 +981,10 @@ function postLeadToSheet() {
   }
 
   // Fallback: keepalive verhindert Abbruch bei Navigation (best effort)
-  fetch("/.netlify/functions/leads", {
+    console.log("Lead DEBUG rid=", rid, payload);
+
+ fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
+
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
