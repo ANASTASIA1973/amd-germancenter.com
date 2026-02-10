@@ -60,7 +60,9 @@ export async function handler(event) {
     else if (ALLOWED.has(incomingPageRaw)) service = incomingPageRaw;
 
     const page = incomingPageRaw || service;
-    const locale = String(incoming.locale || "").trim().toLowerCase() || "en";
+   const locale = String(incoming.locale || "").trim().toLowerCase() || "en";
+const lang = String(incoming.lang || incoming.language || locale || "").trim().toLowerCase() || locale;
+
 
     // if frontend sent a service detail like "Translations", keep it separately
     const serviceDetail =
@@ -84,6 +86,10 @@ const payload = {
   service,
   page,
   locale,
+    lang,          // <-- neu
+  token,           // token from QR check (if any)
+  serviceDetail,   // e.g. "Translations" (if any)
+   source,         // optional source field from frontend (e.g. for marketing campaigns)
 
   // Partner: send in all common keys so the Apps Script can match reliably
   ...(partnerId ? { partnerId, partner: partnerId, pid: partnerId } : {}),
