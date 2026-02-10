@@ -923,8 +923,7 @@ function postLeadToSheet() {
     message: fd.get("message"),
     urgency: fd.get("urgency"),
     contactPreference: fd.get("contact-preference"),
-    channel: leadChannel,
-    action: leadAction
+    channel: leadChannel
   };
 
   // ✅ Robust: Beacon überlebt Navigation (mailto/wa.me) und bleibt "user gesture"-safe
