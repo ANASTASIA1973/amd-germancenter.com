@@ -945,14 +945,15 @@ function postLeadToSheet() {
   const rid = "L" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const fd = new FormData(form);
 
-  // locale from path (de/en/ar)
-  const currentLocale = (function () {
-    const path = window.location.pathname || "";
-    if (path.includes("/de/")) return "de";
-    if (path.includes("/en/")) return "en";
-    if (path.includes("/ar/")) return "ar";
-    return "ar";
-  })();
+ // locale from path (de/en/ar) — SAFE fallback
+const currentLocale = (function () {
+  const path = window.location.pathname || "";
+  if (path.includes("/de/")) return "de";
+  if (path.includes("/en/")) return "en";
+  if (path.includes("/ar/")) return "ar";
+  return "de";
+})();
+
 
 const payload = {
   timestamp: new Date().toISOString(),
