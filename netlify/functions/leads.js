@@ -60,7 +60,7 @@ export async function handler(event) {
     else if (ALLOWED.has(incomingPageRaw)) service = incomingPageRaw;
 
     const page = incomingPageRaw || service;
-   const locale = String(incoming.locale || "").trim().toLowerCase() || "en";
+  const locale = String(incoming.locale || incoming.lang || "").trim().toLowerCase() || "en";
 const lang = String(incoming.lang || incoming.language || locale || "").trim().toLowerCase() || locale;
 
 
@@ -86,6 +86,7 @@ const payload = {
   service,
   page,
   locale,
+    lang: locale,
     lang,          // <-- neu
   token,           // token from QR check (if any)
   serviceDetail,   // e.g. "Translations" (if any)
