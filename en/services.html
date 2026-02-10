@@ -931,7 +931,13 @@ Service: ${service}
 Name: ${fd.get("name")}
 Email: ${fd.get("email")}
 Phone: ${fd.get("phone") || "—"}
-Partner ID: ${fd.get("partnerId") || "—"}
+Partner ID: ${
+  fd.get("partnerId")
+  || (JSON.parse(sessionStorage.getItem("amd_tracking_params_v1")||"{}").partner)
+  || (JSON.parse(sessionStorage.getItem("amd_tracking_params_v1")||"{}").partnerId)
+  || "—"
+}
+
 
 Request / Needed documents:
 ${fd.get("message")}
@@ -952,11 +958,18 @@ Sent via amd-germancenter.com/services`;
         timestamp: new Date().toISOString(),
         page: "services",
         locale: "en",
-        service: fd.get("service"),
+       service: "services",
         name: fd.get("name"),
         email: fd.get("email"),
         phone: fd.get("phone") || "",
-        partnerId: fd.get("partnerId") || "",
+       partnerId: (function () {
+  let stored = {};
+  try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+  catch (_) { stored = {}; }
+  const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+  return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
+})(),
+
         message: fd.get("message"),
         urgency: fd.get("urgency"),
         contactPreference: fd.get("contact-preference"),

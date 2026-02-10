@@ -895,27 +895,37 @@
 
     document.addEventListener("mouseup", () => { isDragging = false; });
 
-    function buildText() {
-      const fd = new FormData(form);
-      const service = fd.get("service") || "";
-      const urgency = fd.get("urgency") || "normal";
-      const urgencyText = {
-        'normal': 'عادي (2–4 أسابيع)',
-        'urgent': 'مستعجل (1–2 أسبوع)',
-        'express': 'مستعجل جداً (خلال أيام)'
-      }[urgency] || 'عادي (2–4 أسابيع)';
+   function buildText() {
+  const fd = new FormData(form);
+  const service = fd.get("service") || "";
+  const urgency = fd.get("urgency") || "normal";
+  const urgencyText = {
+    'normal': 'عادي (2–4 أسابيع)',
+    'urgent': 'مستعجل (1–2 أسبوع)',
+    'express': 'مستعجل جداً (خلال أيام)'
+  }[urgency] || 'عادي (2–4 أسابيع)';
 
-      const contactPref = fd.get("contact-preference") || "whatsapp";
-      const contactText = (contactPref === "email") ? "بريد إلكتروني" : (contactPref === "phone") ? "اتصال هاتفي" : "واتساب";
+  const contactPref = fd.get("contact-preference") || "whatsapp";
+  const contactText = (contactPref === "email") ? "بريد إلكتروني" : (contactPref === "phone") ? "اتصال هاتفي" : "واتساب";
 
-      return `=== طلب: ${SERVICE_TITLE} ===
+  // Partner-ID: first from input, else from stored URL params (QR)
+  let stored = {};
+  try {
+    stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {};
+  } catch (_) {
+    stored = {};
+  }
+  const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+  const partnerFinal = (fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "—";
+
+  return `=== طلب: ${SERVICE_TITLE} ===
 
 الخدمة: ${service}
 
 الاسم: ${fd.get("name")}
 البريد الإلكتروني: ${fd.get("email")}
 الهاتف: ${fd.get("phone") || "—"}
-معرّف الشريك: ${fd.get("partnerId") || "—"}
+معرّف الشريك: ${partnerFinal}
 
 الطلب / الوثائق المطلوبة:
 ${fd.get("message")}
@@ -925,7 +935,8 @@ ${fd.get("message")}
 
 ---
 تم الإرسال عبر amd-germancenter.com/services`;
-    }
+}
+
 
     let leadChannel = "";
     let leadAction = "";
@@ -936,11 +947,18 @@ ${fd.get("message")}
         timestamp: new Date().toISOString(),
         page: "services",
         locale: "ar",
-        service: fd.get("service"),
+        service: "services",
         name: fd.get("name"),
         email: fd.get("email"),
         phone: fd.get("phone") || "",
-        partnerId: fd.get("partnerId") || "",
+       partnerId: (function () {
+  let stored = {};
+  try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+  catch (_) { stored = {}; }
+  const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+  return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
+})(),
+
         message: fd.get("message"),
         urgency: fd.get("urgency"),
         contactPreference: fd.get("contact-preference"),
