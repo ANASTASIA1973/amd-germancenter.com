@@ -84,6 +84,7 @@ const payload = {
   service,
   page,
   locale,
+   lang: locale,
 
   // Partner: send in all common keys so the Apps Script can match reliably
   ...(partnerId ? { partnerId, partner: partnerId, pid: partnerId } : {}),
