@@ -952,15 +952,23 @@ Sent via amd-germancenter.com/services`;
     let leadChannel = "";
     let leadAction = "";
 function postLeadToSheet() {
-    const FORCE_DEBUG_FETCH = new URLSearchParams(location.search).get("debugLead") === "1";
   const rid = "L" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-
   const fd = new FormData(form);
+
+  // Get current locale from URL (de/en/ar)
+  const currentLocale = (function() {
+    const path = window.location.pathname || "";
+    if (path.includes("/de/")) return "de";
+    if (path.includes("/ar/")) return "ar";
+    if (path.includes("/en/")) return "en";
+    return "en"; // default for EN page
+  })();
 
   const payload = {
     timestamp: new Date().toISOString(),
     page: "services",
-    service: "services",
+    service: fd.get("service") || "services",
+    locale: currentLocale,
     name: fd.get("name"),
     email: fd.get("email"),
     phone: fd.get("phone") || "",
@@ -978,7 +986,7 @@ function postLeadToSheet() {
     action: leadAction
   };
 
-  // ✅ Robust: Beacon überlebt Navigation (mailto/wa.me) und bleibt "user gesture"-safe
+  // Robust: Beacon survives navigation (mailto/wa.me)
   try {
     if (navigator.sendBeacon) {
       const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
@@ -990,11 +998,9 @@ function postLeadToSheet() {
     console.warn("Lead beacon error:", err);
   }
 
-  // Fallback: keepalive verhindert Abbruch bei Navigation (best effort)
-    console.log("Lead DEBUG rid=", rid, payload);
+  console.log("Lead DEBUG rid=", rid, payload);
 
- fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
-
+  fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
