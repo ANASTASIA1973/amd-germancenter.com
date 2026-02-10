@@ -965,13 +965,21 @@ ${fd.get("message")}
         channel: leadChannel,
         action: leadAction
       };
+fetch("/.netlify/functions/leads", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload)
+})
+.then(async (r) => {
+  const j = await r.json().catch(() => null);
+  if (!r.ok) {
+    console.error("Lead failed:", r.status, j);
+    return;
+  }
+  console.log("Lead OK:", j);
+})
+.catch(err => console.error("Lead error:", err));
 
-      fetch("https://script.google.com/macros/s/AKfycbxpqRsXKs08KFQ0VRlsCBMWoRpXa6D_7hpuSqDMFo6xn3-ZyMq0Tv3-Yva-2_Wh3MuN/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).catch(err => console.error("Sheet error:", err));
     }
 
     document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
