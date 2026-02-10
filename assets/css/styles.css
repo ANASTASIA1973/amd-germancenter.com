@@ -2701,8 +2701,8 @@ a[x-apple-data-detectors],
 a[x-apple-data-detectors] *,
 a[href^="tel:"],
 a[href^="tel:"] *,
-a[href^="https://wa.me"],
-a[href^="https://wa.me"] *,
+a[href^="https://wa.me"]:not(.btn):not(.btn-whatsapp),
+a[href^="https://wa.me"]:not(.btn):not(.btn-whatsapp) * ,
 .phone-link,
 .phone-link *,
 .hero-service-phone,
@@ -3047,4 +3047,9 @@ html[dir="rtl"] #about-amd .section-header--center .section-subtitle{
   }
 
   .amd-nav.is-open{ display:flex; }
+}
+a.btn-whatsapp,
+a.btn-whatsapp * {
+  color: #ffffff !important;
+  text-decoration: none;
 }
