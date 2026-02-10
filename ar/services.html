@@ -954,27 +954,43 @@ function postLeadToSheet() {
     return "ar";
   })();
 
-  const payload = {
-    timestamp: new Date().toISOString(),
-   service: "services",
-serviceName: (fd.get("service") || "").trim(),
-  // ✅ selected service (same as DE/EN fix)
-    locale: currentLocale,                      // ✅ keep consistent
-    name: fd.get("name"),
-    email: fd.get("email"),
-    phone: fd.get("phone") || "",
-    partnerId: (function () {
-      let stored = {};
-      try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-      catch (_) { stored = {}; }
-      const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-      return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
-    })(),
-    message: fd.get("message"),
-    urgency: fd.get("urgency"),
-    contactPreference: fd.get("contact-preference"),
-    channel: leadChannel
-  };
+const payload = {
+  timestamp: new Date().toISOString(),
+  page: "services",
+
+  // ✅ stabiler Service-Key fürs Backend
+  service: "services",
+
+  // ✅ konkrete Auswahl fürs Sheet/Anzeige
+  serviceName: (fd.get("service") || "").trim(),
+
+  locale: currentLocale,
+  name: fd.get("name"),
+  email: fd.get("email"),
+  phone: fd.get("phone") || "",
+
+  partnerId: (function () {
+    let stored = {};
+    try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+    catch (_) { stored = {}; }
+    const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+    return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
+  })(),
+
+  // ✅ FEHLT bei dir: Token aus dem QR-Flow mitsenden (sonst wird’s PRIVATE)
+  token: (function () {
+    let stored = {};
+    try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+    catch (_) { stored = {}; }
+    return String(stored.token || stored.t || "").trim();
+  })(),
+
+  message: fd.get("message"),
+  urgency: fd.get("urgency"),
+  contactPreference: fd.get("contact-preference"),
+  channel: leadChannel
+};
+
 
   // Robust: Beacon survives navigation (mailto/wa.me)
   try {
