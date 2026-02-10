@@ -60,7 +60,9 @@ export async function handler(event) {
     else if (ALLOWED.has(incomingPageRaw)) service = incomingPageRaw;
 
     const page = incomingPageRaw || service;
-    const locale = String(incoming.locale || "").trim().toLowerCase() || "en";
+  const locale = String(incoming.locale || incoming.lang || "").trim().toLowerCase() || "en";
+const lang = String(incoming.lang || incoming.language || locale || "").trim().toLowerCase() || locale;
+
 
     // if frontend sent a service detail like "Translations", keep it separately
     const serviceDetail =
