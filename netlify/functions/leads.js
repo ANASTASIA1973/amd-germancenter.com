@@ -73,21 +73,29 @@ export async function handler(event) {
     } else {
       partnerId = "";
     }
-    // Build payload for Apps Script (lead webhook mode)
-    const payload = {
-      ...incoming,
+    // Fallback: some pages send partner / pid instead of partnerId (QR links)
+const partnerAltRaw = incoming.partner ?? incoming.pid ?? "";
+let partnerAlt = String(partnerAltRaw || "").trim().replace(/[^A-Za-z0-9_-]/g, "");
+if (!partnerId && partnerAlt) partnerId = partnerAlt;
 
-      // enforce Apps Script expected category
-      service,
-      page,
-      locale,
+   // Build payload for Apps Script
+const payload = {
+  ...incoming,
+  service,
+  page,
+  locale,
 
-      // keep "which service did the user select" without breaking validation
-      serviceDetail: serviceDetail || undefined,
+  // Partner: send in all common keys so the Apps Script can match reliably
+  ...(partnerId ? { partnerId, partner: partnerId, pid: partnerId } : {}),
 
-      partnerId: partnerId || undefined, // do not send empty partnerId
-      secret: WEBHOOK_SECRET, // server-side only
-    };
+  // Avoid collision with Apps Script RPC routing ("action")
+  ...(incoming.action ? { leadAction: String(incoming.action) } : {}),
+
+  secret: WEBHOOK_SECRET, // server-side only
+};
+
+// Ensure Apps Script does not see "action" (it may treat it as RPC command)
+delete payload.action;
 
 
     // Never forward client-provided secret if any
