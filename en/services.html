@@ -951,68 +951,85 @@ Sent via amd-germancenter.com/services`;
 
     let leadChannel = "";
     let leadAction = "";
+function postLeadToSheet() {
+  const fd = new FormData(form);
 
-    function postLeadToSheet() {
-      const fd = new FormData(form);
-      const payload = {
-        timestamp: new Date().toISOString(),
-        page: "services",
-        locale: "en",
-       service: "services",
-        name: fd.get("name"),
-        email: fd.get("email"),
-        phone: fd.get("phone") || "",
-       partnerId: (function () {
-  let stored = {};
-  try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-  catch (_) { stored = {}; }
-  const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-  return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
-})(),
+  const payload = {
+    timestamp: new Date().toISOString(),
+    page: "services",
+    service: "services",
+    name: fd.get("name"),
+    email: fd.get("email"),
+    phone: fd.get("phone") || "",
+    partnerId: (function () {
+      let stored = {};
+      try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+      catch (_) { stored = {}; }
+      const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+      return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
+    })(),
+    message: fd.get("message"),
+    urgency: fd.get("urgency"),
+    contactPreference: fd.get("contact-preference"),
+    channel: leadChannel,
+    action: leadAction
+  };
 
-        message: fd.get("message"),
-        urgency: fd.get("urgency"),
-        contactPreference: fd.get("contact-preference"),
-        channel: leadChannel,
-        action: leadAction
-      };
-fetch("/.netlify/functions/leads", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload)
-})
-.then(async (r) => {
-  const j = await r.json().catch(() => null);
-  if (!r.ok) {
-    console.error("Lead failed:", r.status, j);
-    return;
-  }
-  console.log("Lead OK:", j);
-})
-.catch(err => console.error("Lead error:", err));
-
+  // ✅ Robust: Beacon überlebt Navigation (mailto/wa.me) und bleibt "user gesture"-safe
+  try {
+    if (navigator.sendBeacon) {
+      const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+      const ok = navigator.sendBeacon("/.netlify/functions/leads", blob);
+      console.log("Lead beacon:", ok ? "queued" : "failed");
+      return;
     }
+  } catch (err) {
+    console.warn("Lead beacon error:", err);
+  }
 
-    document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
-      if (!form.checkValidity()) return form.reportValidity();
-      leadChannel = "whatsapp";
-      leadAction = "click";
-      postLeadToSheet();
+  // Fallback: keepalive verhindert Abbruch bei Navigation (best effort)
+  fetch("/.netlify/functions/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    keepalive: true
+  })
+  .then(async (r) => {
+    const j = await r.json().catch(() => null);
+    if (!r.ok) {
+      console.error("Lead failed:", r.status, j);
+      return;
+    }
+    console.log("Lead OK:", j);
+  })
+  .catch(err => console.error("Lead error:", err));
+}
 
-      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText())}`;
-      window.open(url, "_blank", "noopener");
-    });
+ // WhatsApp
+document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
+  if (!form.checkValidity()) return form.reportValidity();
+  leadChannel = "whatsapp";
+  leadAction = "click";
+  postLeadToSheet();
 
-    document.getElementById("btnInquiryEmail")?.addEventListener("click", () => {
-      if (!form.checkValidity()) return form.reportValidity();
-      leadChannel = "email";
-      leadAction = "click";
-      postLeadToSheet();
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText())}`;
+  window.open(url, "_blank", "noopener");
+});
 
-      const subject = `Inquiry – ${SERVICE_TITLE}`;
-      const body = buildText();
-      window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    });
+
+  // Email
+document.getElementById("btnInquiryEmail")?.addEventListener("click", () => {
+  if (!form.checkValidity()) return form.reportValidity();
+
+  leadChannel = "email";
+  leadAction = "click";
+  postLeadToSheet();
+
+  const subject = `Anfrage – ${SERVICE_TITLE}`;
+  const body = buildText();
+  window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+
   })();
 
   // Burger Menu
