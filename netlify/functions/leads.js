@@ -4,33 +4,43 @@ export async function handler(event) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Headers": "Content-Type",
   };
 
+  // Preflight
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: corsHeaders, body: "" };
   }
 
+  // Only POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, error: "Method not allowed" })
+      body: JSON.stringify({ ok: false, error: "Method not allowed" }),
     };
   }
 
   try {
-    const GAS_EXEC_URL = process.env.GAS_EXEC_URL;      // https://script.google.com/macros/s/.../exec
-    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;  // stored only in Netlify
+    const GAS_EXEC_URL = process.env.GAS_EXEC_URL; // https://script.google.com/macros/s/.../exec
+    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET; // stored only in Netlify
 
     if (!GAS_EXEC_URL || !WEBHOOK_SECRET) {
       return {
         statusCode: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-        body: JSON.stringify({ ok: false, error: "Missing server configuration" })
+        body: JSON.stringify({
+          ok: false,
+          error: "Missing server configuration",
+          missing: {
+            GAS_EXEC_URL: !GAS_EXEC_URL,
+            WEBHOOK_SECRET: !WEBHOOK_SECRET,
+          },
+        }),
       };
     }
 
+    // Parse incoming JSON body
     let incoming = {};
     try {
       incoming = JSON.parse(event.body || "{}") || {};
@@ -38,34 +48,49 @@ export async function handler(event) {
       incoming = {};
     }
 
-    // Canonical service key for Apps Script allow-list
-    // IMPORTANT: keep this exact: "services"
+    // Normalize/sanitize
+    const service = String(incoming.service || "services").trim();
+    const page = String(incoming.page || service || "services").trim() || "services";
+    const locale = String(incoming.locale || "").trim().toLowerCase() || "en";
+
+    let partnerId = incoming.partnerId;
+    if (partnerId != null) {
+      partnerId = String(partnerId).trim().replace(/[^A-Za-z0-9_-]/g, "");
+      if (!partnerId) partnerId = ""; // keep empty consistent
+    } else {
+      partnerId = "";
+    }
+
+    // Build payload for Apps Script
     const payload = {
       ...incoming,
-      service: "services",
-      secret: WEBHOOK_SECRET
+      service,
+      page,
+      locale,
+      partnerId: partnerId || undefined, // do not send empty partnerId
+      secret: WEBHOOK_SECRET, // server-side only
     };
 
-    // Basic hardening / normalization (optional but helpful)
-    payload.locale = String(payload.locale || "").trim().toLowerCase() || "en";
-    payload.page = String(payload.page || "services").trim() || "services";
-
-    // If partnerId missing but URL had ?partner=... in client, client should send it.
-    // Still, sanitize partnerId server-side.
-    if (payload.partnerId != null) {
-      payload.partnerId = String(payload.partnerId).trim().replace(/[^A-Za-z0-9_-]/g, "");
-    }
+    // Never forward client-provided secret if any
+    delete payload.WEBHOOK_SECRET;
+    delete payload.webhookSecret;
+    delete payload.secretFromClient;
+    // and ensure the only secret is ours:
+    payload.secret = WEBHOOK_SECRET;
 
     const res = await fetch(GAS_EXEC_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
-    // GAS often returns JSON, but we’ll be defensive
     const text = await res.text().catch(() => "");
     let data = null;
-    try { data = text ? JSON.parse(text) : null; } catch (_) { data = null; }
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch (_) {
+      data = null;
+    }
 
     if (!res.ok) {
       return {
@@ -75,21 +100,27 @@ export async function handler(event) {
           ok: false,
           error: "Upstream error",
           status: res.status,
-          upstream: data || text || null
-        })
+          upstream: data || text || null,
+        }),
       };
     }
 
     return {
       statusCode: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: true, upstream: data || text || null })
+      body: JSON.stringify({
+        ok: true,
+        upstream: data || text || null,
+      }),
     };
   } catch (e) {
     return {
       statusCode: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, error: String(e?.message || e || "Unknown error") })
+      body: JSON.stringify({
+        ok: false,
+        error: String(e?.message || e || "Unknown error"),
+      }),
     };
   }
 }
