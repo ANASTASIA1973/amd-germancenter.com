@@ -909,7 +909,9 @@ function postLeadToSheet() {
   const payload = {
     timestamp: new Date().toISOString(),
     page: "services",
-    service: "services",
+   service: "services",
+serviceName: (fd.get("service") || "").trim(),
+
     name: fd.get("name"),
     email: fd.get("email"),
     phone: fd.get("phone") || "",

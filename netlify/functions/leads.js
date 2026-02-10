@@ -48,10 +48,23 @@ export async function handler(event) {
       incoming = {};
     }
 
-    // Normalize/sanitize
-    const service = String(incoming.service || "services").trim();
-    const page = String(incoming.page || service || "services").trim() || "services";
+     // Normalize/sanitize
+    const ALLOWED = new Set(["tours", "transfer", "car_rental", "package_tours", "services"]);
+
+    const incomingServiceRaw = String(incoming.service || "").trim();
+    const incomingPageRaw = String(incoming.page || "").trim();
+
+    // category must be one of the allowed services for Apps Script
+    let service = "services";
+    if (ALLOWED.has(incomingServiceRaw)) service = incomingServiceRaw;
+    else if (ALLOWED.has(incomingPageRaw)) service = incomingPageRaw;
+
+    const page = incomingPageRaw || service;
     const locale = String(incoming.locale || "").trim().toLowerCase() || "en";
+
+    // if frontend sent a service detail like "Translations", keep it separately
+    const serviceDetail =
+      (!ALLOWED.has(incomingServiceRaw) && incomingServiceRaw) ? incomingServiceRaw : "";
 
     let partnerId = incoming.partnerId;
     if (partnerId != null) {
@@ -60,21 +73,32 @@ export async function handler(event) {
     } else {
       partnerId = "";
     }
-
-    // Build payload for Apps Script
+    // Build payload for Apps Script (lead webhook mode)
     const payload = {
       ...incoming,
+
+      // enforce Apps Script expected category
       service,
       page,
       locale,
+
+      // keep "which service did the user select" without breaking validation
+      serviceDetail: serviceDetail || undefined,
+
       partnerId: partnerId || undefined, // do not send empty partnerId
       secret: WEBHOOK_SECRET, // server-side only
     };
+
 
     // Never forward client-provided secret if any
     delete payload.WEBHOOK_SECRET;
     delete payload.webhookSecret;
     delete payload.secretFromClient;
+        // CRITICAL: never forward any "action" field from the browser.
+    // If Apps Script sees p.action, it switches to portal routing => "Unknown action".
+    delete payload.action;
+    delete payload.leadAction;
+
     // and ensure the only secret is ours:
     payload.secret = WEBHOOK_SECRET;
 

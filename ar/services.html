@@ -956,8 +956,9 @@ function postLeadToSheet() {
 
   const payload = {
     timestamp: new Date().toISOString(),
-    page: "services",
-    service: fd.get("service") || "services",   // ✅ selected service (same as DE/EN fix)
+   service: "services",
+serviceName: (fd.get("service") || "").trim(),
+  // ✅ selected service (same as DE/EN fix)
     locale: currentLocale,                      // ✅ keep consistent
     name: fd.get("name"),
     email: fd.get("email"),
