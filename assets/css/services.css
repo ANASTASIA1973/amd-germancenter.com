@@ -621,6 +621,10 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   padding: 14px;
 
   box-shadow: 0 25px 50px rgba(0,0,0,.3);
+    box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: hidden;
+
 }
 
 
@@ -855,8 +859,9 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   }
 .page-services .srv-modal__panel { 
   padding: 10px;
-  width: calc(100% - 20px); /* Verhindert Überlauf */
+  width: 100%;
 }
+
 .page-services .srv-modal__head { padding: 1.25rem 1.2rem .9rem; }
 .page-services .srv-form { padding: 1rem 1.2rem 1.2rem; }
   .page-services .srv-check span { 
