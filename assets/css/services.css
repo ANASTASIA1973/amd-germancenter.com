@@ -749,8 +749,13 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   font-size: .82rem;
   color: var(--srv-muted);
   line-height: 1.3;
-  white-space: nowrap;
+  white-space: normal;   /* ERLAUBT UMBRUCH */
+  word-break: break-word;
 }
+.page-services .srv-modal__panel {
+  overflow-x: hidden;
+}
+
 
 
 .page-services .srv-check a {
