@@ -505,11 +505,56 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   transform: translateY(-4px);
 }
 
-.page-services .srv-feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  display: block;
+/* Premium Icon Badge – Gold-Ring (warm) + Navy Icon (clean) */
+.page-services .srv-feature-icon{
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  position: relative;
+
+  /* Clean, nicht milchig */
+  background: #ffffff;
+
+  /* Gold als Akzent-Ring */
+  border: 1px solid rgba(212,175,55,.42);
+
+  box-shadow:
+    0 14px 34px rgba(15,23,42,.10),
+    0 0 0 5px rgba(212,175,55,.08),
+    inset 0 1px 0 rgba(255,255,255,.85);
+
+  /* Icon-Farbe: Navy = mehr Premium/Seriosität */
+  color: #0b1f3a;
 }
+
+.page-services .srv-feature-icon svg{
+  width: 24px;
+  height: 24px;
+  display: block;
+  stroke-width: 1.9; /* minimal kräftiger als 1.7 */
+}
+
+/* innerer Ring – sehr subtil */
+.page-services .srv-feature-icon::before{
+  content:"";
+  position:absolute;
+  inset: 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,.20);
+  pointer-events:none;
+}
+
+/* Hover: etwas mehr Gold-Halo (aber nicht “glowig”) */
+.page-services .srv-feature:hover .srv-feature-icon{
+  box-shadow:
+    0 18px 44px rgba(15,23,42,.12),
+    0 0 0 7px rgba(212,175,55,.12),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+
 
 .page-services .srv-feature-title {
   margin: 0 0 .75rem;
@@ -982,4 +1027,28 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   width: 100%;
   height: 100%;
   fill: currentColor;
+}
+.srv-highlights {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.srv-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #0b1f3a;
+}
+
+.srv-highlight-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+}
+
+.srv-highlight-icon svg {
+  width: 20px;
+  height: 20px;
 }
