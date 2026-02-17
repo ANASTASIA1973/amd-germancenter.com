@@ -218,20 +218,7 @@ async function postLead(payload) {
     if (json?.upstream?.data?.refNr) ref = json.upstream.data.refNr;
     if (!ref && json?.upstream?.refNr) ref = json.upstream.refNr;
 
-    if (ref) {
-      // Referenz in payload/fullText ersetzen
-      if (payload.fullText) {
-        payload.fullText = payload.fullText.replace("(pending)", ref);
-      }
-
-      // auch in textarea sichtbar ersetzen
-      const txt = document.querySelector("textarea");
-      if (txt && txt.value.includes("(pending)")) {
-        txt.value = txt.value.replace("(pending)", ref);
-      }
-    }
-
-    return ref;
+    return ref || "";
   } catch (e) {
     return "";
   }
@@ -406,6 +393,7 @@ function buildLeadPayloadFromForm_(form, contactPreference) {
   };
 }
 
+/*
 function hookForms_() {
   const forms = Array.from(document.querySelectorAll("form"));
   forms.forEach((form) => {
@@ -424,6 +412,7 @@ function hookForms_() {
     );
   });
 }
+*/
 
 function hookWhatsAppClicks_() {
   document.addEventListener(
@@ -441,7 +430,15 @@ function hookWhatsAppClicks_() {
         if (!form) return;
 
         const payload = buildLeadPayloadFromForm_(form, "whatsapp");
-        postLead(payload);
+       postLead(payload).then((ref)=>{
+  if(!ref) return;
+
+  const textarea = document.querySelector("textarea");
+  if(textarea){
+    textarea.value = textarea.value.replace("(pending)", ref);
+  }
+});
+
       } catch (_) {}
     },
     { passive: true }
@@ -468,7 +465,15 @@ function hookEmailClicks_() {
         if (!form) return;
 
         const payload = buildLeadPayloadFromForm_(form, "email");
-        postLead(payload);
+        postLead(payload).then((ref)=>{
+  if(!ref) return;
+
+  const textarea = document.querySelector("textarea");
+  if(textarea){
+    textarea.value = textarea.value.replace("(pending)", ref);
+  }
+});
+
       } catch (_) {}
     },
     true
@@ -519,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Lead Hooks
-  hookForms_();
+/* hookForms_(); */
   hookWhatsAppClicks_();
   hookEmailClicks_();
 
