@@ -1496,8 +1496,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const WA_NUMBER = "96181622668";
   const PACKAGE_TITLE = "Lebanon package tour (customizable)";
   const PRICE = "from €1,999 per person";
-const LEADS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxde3nALj5Lr6FI62WrjQngF4dmBSJgdxM5WuF2v9MgoI2U9Loy0r7c3tlw5Orw0ADf/exec";
-const LEADS_SECRET = "AMD_2026_WEBHOOK__k9V7mQ3pL8xR2nD6sT1wZ4cJ5hY0aB7e";
+
 
   const btnOpen = document.getElementById("btnOpenInquiry");
   const modal = document.getElementById("ptInquiryModal");
@@ -1532,79 +1531,92 @@ const isChecked = (name) => {
 let leadChannel = "form";
 let leadAction = "submit";
 
-const postLeadToSheet = async () => {
+const postLeadToSheet = async (contactPreference) => {
   const name = v("name");
   const email = v("email");
   const phone = v("phone");
 
-  // Server prüft auch – wir sparen Requests
-  if (!name && !email && !phone) return;
+  // Backend verlangt: service + name + (email oder phone)
+  if (!name || (!email && !phone)) return null;
 
- const notes = [
-  `channel=${leadChannel}`,
-  `action=${leadAction}`,
-  `people=${v("people")}`,
-  `kids=${v("kids") || "-"}`,
-  `travelPeriod=${v("dates") || "-"}`,
-  `departureAirport=${v("departure") || "-"}`,
-  `messageProvided=${v("message") ? "yes" : "no"}`
+  const partnerId = (sessionStorage.getItem("amd_partner") || localStorage.getItem("amd_partner") || "").trim();
+  const token     = (sessionStorage.getItem("amd_token")   || localStorage.getItem("amd_token")   || "").trim();
 
-].join(" | ");
+  // simple idemKey (stabil genug fürs Dedupe)
+  const idemKey = [
+    "packages",
+    (document.documentElement.lang || "en"),
+    (email || "-").toLowerCase(),
+    (phone || "-"),
+    v("people") || "-",
+    v("dates") || "-",
+    v("departure") || "-"
+  ].join("|");
 
-const payload = {
-  source: window.location.hostname,
- service: "packages",
+  const structuredJson = {
+    packageTitle: PACKAGE_TITLE,
+    price: PRICE,
+    people: v("people"),
+    kids: v("kids") || "",
+    travelPeriod: v("dates") || "",
+    departureAirport: v("departure") || "",
+    message: v("message") || "",
+    acceptLegal: isChecked("acceptLegal") ? true : false,
+    channel: leadChannel,
+    action: leadAction
+  };
 
+  // fullText: backend kann es bauen, aber wir liefern es sauber mit
+  const fullText = buildText(null);
 
-
-  partner: (sessionStorage.getItem("amd_partner") || localStorage.getItem("amd_partner") || ""),
-  token:   (sessionStorage.getItem("amd_token")   || localStorage.getItem("amd_token")   || ""),
-
-  name,
-  email,
-  phone,
-  acceptLegal: isChecked("acceptLegal"),
-  tourName: PACKAGE_TITLE,
-  lang: document.documentElement.lang || "en",
-  pageUrl: window.location.href,
-  adults: v("people"),
-  children: v("kids"),
-  date: v("dates"),
-  pickup: v("departure"),
-  notes
-};
-
+  const payload = {
+    // REQUIRED / SHEET MAPPING (10_leads.gs)
+    service: "packages",
+    locale: (document.documentElement.lang || "en"),
+    name,
+    email,
+    phone,
+    contactPreference: contactPreference || leadChannel || "whatsapp",
+    partnerId,
+    token,
+    sourceUrl: window.location.href,
+    structuredJson,
+    fullText,
+    idemKey
+  };
 
   try {
-try {
-  // Beacon überlebt Navigation (wa.me / mailto)
-  const body = JSON.stringify(payload || {});
-  if (navigator.sendBeacon) {
-    const blob = new Blob([body], { type: "application/json" });
-    navigator.sendBeacon("/.netlify/functions/leads", blob);
-    return;
-  }
+  const resp = await fetch("/.netlify/functions/leads", {
 
-  // Fallback
-  fetch("/.netlify/functions/leads", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body,
-    keepalive: true
-  }).catch(() => {});
-} catch (err) {
-  console.warn("Lead send failed:", err);
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+ // Wenn Function nix zurückgibt: trotzdem weiter
+let out = null;
+if (resp && resp.ok) {
+  out = await resp.json().catch(() => null);
+} else {
+  // optional: Fehlertext lesen (hilft beim Debuggen)
+  const txt = await resp.text().catch(() => "");
+  console.warn("Lead send failed (HTTP):", resp?.status, txt);
 }
-
-
-
+return out;
 
   } catch (err) {
-    console.warn("Leads webhook failed:", err);
+    console.warn("Lead send failed:", err);
+    return null;
   }
 };
-const buildText = () => [
+
+
+
+
+
+const buildText = (refNr) => [
   `Inquiry: ${PACKAGE_TITLE}`,
+  (refNr ? `Reference: ${refNr}` : `Reference: (pending)`),
   `Price: ${PRICE}`,
   "",
   `Name: ${v("name")}`,
@@ -1622,6 +1634,7 @@ const buildText = () => [
 
 
 
+
   btnOpen.addEventListener("click", open);
 
   modal.addEventListener("click", (e) => {
@@ -1632,27 +1645,33 @@ const buildText = () => [
     if (e.key === "Escape" && modal.classList.contains("is-open")) close();
   });
 
-document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
+document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", async () => {
   if (!form.checkValidity()) return form.reportValidity();
- leadChannel = "whatsapp";
-leadAction = "click";
-postLeadToSheet();
 
+  leadChannel = "whatsapp";
+  leadAction = "click";
 
-  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText())}`;
+  const out = await postLeadToSheet("whatsapp");
+  const refNr = out?.data?.refNr || out?.refNr || out?.result?.refNr || "";
+
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText(refNr || null))}`;
   window.open(url, "_blank", "noopener");
 });
 
 
- document.getElementById("btnInquiryEmail")?.addEventListener("click", () => {
-  if (!form.checkValidity()) return form.reportValidity();
- 
-leadChannel = "email";
-leadAction = "click";
-postLeadToSheet();
 
-  const subject = `Inquiry – ${PACKAGE_TITLE}`;
-  const body = buildText();
+document.getElementById("btnInquiryEmail")?.addEventListener("click", async () => {
+  if (!form.checkValidity()) return form.reportValidity();
+
+  leadChannel = "email";
+  leadAction = "click";
+
+  const out = await postLeadToSheet("email");
+  const refNr = out?.data?.refNr || out?.refNr || out?.result?.refNr || "";
+
+  const subject = `Inquiry – ${PACKAGE_TITLE}${refNr ? " – " + refNr : ""}`;
+  const body = buildText(refNr || null);
+
   window.location.href =
     `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });
