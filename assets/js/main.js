@@ -3,6 +3,8 @@
    + Partner+Token Session (URL → session/localStorage)
    + Link-Patching (nur definierte Domains)
    + Lead payload: PartnerId/Token sauber (Hotel QR vs Agent)
+   + FIX: idemKey (keine Doppelzeilen)
+   + FIX: WhatsApp/Mail Text bekommt refNr (immer)
    ================================ */
 
 const AMD_LEADS_URL = "/.netlify/functions/leads";
@@ -85,7 +87,7 @@ function getPartnerToken_() {
   if (partner || token) return { partner, token };
 
   const ts = Number(localStorage.getItem(TOKEN_TS_KEY) || "0");
-  const fresh = ts > 0 && (Date.now() - ts) <= TOKEN_TTL_MS;
+  const fresh = ts > 0 && Date.now() - ts <= TOKEN_TTL_MS;
   if (!fresh) return { partner: "", token: "" };
 
   const lp = (localStorage.getItem(PARTNER_KEY) || "").trim();
@@ -95,6 +97,18 @@ function getPartnerToken_() {
   if (lt) sessionStorage.setItem(TOKEN_KEY, lt);
 
   return { partner: lp, token: lt };
+}
+
+/**
+ * “Hotel-QR Attribution” NUR wenn in der AKTUELLEN URL beides steht:
+ *   ?partner=XXX&token=YYY
+ * Dadurch kann kein alter Token aus storage eine private Anfrage “partnern”.
+ */
+function getQrAttributionFromUrlOnly_() {
+  const partner = getUrlParam_("partner");
+  const token = getUrlParam_("token");
+  if (partner && token) return { partner: partner.trim(), token: token.trim() };
+  return { partner: "", token: "" };
 }
 
 function shouldPatchUrl_(u) {
@@ -172,7 +186,6 @@ function goWithPartner_(url) {
 /**
  * QR Token sicherstellen:
  * - Wenn partner in URL aber kein token: redirect über /.netlify/functions/r?pid=PARTNER
- *   (dein QR-Link macht genau das server-side)
  */
 function ensureQrTokenForHotel_(onReady) {
   const partnerFromUrl = getUrlParam_("partner");
@@ -191,7 +204,6 @@ function ensureQrTokenForHotel_(onReady) {
     return;
   }
 
-  // Partner vorhanden, Token fehlt => über r.js Token holen (redirect)
   try {
     const dest = `/.netlify/functions/r?pid=${encodeURIComponent(partnerFromUrl)}`;
     window.location.href = dest;
@@ -201,8 +213,22 @@ function ensureQrTokenForHotel_(onReady) {
 }
 
 /* ================================
-   Leads
+   Leads (POST + refNr parsing)
    ================================ */
+
+function extractRefNr_(json) {
+  // netlify returns: { ok:true, upstream: { success:true, data:{ refNr ... } } }
+  // sometimes nested: upstream.data.data.refNr
+  const u = json?.upstream;
+  return (
+    u?.data?.refNr ||
+    u?.refNr ||
+    u?.data?.data?.refNr ||
+    json?.refNr ||
+    json?.data?.refNr ||
+    ""
+  );
+}
 
 async function postLead(payload) {
   try {
@@ -212,15 +238,10 @@ async function postLead(payload) {
       body: JSON.stringify(payload || {}),
     });
 
-    const json = await res.json().catch(()=>null);
-
-    let ref = "";
-    if (json?.upstream?.data?.refNr) ref = json.upstream.data.refNr;
-    if (!ref && json?.upstream?.refNr) ref = json.upstream.refNr;
-
-    return ref || "";
+    const json = await res.json().catch(() => null);
+    return { refNr: extractRefNr_(json), json };
   } catch (e) {
-    return "";
+    return { refNr: "", json: null };
   }
 }
 
@@ -253,10 +274,7 @@ function initPartnerBrand_(partner, token) {
   if (!partner || !token) return;
 
   const safeId = encodeURIComponent(String(partner).trim());
-  const candidates = [
-    `../assets/partners/${safeId}.svg`,
-    `../assets/partners/${safeId}.png`,
-  ];
+  const candidates = [`../assets/partners/${safeId}.svg`, `../assets/partners/${safeId}.png`];
 
   const resetImg = () => {
     brandImg.onload = null;
@@ -293,12 +311,9 @@ function initPartnerBrand_(partner, token) {
 
 function determineServiceFromPath_() {
   const p = (location.pathname || "").toLowerCase();
-  // Backend akzeptiert "packages" (nicht "package_tours")
   if (p.includes("package")) return "packages";
   return "services";
 }
-
-
 
 function formToObject_(form) {
   try {
@@ -322,210 +337,388 @@ function buildFullText_(obj) {
 }
 
 /**
- * Regel:
- * - Hotel QR: token vorhanden => PartnerId nur aus URL/Session, Feld wird versteckt
- * - Agent: kein token => PartnerId darf manuell aus #partnerId kommen
+ * Agent (manuell): #partnerId (ohne token)
+ * Hotel QR: NUR wenn ?partner + ?token in aktueller URL
  */
 function getFinalPartnerToken_() {
-  const urlPartner = getUrlParam_("partner");
-  const { token } = getPartnerToken_();
-
   const manualPartnerId = document.getElementById("partnerId")?.value?.trim() || "";
 
-  if (urlPartner && token) {
-    return {
-      finalPartnerId: urlPartner.trim(),
-      finalToken: String(token || "").trim(),
-    };
+  const qr = getQrAttributionFromUrlOnly_();
+  if (qr.partner && qr.token) {
+    return { finalPartnerId: qr.partner, finalToken: qr.token };
   }
 
   if (manualPartnerId) {
-    return {
-      finalPartnerId: manualPartnerId.trim(),
-      finalToken: "",
-    };
+    return { finalPartnerId: manualPartnerId.trim(), finalToken: "" };
   }
 
   return { finalPartnerId: "", finalToken: "" };
 }
 
-function buildLeadPayloadFromForm_(form, contactPreference) {
-  const obj = formToObject_(form);
+function safeLower_(s) {
+  return String(s || "").trim().toLowerCase();
+}
 
-  const name = String(
-    obj.name || obj.fullName || obj.firstname || obj.firstName || obj.vorname || ""
-  ).trim() || "—";
+function stableStringify_(obj) {
+  try {
+    if (!obj || typeof obj !== "object") return String(obj ?? "");
+    const keys = Object.keys(obj).sort();
+    const out = {};
+    for (const k of keys) out[k] = obj[k];
+    return JSON.stringify(out);
+  } catch (_) {
+    return "";
+  }
+}
 
-  const email = String(obj.email || obj.mail || "").trim();
-  const phone = String(obj.phone || obj.tel || obj.mobile || obj.telefon || "").trim();
+function simpleHash_(str) {
+  // stable-enough short hash for idemKey
+  let hash = 0;
+  const s = String(str || "");
+  for (let i = 0; i < s.length; i++) {
+    const chr = s.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
 
-  const message = String(
-    obj.message || obj.nachricht || obj.notes || obj.wuensche || obj.wünsche || ""
-  ).trim();
+function buildIdemKey_(payload) {
+  const base = [
+    payload.service || "-",
+    payload.locale || "-",
+    safeLower_(payload.email || "-"),
+    String(payload.phone || "-").trim(),
+    String(payload.pageUrl || payload.sourceUrl || "-").trim(),
+    stableStringify_(payload.structuredJson || {}),
+    String(payload.fullText || "").trim(),
+  ].join("|");
+  return `${payload.service || "lead"}:${simpleHash_(base)}`;
+}
 
-  const fullText = message || buildFullText_(obj);
+function findFormForElement_(el) {
+  if (!el) return document.querySelector("form") || null;
+  return el.closest("form") || document.querySelector("form") || null;
+}
+
+function buildLeadPayloadFromForm_(form, opts = {}) {
+  const obj = form ? formToObject_(form) : {};
+  const service = determineServiceFromPath_();
+
+  const name =
+    (document.getElementById("name")?.value || obj.name || obj.fullname || obj.customerName || "").trim();
+  const email =
+    (document.getElementById("email")?.value || obj.email || obj.mail || "").trim();
+  const phone =
+    (document.getElementById("phone")?.value || obj.phone || obj.tel || obj.mobile || "").trim();
+
+  const contactPreference =
+    (opts.contactPreference || obj.contactPreference || obj.channel || "whatsapp").trim();
+
   const { finalPartnerId, finalToken } = getFinalPartnerToken_();
 
-  return {
-    service: determineServiceFromPath_(), // packages | services
-    locale: getLang(),
-    lang: getLang(),
+  // fullText: bevorzugt Textarea/Message-Feld (menschlich), sonst aus Formdaten
+  const message =
+    (document.getElementById("fullText")?.value ||
+      document.getElementById("message")?.value ||
+      obj.fullText ||
+      obj.message ||
+      obj.notes ||
+      "").trim();
 
+  const structuredJson = {
+    ...obj,
+    channel: opts.channel || obj.channel || "",
+    action: opts.action || obj.action || "",
+  };
+
+  const payload = {
+    service,
+    locale: (document.documentElement.lang || getLang() || "en"),
+    lang: (document.documentElement.lang || getLang() || "en"),
     name,
     email,
     phone,
-
-    // menschenlesbarer Text
-    message: fullText,
-    fullText: fullText,
-
-    // strukturiert (für Angebot)
-    structuredJson: obj,
-
-    // Attribution
+    contactPreference,
     partnerId: finalPartnerId,
     token: finalToken,
-
-    contactPreference: contactPreference || "form",
-    pageUrl: location.href,
-    sourceUrl: location.href,
-    source: location.hostname,
+    sourceUrl: window.location.href,
+    pageUrl: window.location.href,
+    structuredJson,
+    fullText: message || buildFullText_(structuredJson),
   };
-}
 
-/*
-function hookForms_() {
-  const forms = Array.from(document.querySelectorAll("form"));
-  forms.forEach((form) => {
-    if (form.__amdLeadHooked) return;
-    form.__amdLeadHooked = true;
+  payload.idemKey = buildIdemKey_(payload);
 
-    form.addEventListener(
-      "submit",
-      () => {
-        try {
-          const payload = buildLeadPayloadFromForm_(form, "email");
-          postLead(payload);
-        } catch (_) {}
-      },
-      { passive: true }
-    );
-  });
-}
-*/
-
-function hookWhatsAppClicks_() {
-  document.addEventListener(
-    "click",
-    (e) => {
-      const a = e.target?.closest?.('a[href*="wa.me"], a[href*="whatsapp"]');
-      const btn = e.target?.closest?.("button");
-      const txt = String((a || btn)?.innerText || "").toLowerCase();
-
-      const isWa = !!a || txt.includes("whatsapp") || txt.includes("واتساب");
-      if (!isWa) return;
-
-      try {
-        const form = (a || btn)?.closest("form") || document.querySelector("form");
-        if (!form) return;
-
-        const payload = buildLeadPayloadFromForm_(form, "whatsapp");
-       postLead(payload).then((ref)=>{
-  if(!ref) return;
-
-  const textarea = document.querySelector("textarea");
-  if(textarea){
-    textarea.value = textarea.value.replace("(pending)", ref);
-  }
-});
-
-      } catch (_) {}
-    },
-    { passive: true }
-  );
-}
-function hookEmailClicks_() {
-  document.addEventListener(
-    "click",
-    (e) => {
-      const a = e.target?.closest?.('a[href^="mailto:"]');
-      const btn = e.target?.closest?.("button");
-      const txt = String((a || btn)?.innerText || "").toLowerCase();
-
-      const isMail =
-        !!a ||
-        txt.includes("email") ||
-        txt.includes("mail") ||
-        txt.includes("e-mail");
-
-      if (!isMail) return;
-
-      try {
-        const form = (a || btn)?.closest("form") || document.querySelector("form");
-        if (!form) return;
-
-        const payload = buildLeadPayloadFromForm_(form, "email");
-        postLead(payload).then((ref)=>{
-  if(!ref) return;
-
-  const textarea = document.querySelector("textarea");
-  if(textarea){
-    textarea.value = textarea.value.replace("(pending)", ref);
-  }
-});
-
-      } catch (_) {}
-    },
-    true
-  );
+  return payload;
 }
 
 /* ================================
-   DOM Ready
+   refNr in WhatsApp/Email Text “einspritzen”
    ================================ */
 
-document.addEventListener("DOMContentLoaded", () => {
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+function refLabel_(lang) {
+  const l = (lang || getLang() || "en").toLowerCase();
+  if (l.startsWith("de")) return "Referenz";
+  if (l.startsWith("ar")) return "المرجع";
+  return "Reference";
+}
 
-  ensureQrTokenForHotel_(({ partner: p2, token: t2 } = {}) => {
-    const final = getPartnerToken_();
-    const partner = (p2 || final.partner || "").trim();
-    const token = (t2 || final.token || "").trim();
+function injectRef_(text, refNr) {
+  const ref = String(refNr || "").trim();
+  if (!ref) return String(text || "");
 
-    if (partner || token) {
+  const t = String(text || "");
+
+  // 1) ersetze (pending)
+  if (t.includes("(pending)")) return t.replace(/\(pending\)/g, ref);
+
+  // 2) ersetze bestehende Reference/Referenz Zeile
+  const re = /^(Reference|Referenz|المرجع)\s*:\s*.*$/gmi;
+  if (re.test(t)) return t.replace(re, `${refLabel_()}: ${ref}`);
+
+  // 3) sonst: nach erster Zeile einfügen
+  const lines = t.split("\n");
+  if (lines.length <= 1) return `${refLabel_()}: ${ref}\n${t}`.trim();
+  lines.splice(1, 0, `${refLabel_()}: ${ref}`);
+  return lines.join("\n");
+}
+
+function buildWhatsAppUrlFromElement_(el, messageText) {
+  // akzeptiert:
+  // - a[href="https://wa.me/....?text=..."]
+  // - button[data-wa="+961..."] oder data-whatsapp="+961..."
+  const msg = encodeURIComponent(String(messageText || ""));
+
+  // prefer explicit href if present
+  const href = el?.getAttribute?.("href") || "";
+  if (href && href.includes("wa.me")) {
+    try {
+      const u = new URL(href);
+      u.searchParams.set("text", String(messageText || ""));
+      return u.toString();
+    } catch (_) {
+      // fallback: replace text=...
+      if (href.includes("text=")) return href.replace(/text=[^&]*/i, `text=${msg}`);
+      return href + (href.includes("?") ? "&" : "?") + `text=${msg}`;
+    }
+  }
+
+  const rawNum =
+    el?.dataset?.wa ||
+    el?.dataset?.whatsapp ||
+    document.querySelector("[data-wa]")?.dataset?.wa ||
+    "";
+
+  const num = String(rawNum || "").replace(/[^\d+]/g, "");
+  const waNumber = num ? num.replace(/^\+/, "") : "";
+  if (!waNumber) return "";
+
+  return `https://wa.me/${waNumber}?text=${msg}`;
+}
+
+function buildMailtoFromElement_(el, subject, body) {
+  const href = el?.getAttribute?.("href") || "";
+  let to = "";
+
+  if (href.toLowerCase().startsWith("mailto:")) {
+    to = href.slice("mailto:".length).split("?")[0] || "";
+  }
+
+  if (!to) {
+    to = el?.dataset?.mailto || el?.dataset?.emailto || "";
+  }
+  if (!to) {
+    // fallback: first mailto on page
+    const a = document.querySelector('a[href^="mailto:"]');
+    if (a) to = (a.getAttribute("href") || "").slice("mailto:".length).split("?")[0] || "";
+  }
+
+  const sp = new URLSearchParams();
+  if (subject) sp.set("subject", subject);
+  if (body) sp.set("body", body);
+
+  return `mailto:${to}?${sp.toString()}`;
+}
+
+/* ================================
+   Hooks (WhatsApp / Email / Form)
+   ================================ */
+
+const _leadSendLocks = new Map(); // idemKey -> timestamp
+
+function lockAllowsSend_(idemKey) {
+  const now = Date.now();
+  const last = Number(_leadSendLocks.get(idemKey) || 0);
+  if (last && now - last < 8000) return false; // 8s click spam guard
+  _leadSendLocks.set(idemKey, now);
+  return true;
+}
+
+async function handleSendAndOpen_(kind, el) {
+  const form = findFormForElement_(el);
+  if (form && typeof form.checkValidity === "function" && !form.checkValidity()) {
+    form.reportValidity?.();
+    return;
+  }
+
+  const payload = buildLeadPayloadFromForm_(form, {
+    channel: kind,
+    action: "click",
+    contactPreference: kind,
+  });
+
+  // minimal required fields: name + (email or phone)
+  if (!payload.name || (!payload.email && !payload.phone)) {
+    // page may have custom validation elsewhere
+    return;
+  }
+
+  if (!lockAllowsSend_(payload.idemKey)) {
+    // already sent very recently; still open link if possible
+  }
+
+  const { refNr } = await postLead(payload);
+
+  // build outgoing message from textarea if exists, else payload.fullText
+  const textarea =
+    document.getElementById("fullText") ||
+    document.getElementById("message") ||
+    document.querySelector("textarea");
+
+  const baseText = (textarea?.value || payload.fullText || "").trim();
+  const finalText = injectRef_(baseText, refNr);
+
+  if (textarea && finalText) textarea.value = finalText;
+
+  if (kind === "whatsapp") {
+    const waUrl = buildWhatsAppUrlFromElement_(el, finalText);
+    if (waUrl) window.open(waUrl, "_blank", "noopener");
+    return;
+  }
+
+  if (kind === "email") {
+    const subjBase =
+      (document.querySelector('input[name="subject"]')?.value || "").trim() ||
+      (getLang().startsWith("de") ? "Anfrage AMD German Center" : "AMD German Center Inquiry");
+
+    const subject = refNr ? `${subjBase} – ${refNr}` : subjBase;
+    const mailto = buildMailtoFromElement_(el, subject, finalText);
+    if (mailto) window.location.href = mailto;
+    return;
+  }
+}
+
+function hookWhatsAppClicks_() {
+  // anchors or buttons that look like WhatsApp
+  const candidates = Array.from(document.querySelectorAll('a,button')).filter((el) => {
+    const href = (el.getAttribute?.("href") || "").toLowerCase();
+    const id = (el.id || "").toLowerCase();
+    const cls = (el.className || "").toString().toLowerCase();
+    const data = Object.assign({}, el.dataset || {});
+    return (
+      href.includes("wa.me") ||
+      href.includes("whatsapp") ||
+      id.includes("whatsapp") ||
+      cls.includes("whatsapp") ||
+      data.wa ||
+      data.whatsapp
+    );
+  });
+
+  candidates.forEach((el) => {
+    if (el.__amdHookedWhatsApp) return;
+    el.__amdHookedWhatsApp = true;
+
+    el.addEventListener(
+      "click",
+      async (ev) => {
+        // prevent default navigation to keep exactly one lead
+        ev.preventDefault();
+        ev.stopPropagation();
+        await handleSendAndOpen_("whatsapp", el);
+      },
+      true
+    );
+  });
+}
+
+function hookEmailClicks_() {
+  const candidates = Array.from(document.querySelectorAll('a[href^="mailto:"], a, button')).filter((el) => {
+    const href = (el.getAttribute?.("href") || "").toLowerCase();
+    const id = (el.id || "").toLowerCase();
+    const cls = (el.className || "").toString().toLowerCase();
+    const data = Object.assign({}, el.dataset || {});
+    return href.startsWith("mailto:") || id.includes("email") || cls.includes("email") || data.mailto || data.emailto;
+  });
+
+  candidates.forEach((el) => {
+    if (el.__amdHookedEmail) return;
+    el.__amdHookedEmail = true;
+
+    el.addEventListener(
+      "click",
+      async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        await handleSendAndOpen_("email", el);
+      },
+      true
+    );
+  });
+}
+
+function hookFormSubmits_() {
+  const forms = Array.from(document.querySelectorAll("form"));
+  forms.forEach((form) => {
+    if (form.__amdHookedSubmit) return;
+    form.__amdHookedSubmit = true;
+
+    form.addEventListener("submit", async (ev) => {
+      // some pages do custom submission; we keep it safe:
+      // - we only send lead once (idemKey) and do NOT block the form unless it would navigate away immediately
+      const payload = buildLeadPayloadFromForm_(form, {
+        channel: "form",
+        action: "submit",
+        contactPreference: "whatsapp",
+      });
+
+      if (!payload.name || (!payload.email && !payload.phone)) return;
+
+      if (!lockAllowsSend_(payload.idemKey)) return;
+
+      // fire-and-forget; do not prevent form behavior
+      postLead(payload).catch(() => {});
+    });
+  });
+}
+
+/* ================================
+   Boot
+   ================================ */
+
+function boot_() {
+  ensureQrTokenForHotel_(({ partner, token } = {}) => {
+    // UI
+    updatePartnerFieldVisibility_(token);
+    initPartnerBrand_(partner, token);
+
+    // patch links only when QR active (existing behavior)
+    const qrActive = sessionStorage.getItem(QR_ACTIVE_KEY) === "1";
+    if (qrActive) {
       patchAllLinks_(partner, token);
       watchAndPatchLinks_(partner, token);
     }
 
-    updatePartnerFieldVisibility_(token);
-    initPartnerBrand_(partner, token);
+    // lead hooks
+    hookWhatsAppClicks_();
+    hookEmailClicks_();
+    hookFormSubmits_();
   });
+}
 
-  // Sofortzustand (wenn partner/token schon da sind)
-  const { partner, token } = getPartnerToken_();
-  if (partner || token) {
-    patchAllLinks_(partner, token);
-    watchAndPatchLinks_(partner, token);
-  }
-  updatePartnerFieldVisibility_(token);
-  initPartnerBrand_(partner, token);
-
-  // Buttons ohne <a href>: data-go
-  document.addEventListener("click", (e) => {
-    const el = e.target?.closest?.("[data-go]");
-    if (!el) return;
-
-    const url = String(el.getAttribute("data-go") || "").trim();
-    if (!url) return;
-
-    e.preventDefault();
-    goWithPartner_(url);
-  });
-
-  // Lead Hooks
-/* hookForms_(); */
-  hookWhatsAppClicks_();
-  hookEmailClicks_();
-
-});
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", boot_);
+} else {
+  boot_();
+}
