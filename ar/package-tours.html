@@ -1452,6 +1452,7 @@ const postLeadToSheet = async () => {
 const data = new URLSearchParams();
 
 Object.entries({ ...payload, secret: LEADS_SECRET }).forEach(([k, v]) => {
+
   if (v === undefined || v === null) return;
   const sv = String(v);
   if (sv.trim() === "") return; // leere Strings nicht senden
