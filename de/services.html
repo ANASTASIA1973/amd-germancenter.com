@@ -1140,7 +1140,21 @@ Gesendet über amd-germancenter.com/services`;
 
       const subject = `Service-Anfrage – ${SERVICE_TITLE}`;
       const body = buildText();
-      window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+     const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+// Browser-Fallback (Gmail Web-Compose)
+const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+try {
+  // Erst mailto versuchen
+  window.location.href = mailto;
+
+  // Wenn nichts passiert (typisch), zusätzlich Gmail öffnen
+  setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
+} catch (e) {
+  window.open(gmail, "_blank", "noopener");
+}
+
     });
 
   })();

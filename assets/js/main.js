@@ -204,26 +204,38 @@ function ensureQrTokenForHotel_(onReady) {
    Leads
    ================================ */
 
-function postLead(payload) {
-  // bewusst silent: darf niemals Flow blockieren
+async function postLead(payload) {
   try {
-    const body = JSON.stringify(payload || {});
-    // 1) Beacon überlebt Navigation (mailto/wa.me)
-    if (navigator.sendBeacon) {
-      const blob = new Blob([body], { type: "application/json" });
-      navigator.sendBeacon(AMD_LEADS_URL, blob);
-      return;
-    }
-    // 2) Fallback: keepalive
-    fetch(AMD_LEADS_URL, {
+    const res = await fetch(AMD_LEADS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body,
-      keepalive: true,
-    }).catch(() => {});
-  } catch (_) {}
-}
+      body: JSON.stringify(payload || {}),
+    });
 
+    const json = await res.json().catch(()=>null);
+
+    let ref = "";
+    if (json?.upstream?.data?.refNr) ref = json.upstream.data.refNr;
+    if (!ref && json?.upstream?.refNr) ref = json.upstream.refNr;
+
+    if (ref) {
+      // Referenz in payload/fullText ersetzen
+      if (payload.fullText) {
+        payload.fullText = payload.fullText.replace("(pending)", ref);
+      }
+
+      // auch in textarea sichtbar ersetzen
+      const txt = document.querySelector("textarea");
+      if (txt && txt.value.includes("(pending)")) {
+        txt.value = txt.value.replace("(pending)", ref);
+      }
+    }
+
+    return ref;
+  } catch (e) {
+    return "";
+  }
+}
 
 function getLang() {
   return (document.documentElement.lang || "de").toLowerCase();
@@ -435,6 +447,33 @@ function hookWhatsAppClicks_() {
     { passive: true }
   );
 }
+function hookEmailClicks_() {
+  document.addEventListener(
+    "click",
+    (e) => {
+      const a = e.target?.closest?.('a[href^="mailto:"]');
+      const btn = e.target?.closest?.("button");
+      const txt = String((a || btn)?.innerText || "").toLowerCase();
+
+      const isMail =
+        !!a ||
+        txt.includes("email") ||
+        txt.includes("mail") ||
+        txt.includes("e-mail");
+
+      if (!isMail) return;
+
+      try {
+        const form = (a || btn)?.closest("form") || document.querySelector("form");
+        if (!form) return;
+
+        const payload = buildLeadPayloadFromForm_(form, "email");
+        postLead(payload);
+      } catch (_) {}
+    },
+    true
+  );
+}
 
 /* ================================
    DOM Ready
@@ -482,4 +521,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Lead Hooks
   hookForms_();
   hookWhatsAppClicks_();
+  hookEmailClicks_();
+
 });
