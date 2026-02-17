@@ -19,11 +19,12 @@ export async function handler(event) {
       };
     }
 
-    // Token holen (dein GAS: mode=qr_check, partner=..., secret=...)
-    const url =
-      `${GAS_EXEC_URL}?mode=qr_check` +
-      `&partner=${encodeURIComponent(partnerId)}` +
-      `&secret=${encodeURIComponent(WEBHOOK_SECRET)}`;
+   // Token holen (GAS: mode=qr_check, partnerId=..., secret=...)
+const url =
+  `${GAS_EXEC_URL}?mode=qr_check` +
+  `&partnerId=${encodeURIComponent(partnerId)}` +
+  `&secret=${encodeURIComponent(WEBHOOK_SECRET)}`;
+
 
     const res = await fetch(url, { method: "GET" });
     const data = await res.json().catch(() => null);
@@ -35,9 +36,11 @@ export async function handler(event) {
       };
     }
 
-    const dest =
-      `${DEFAULT_DEST}?partner=${encodeURIComponent(partnerId)}` +
-      `&token=${encodeURIComponent(data.token)}`;
+  const dest =
+  `${DEFAULT_DEST}?partner=${encodeURIComponent(partnerId)}` +
+  `&token=${encodeURIComponent(data.token)}` +
+  `&t=${encodeURIComponent(data.token)}`;
+
 
     return {
       statusCode: 302,

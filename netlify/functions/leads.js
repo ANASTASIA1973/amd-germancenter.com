@@ -80,44 +80,49 @@ const partnerAltRaw = incoming.partner ?? incoming.pid ?? "";
 let partnerAlt = String(partnerAltRaw || "").trim().replace(/[^A-Za-z0-9_-]/g, "");
 if (!partnerId && partnerAlt) partnerId = partnerAlt;
 
-   // Build payload for Apps Script
-const payload = {
+// Build lead data for Apps Script (Router expects action + data)
+const leadData = {
   ...incoming,
-  service,
-  page,
+  service,               // keep for createLead()
+  page,                  // keep for your own reference
   locale,
-   lang: locale,
+  lang,                  // IMPORTANT: keep lang = real lang, not forced to locale
 
-  // Partner: send in all common keys so the Apps Script can match reliably
-  ...(partnerId ? { partnerId, partner: partnerId, pid: partnerId } : {}),
+  // Partner (Agent / Hotel QR)
+  ...(partnerId ? { partnerId } : {}),
 
-  // Avoid collision with Apps Script RPC routing ("action")
-  ...(incoming.action ? { leadAction: String(incoming.action) } : {}),
+  // Make sure fullText exists (human readable request text)
+  // Priority: whatever the customer typed
+  fullText: String(
+    incoming.fullText ||
+    incoming.message ||
+    incoming.requestText ||
+    incoming.notes ||
+    incoming.text ||
+    ""
+  ).trim(),
 
-  secret: WEBHOOK_SECRET, // server-side only
+  // Keep everything also structured for later offer building
+  structuredJson: incoming,
+
+  // Trace
+  sourceUrl: String(incoming.sourceUrl || incoming.pageUrl || incoming.url || "").trim(),
 };
 
-// Ensure Apps Script does not see "action" (it may treat it as RPC command)
-delete payload.action;
+// IMPORTANT: Apps Script Router (90_api_router.gs) requires payload.action
+const requestData = {
+  action: "lead.create",
+  secret: WEBHOOK_SECRET,
+  data: leadData,
+};
+
+const res = await fetch(GAS_EXEC_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(requestData),
+});
 
 
-    // Never forward client-provided secret if any
-    delete payload.WEBHOOK_SECRET;
-    delete payload.webhookSecret;
-    delete payload.secretFromClient;
-        // CRITICAL: never forward any "action" field from the browser.
-    // If Apps Script sees p.action, it switches to portal routing => "Unknown action".
-    delete payload.action;
-    delete payload.leadAction;
-
-    // and ensure the only secret is ours:
-    payload.secret = WEBHOOK_SECRET;
-
-    const res = await fetch(GAS_EXEC_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
 
     const text = await res.text().catch(() => "");
     let data = null;
