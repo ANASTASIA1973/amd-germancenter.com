@@ -1065,3 +1065,29 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   height: 16px;
   display: block;
 }
+
+.srv-highlights {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.srv-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #0b1f3a;
+}
+
+.srv-highlight-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+}
+
+.srv-highlight-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
