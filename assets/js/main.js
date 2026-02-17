@@ -5,11 +5,8 @@
    + Lead payload: partnerId/token nur wenn gesetzt
    ================================ */
 
-const AMD_LEADS_URL =
-  "https://script.google.com/macros/s/AKfycbwcHBmltDbbfqfobOsVCW5o9Uehhw09jSpRzRApJJ8xOxQI7v1tG7sp-xQyxJiRqX3F/exec";
+const AMD_LEADS_URL = "/.netlify/functions/leads";
 
-
-const AMD_LEADS_SECRET = "AMD_2026_WEBHOOK__k9V7mQ3pL8xR2nD6sT1wZ4cJ5hY0aB7e";
 
 
 
@@ -274,22 +271,10 @@ function watchAndPatchLinks_(partner, token) {
 function postLead(payload) {
   // bewusst silent: darf niemals Flow blockieren
   try {
-    const data = new URLSearchParams();
-
-    Object.entries({ ...payload, secret: AMD_LEADS_SECRET }).forEach(([k, v]) => {
-      if (v === undefined || v === null) return;
-
-      // WICHTIG: leere Strings NICHT senden (damit PRIVATE nicht "verunreinigt" wird)
-      const sv = String(v);
-      if (sv.trim() === "") return;
-
-      data.append(k, sv);
-    });
-
-    fetch(AMD_LEADS_URL, {
+    fetch("/.netlify/functions/leads", {
       method: "POST",
-      body: data,
-      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload || {})
     }).catch(() => {});
   } catch (_) {}
 }
