@@ -1449,21 +1449,25 @@ const postLeadToSheet = async () => {
 };
 
   try {
-const data = new URLSearchParams();
+try {
+  // Beacon überlebt Navigation (wa.me / mailto)
+  const body = JSON.stringify(payload || {});
+  if (navigator.sendBeacon) {
+    const blob = new Blob([body], { type: "application/json" });
+    navigator.sendBeacon("/.netlify/functions/leads", blob);
+    return;
+  }
 
-Object.entries({ ...payload, secret: LEADS_SECRET }).forEach(([k, v]) => {
-
-  if (v === undefined || v === null) return;
-  const sv = String(v);
-  if (sv.trim() === "") return; // leere Strings nicht senden
-  data.append(k, sv);
-});
-
-await fetch(LEADS_WEBHOOK_URL, {
-  method: "POST",
-  body: data,
-  mode: "no-cors"
-});
+  // Fallback
+  fetch("/.netlify/functions/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+    keepalive: true
+  }).catch(() => {});
+} catch (err) {
+  console.warn("Lead send failed:", err);
+}
 
 
 
