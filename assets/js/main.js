@@ -1,10 +1,9 @@
 /* ================================
-   AMD Leads – Packages + Services
-   + Partner+Token Session (URL → session/localStorage)
-   + Link-Patching (nur definierte Domains)
-   + Lead payload: PartnerId/Token sauber (Hotel QR vs Agent)
-   + FIX: idemKey (keine Doppelzeilen)
-   + FIX: WhatsApp/Mail Text bekommt refNr (immer)
+   AMD Leads – Packages + Services (MAIN)
+   - Partner + Token Session (URL → sessionStorage/localStorage)
+   - Link-Patching nur für erlaubte Hosts
+   - OPTIONAL Lead-Hooks (nur wenn Seite nicht selbst Leads sendet)
+   - RefNr muss IM ausgehenden WhatsApp/Mail-Text enthalten sein
    ================================ */
 
 const AMD_LEADS_URL = "/.netlify/functions/leads";
@@ -23,6 +22,7 @@ const TOKEN_TTL_MS = 60 * 60 * 1000; // 1 Stunde
  * Nur diese externen Domains bekommen automatisch partner+token:
  * - Transfer
  * - Tours
+ * (alte Netlify Hosts als Fallback)
  */
 const PASS_HOSTS = new Set([
   "transfer.amd-germancenter.com",
@@ -32,7 +32,7 @@ const PASS_HOSTS = new Set([
 ]);
 
 /**
- * Hauptseite (inkl. Netlify Preview Hosts)
+ * Hauptseite (inkl. Preview Hosts)
  */
 const MAIN_HOSTS = new Set([
   "neuewebsite.netlify.app",
@@ -41,25 +41,29 @@ const MAIN_HOSTS = new Set([
 ]);
 
 function getUrlParam_(key) {
-  const sp = new URLSearchParams(window.location.search);
-  return (sp.get(key) || "").trim();
+  try {
+    const sp = new URLSearchParams(window.location.search);
+    return (sp.get(key) || "").trim();
+  } catch (_) {
+    return "";
+  }
 }
 
-function getSession_(key) {
-  // 1) sessionStorage
-  const s = (sessionStorage.getItem(key) || "").trim();
-  if (s) return s;
-
-  // 2) localStorage, aber nur wenn Token frisch
+function _readWithTtl_(key) {
   const ts = Number(localStorage.getItem(TOKEN_TS_KEY) || "0");
   if (!ts || Date.now() - ts > TOKEN_TTL_MS) return "";
-
   return (localStorage.getItem(key) || "").trim();
 }
 
+function getSession_(key) {
+  const s = (sessionStorage.getItem(key) || "").trim();
+  if (s) return s;
+  return _readWithTtl_(key);
+}
+
 function setSession_(key, val) {
-  if (!val) return;
-  const v = String(val).trim();
+  const v = String(val || "").trim();
+  if (!v) return;
 
   sessionStorage.setItem(key, v);
   localStorage.setItem(key, v);
@@ -69,9 +73,20 @@ function setSession_(key, val) {
   }
 }
 
+function clearPartnerSession_() {
+  sessionStorage.removeItem(PARTNER_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(QR_ACTIVE_KEY);
+
+  localStorage.removeItem(PARTNER_KEY);
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_TS_KEY);
+}
+
 /**
  * Zentrale Wahrheit:
- * - wenn URL partner/token hat => Session refresh
+ * - wenn URL partner/token hat → Session refresh + QR_ACTIVE=1
+ * - wenn URL KEIN partner hat → QR_ACTIVE aus + (optional) Session clean, damit nichts "leakt"
  * - sonst Session lesen (mit localStorage TTL fallback)
  */
 function getPartnerToken_() {
@@ -81,34 +96,21 @@ function getPartnerToken_() {
   if (urlPartner) setSession_(PARTNER_KEY, urlPartner);
   if (urlToken) setSession_(TOKEN_KEY, urlToken);
 
+  // QR Active: nur wenn URL partner gesetzt hat (Hotel/Partner Attribution Start)
+  if (urlPartner) sessionStorage.setItem(QR_ACTIVE_KEY, "1");
+
+  // Wenn KEIN partner in URL: wir behandeln das als "privater Einstieg" → Partner/Token löschen
+  // (damit kein alter QR-Token später still mitgeht)
+  if (!urlPartner) {
+    clearPartnerSession_();
+    return { partner: "", token: "" };
+  }
+
   const partner = (urlPartner || getSession_(PARTNER_KEY) || "").trim();
   const token = (urlToken || getSession_(TOKEN_KEY) || "").trim();
 
-  if (partner || token) return { partner, token };
-
-  const ts = Number(localStorage.getItem(TOKEN_TS_KEY) || "0");
-  const fresh = ts > 0 && Date.now() - ts <= TOKEN_TTL_MS;
-  if (!fresh) return { partner: "", token: "" };
-
-  const lp = (localStorage.getItem(PARTNER_KEY) || "").trim();
-  const lt = (localStorage.getItem(TOKEN_KEY) || "").trim();
-
-  if (lp) sessionStorage.setItem(PARTNER_KEY, lp);
-  if (lt) sessionStorage.setItem(TOKEN_KEY, lt);
-
-  return { partner: lp, token: lt };
-}
-
-/**
- * “Hotel-QR Attribution” NUR wenn in der AKTUELLEN URL beides steht:
- *   ?partner=XXX&token=YYY
- * Dadurch kann kein alter Token aus storage eine private Anfrage “partnern”.
- */
-function getQrAttributionFromUrlOnly_() {
-  const partner = getUrlParam_("partner");
-  const token = getUrlParam_("token");
-  if (partner && token) return { partner: partner.trim(), token: token.trim() };
-  return { partner: "", token: "" };
+  // Falls wir partner haben aber Token fehlt: trotzdem partner merken; token kann via r.js nachkommen
+  return { partner, token };
 }
 
 function shouldPatchUrl_(u) {
@@ -171,9 +173,7 @@ function patchAllLinks_(partner, token) {
 function watchAndPatchLinks_(partner, token) {
   if (!partner && !token) return;
 
-  const obs = new MutationObserver(() => {
-    patchAllLinks_(partner, token);
-  });
+  const obs = new MutationObserver(() => patchAllLinks_(partner, token));
   obs.observe(document.documentElement, { childList: true, subtree: true });
 }
 
@@ -187,25 +187,31 @@ function goWithPartner_(url) {
  * QR Token sicherstellen:
  * - Wenn partner in URL aber kein token: redirect über /.netlify/functions/r?pid=PARTNER
  */
-function ensureQrTokenForHotel_(onReady) {
+async function ensureQrTokenForHotel_(onReady) {
   const partnerFromUrl = getUrlParam_("partner");
   const tokenFromUrl = getUrlParam_("token");
 
   if (!partnerFromUrl) {
-    sessionStorage.removeItem(QR_ACTIVE_KEY);
-    if (typeof onReady === "function") onReady(getPartnerToken_());
+    clearPartnerSession_();
+    if (typeof onReady === "function") onReady({ partner: "", token: "" });
     return;
   }
 
+  // QR Active session mark
   sessionStorage.setItem(QR_ACTIVE_KEY, "1");
+  setSession_(PARTNER_KEY, partnerFromUrl);
 
+  // Wenn token vorhanden: fertig
   if (tokenFromUrl) {
+    setSession_(TOKEN_KEY, tokenFromUrl);
     if (typeof onReady === "function") onReady(getPartnerToken_());
     return;
   }
 
+  // Wenn kein token: über r.js holen (server-side)
   try {
-    const dest = `/.netlify/functions/r?pid=${encodeURIComponent(partnerFromUrl)}`;
+    const pid = encodeURIComponent(partnerFromUrl);
+    const dest = `/.netlify/functions/r?pid=${pid}&next=${encodeURIComponent(window.location.href)}`;
     window.location.href = dest;
   } catch (_) {
     if (typeof onReady === "function") onReady(getPartnerToken_());
@@ -213,22 +219,8 @@ function ensureQrTokenForHotel_(onReady) {
 }
 
 /* ================================
-   Leads (POST + refNr parsing)
+   Leads (optional)
    ================================ */
-
-function extractRefNr_(json) {
-  // netlify returns: { ok:true, upstream: { success:true, data:{ refNr ... } } }
-  // sometimes nested: upstream.data.data.refNr
-  const u = json?.upstream;
-  return (
-    u?.data?.refNr ||
-    u?.refNr ||
-    u?.data?.data?.refNr ||
-    json?.refNr ||
-    json?.data?.refNr ||
-    ""
-  );
-}
 
 async function postLead(payload) {
   try {
@@ -239,75 +231,25 @@ async function postLead(payload) {
     });
 
     const json = await res.json().catch(() => null);
-    return { refNr: extractRefNr_(json), json };
-  } catch (e) {
-    return { refNr: "", json: null };
+
+    // Netlify leads.js wraps Apps Script response in { ok:true, upstream: ... }
+    const up = json?.upstream;
+    const ref =
+      up?.data?.refNr ||
+      up?.refNr ||
+      up?.data?.data?.refNr ||
+      up?.data?.data?.data?.refNr ||
+      "";
+
+    return String(ref || "").trim();
+  } catch (_) {
+    return "";
   }
 }
 
 function getLang() {
   return (document.documentElement.lang || "de").toLowerCase();
 }
-
-/* ================================
-   UI: Partner-Feld + Brand
-   ================================ */
-
-function updatePartnerFieldVisibility_(token) {
-  const partnerRow = document.querySelector(".partner-row");
-  const partnerInput = document.getElementById("partnerId");
-  if (!partnerRow) return;
-
-  const hide = !!String(token || "").trim();
-  partnerRow.style.display = hide ? "none" : "";
-  if (hide && partnerInput) partnerInput.value = "";
-}
-
-function initPartnerBrand_(partner, token) {
-  const brandWrap = document.getElementById("partnerBrand");
-  const brandImg = document.getElementById("partnerBrandImg");
-  if (!brandWrap) return;
-
-  brandWrap.hidden = true;
-  if (!brandImg) return;
-
-  if (!partner || !token) return;
-
-  const safeId = encodeURIComponent(String(partner).trim());
-  const candidates = [`../assets/partners/${safeId}.svg`, `../assets/partners/${safeId}.png`];
-
-  const resetImg = () => {
-    brandImg.onload = null;
-    brandImg.onerror = null;
-    brandImg.removeAttribute("src");
-    brandImg.src = "";
-  };
-
-  const tryLoad = (i) => {
-    if (i >= candidates.length) {
-      resetImg();
-      brandWrap.hidden = true;
-      return;
-    }
-
-    brandImg.onload = () => {
-      brandWrap.hidden = false;
-    };
-
-    brandImg.onerror = () => {
-      resetImg();
-      tryLoad(i + 1);
-    };
-
-    brandImg.src = candidates[i];
-  };
-
-  tryLoad(0);
-}
-
-/* ================================
-   Universal Lead Hooks (Packages + Services)
-   ================================ */
 
 function determineServiceFromPath_() {
   const p = (location.pathname || "").toLowerCase();
@@ -326,399 +268,330 @@ function formToObject_(form) {
   }
 }
 
-function buildFullText_(obj) {
-  const lines = [];
-  for (const k of Object.keys(obj)) {
-    const v = String(obj[k] ?? "").trim();
-    if (!v) continue;
-    lines.push(`${k}: ${v}`);
-  }
-  return lines.join("\n");
+function _stableIdemKey_(service, locale, email, phone, obj) {
+  const safe = (x) => String(x || "-").trim();
+  return [
+    service,
+    locale,
+    safe(email).toLowerCase(),
+    safe(phone),
+    safe(obj.people || obj.personen || obj.adults),
+    safe(obj.dates || obj.date || obj.travelPeriod),
+    safe(obj.departure || obj.abflughafen || obj.departureAirport),
+  ].join("|");
 }
 
 /**
- * Agent (manuell): #partnerId (ohne token)
- * Hotel QR: NUR wenn ?partner + ?token in aktueller URL
+ * Partner/Token dürfen nur mit, wenn:
+ * - QR_ACTIVE=1 UND partner in URL vorhanden (Hotel/Partner Funnel)
+ * - oder manueller PartnerId im Feld (Agent)
  */
 function getFinalPartnerToken_() {
-  const manualPartnerId = document.getElementById("partnerId")?.value?.trim() || "";
+  const qrActive = sessionStorage.getItem(QR_ACTIVE_KEY) === "1";
+  const urlPartner = getUrlParam_("partner");
+  const urlToken = getUrlParam_("token");
 
-  const qr = getQrAttributionFromUrlOnly_();
-  if (qr.partner && qr.token) {
-    return { finalPartnerId: qr.partner, finalToken: qr.token };
+  const manualPartnerId = (document.getElementById("partnerId")?.value || "").trim();
+
+  // Hotel QR: partner + token aus URL (oder nach r.js), aber nur wenn QR_ACTIVE
+  if (qrActive && urlPartner) {
+    const token = String(urlToken || getSession_(TOKEN_KEY) || "").trim();
+    if (token) {
+      return { finalPartnerId: urlPartner.trim(), finalToken: token };
+    }
+    // partner ja, token noch nicht: sende trotzdem partnerId, token leer
+    return { finalPartnerId: urlPartner.trim(), finalToken: "" };
   }
 
+  // Agent: manuelle PartnerId ohne token
   if (manualPartnerId) {
-    return { finalPartnerId: manualPartnerId.trim(), finalToken: "" };
+    return { finalPartnerId: manualPartnerId, finalToken: "" };
   }
 
   return { finalPartnerId: "", finalToken: "" };
 }
 
-function safeLower_(s) {
-  return String(s || "").trim().toLowerCase();
-}
+function buildLeadPayloadFromForm_(form, contactPreference) {
+  const obj = formToObject_(form);
 
-function stableStringify_(obj) {
-  try {
-    if (!obj || typeof obj !== "object") return String(obj ?? "");
-    const keys = Object.keys(obj).sort();
-    const out = {};
-    for (const k of keys) out[k] = obj[k];
-    return JSON.stringify(out);
-  } catch (_) {
-    return "";
-  }
-}
+  const name = String(
+    obj.name || obj.fullName || obj.firstname || obj.firstName || obj.vorname || ""
+  ).trim() || "—";
 
-function simpleHash_(str) {
-  // stable-enough short hash for idemKey
-  let hash = 0;
-  const s = String(str || "");
-  for (let i = 0; i < s.length; i++) {
-    const chr = s.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0;
-  }
-  return Math.abs(hash).toString(36);
-}
+  const email = String(obj.email || obj.mail || "").trim();
+  const phone = String(obj.phone || obj.tel || obj.mobile || obj.telefon || "").trim();
 
-function buildIdemKey_(payload) {
-  const base = [
-    payload.service || "-",
-    payload.locale || "-",
-    safeLower_(payload.email || "-"),
-    String(payload.phone || "-").trim(),
-    String(payload.pageUrl || payload.sourceUrl || "-").trim(),
-    stableStringify_(payload.structuredJson || {}),
-    String(payload.fullText || "").trim(),
-  ].join("|");
-  return `${payload.service || "lead"}:${simpleHash_(base)}`;
-}
+  const message = String(
+    obj.message || obj.nachricht || obj.notes || obj.wuensche || obj.wünsche || ""
+  ).trim();
 
-function findFormForElement_(el) {
-  if (!el) return document.querySelector("form") || null;
-  return el.closest("form") || document.querySelector("form") || null;
-}
-
-function buildLeadPayloadFromForm_(form, opts = {}) {
-  const obj = form ? formToObject_(form) : {};
-  const service = determineServiceFromPath_();
-
-  const name =
-    (document.getElementById("name")?.value || obj.name || obj.fullname || obj.customerName || "").trim();
-  const email =
-    (document.getElementById("email")?.value || obj.email || obj.mail || "").trim();
-  const phone =
-    (document.getElementById("phone")?.value || obj.phone || obj.tel || obj.mobile || "").trim();
-
-  const contactPreference =
-    (opts.contactPreference || obj.contactPreference || obj.channel || "whatsapp").trim();
+  // fullText wird später mit RefNr finalisiert
+  const fullText = message || _kvText_(obj);
 
   const { finalPartnerId, finalToken } = getFinalPartnerToken_();
+  const service = determineServiceFromPath_();
+  const locale = getLang();
 
-  // fullText: bevorzugt Textarea/Message-Feld (menschlich), sonst aus Formdaten
-  const message =
-    (document.getElementById("fullText")?.value ||
-      document.getElementById("message")?.value ||
-      obj.fullText ||
-      obj.message ||
-      obj.notes ||
-      "").trim();
-
-  const structuredJson = {
-    ...obj,
-    channel: opts.channel || obj.channel || "",
-    action: opts.action || obj.action || "",
-  };
-
-  const payload = {
+  return {
     service,
-    locale: (document.documentElement.lang || getLang() || "en"),
-    lang: (document.documentElement.lang || getLang() || "en"),
+    locale,
+    lang: locale,
+
     name,
     email,
     phone,
-    contactPreference,
+
+    message: fullText,
+    fullText: fullText,
+
+    structuredJson: obj,
+
     partnerId: finalPartnerId,
     token: finalToken,
-    sourceUrl: window.location.href,
-    pageUrl: window.location.href,
-    structuredJson,
-    fullText: message || buildFullText_(structuredJson),
+
+    contactPreference: contactPreference || "form",
+    pageUrl: location.href,
+    sourceUrl: location.href,
+    source: location.hostname,
+
+    idemKey: _stableIdemKey_(service, locale, email, phone, obj),
   };
-
-  payload.idemKey = buildIdemKey_(payload);
-
-  return payload;
 }
 
-/* ================================
-   refNr in WhatsApp/Email Text “einspritzen”
-   ================================ */
-
-function refLabel_(lang) {
-  const l = (lang || getLang() || "en").toLowerCase();
-  if (l.startsWith("de")) return "Referenz";
-  if (l.startsWith("ar")) return "المرجع";
-  return "Reference";
-}
-
-function injectRef_(text, refNr) {
-  const ref = String(refNr || "").trim();
-  if (!ref) return String(text || "");
-
-  const t = String(text || "");
-
-  // 1) ersetze (pending)
-  if (t.includes("(pending)")) return t.replace(/\(pending\)/g, ref);
-
-  // 2) ersetze bestehende Reference/Referenz Zeile
-  const re = /^(Reference|Referenz|المرجع)\s*:\s*.*$/gmi;
-  if (re.test(t)) return t.replace(re, `${refLabel_()}: ${ref}`);
-
-  // 3) sonst: nach erster Zeile einfügen
-  const lines = t.split("\n");
-  if (lines.length <= 1) return `${refLabel_()}: ${ref}\n${t}`.trim();
-  lines.splice(1, 0, `${refLabel_()}: ${ref}`);
+function _kvText_(obj) {
+  const lines = [];
+  try {
+    Object.keys(obj || {}).forEach((k) => {
+      const v = String(obj[k] ?? "").trim();
+      if (!v) return;
+      lines.push(`${k}: ${v}`);
+    });
+  } catch (_) {}
   return lines.join("\n");
 }
 
-function buildWhatsAppUrlFromElement_(el, messageText) {
-  // akzeptiert:
-  // - a[href="https://wa.me/....?text=..."]
-  // - button[data-wa="+961..."] oder data-whatsapp="+961..."
-  const msg = encodeURIComponent(String(messageText || ""));
+function _injectRef_(text, ref) {
+  const t = String(text || "");
+  const r = String(ref || "").trim();
+  if (!r) return t;
 
-  // prefer explicit href if present
-  const href = el?.getAttribute?.("href") || "";
-  if (href && href.includes("wa.me")) {
-    try {
-      const u = new URL(href);
-      u.searchParams.set("text", String(messageText || ""));
-      return u.toString();
-    } catch (_) {
-      // fallback: replace text=...
-      if (href.includes("text=")) return href.replace(/text=[^&]*/i, `text=${msg}`);
-      return href + (href.includes("?") ? "&" : "?") + `text=${msg}`;
-    }
-  }
+  // 1) replace common placeholders
+  const replaced = t
+    .replace(/\(pending\)/gi, r)
+    .replace(/\bpending\b/gi, r)
+    .replace(/قيد الانتظار/g, r);
 
-  const rawNum =
-    el?.dataset?.wa ||
-    el?.dataset?.whatsapp ||
-    document.querySelector("[data-wa]")?.dataset?.wa ||
-    "";
+  if (replaced !== t) return replaced;
 
-  const num = String(rawNum || "").replace(/[^\d+]/g, "");
-  const waNumber = num ? num.replace(/^\+/, "") : "";
-  if (!waNumber) return "";
-
-  return `https://wa.me/${waNumber}?text=${msg}`;
+  // 2) if no placeholder, prepend a ref line depending on language
+  const lang = getLang();
+  if (lang === "ar") return `مرجع: ${r}\n` + t;
+  if (lang === "de") return `Referenz: ${r}\n` + t;
+  return `Reference: ${r}\n` + t;
 }
 
-function buildMailtoFromElement_(el, subject, body) {
-  const href = el?.getAttribute?.("href") || "";
-  let to = "";
+function _setTextareaText_(text) {
+  const ta = document.querySelector("textarea");
+  if (ta) ta.value = String(text || "");
+}
 
-  if (href.toLowerCase().startsWith("mailto:")) {
-    to = href.slice("mailto:".length).split("?")[0] || "";
-  }
-
-  if (!to) {
-    to = el?.dataset?.mailto || el?.dataset?.emailto || "";
-  }
-  if (!to) {
-    // fallback: first mailto on page
-    const a = document.querySelector('a[href^="mailto:"]');
-    if (a) to = (a.getAttribute("href") || "").slice("mailto:".length).split("?")[0] || "";
-  }
-
-  const sp = new URLSearchParams();
-  if (subject) sp.set("subject", subject);
-  if (body) sp.set("body", body);
-
-  return `mailto:${to}?${sp.toString()}`;
+/**
+ * Manche Seiten (z.B. package-tours.html) senden Leads bereits selbst.
+ * Wenn eine solche Funktion existiert, dürfen wir hier NICHT nochmal senden.
+ */
+function pageManagesLeads_() {
+  return typeof window.postLeadToSheet === "function" || typeof window.postLeadToSheets === "function";
 }
 
 /* ================================
-   Hooks (WhatsApp / Email / Form)
+   UI: Partner-Feld + Brand
    ================================ */
 
-const _leadSendLocks = new Map(); // idemKey -> timestamp
+function updatePartnerFieldVisibility_() {
+  const partnerRow = document.querySelector(".partner-row");
+  const partnerInput = document.getElementById("partnerId");
+  if (!partnerRow) return;
 
-function lockAllowsSend_(idemKey) {
-  const now = Date.now();
-  const last = Number(_leadSendLocks.get(idemKey) || 0);
-  if (last && now - last < 8000) return false; // 8s click spam guard
-  _leadSendLocks.set(idemKey, now);
-  return true;
+  const qrActive = sessionStorage.getItem(QR_ACTIVE_KEY) === "1";
+  const hasPartnerInUrl = !!getUrlParam_("partner");
+  const hasToken = !!String(getSession_(TOKEN_KEY) || "").trim();
+
+  // Verstecke Partner-Feld nur im echten QR-Funnel (partner in URL)
+  const hide = qrActive && hasPartnerInUrl && hasToken;
+
+  partnerRow.style.display = hide ? "none" : "";
+  if (hide && partnerInput) partnerInput.value = "";
 }
 
-async function handleSendAndOpen_(kind, el) {
-  const form = findFormForElement_(el);
-  if (form && typeof form.checkValidity === "function" && !form.checkValidity()) {
-    form.reportValidity?.();
-    return;
-  }
+function initPartnerBrand_(partner, token) {
+  const brandWrap = document.getElementById("partnerBrand");
+  const brandImg = document.getElementById("partnerBrandImg");
+  if (!brandWrap || !brandImg) return;
 
-  const payload = buildLeadPayloadFromForm_(form, {
-    channel: kind,
-    action: "click",
-    contactPreference: kind,
-  });
+  brandWrap.hidden = true;
+  if (!partner || !token) return;
 
-  // minimal required fields: name + (email or phone)
-  if (!payload.name || (!payload.email && !payload.phone)) {
-    // page may have custom validation elsewhere
-    return;
-  }
+  const safeId = encodeURIComponent(String(partner).trim());
+  const candidates = [
+    `../assets/img/partners/${safeId}.png`,
+    `../assets/img/partners/${safeId}.jpg`,
+    `./assets/img/partners/${safeId}.png`,
+    `./assets/img/partners/${safeId}.jpg`,
+  ];
 
-  if (!lockAllowsSend_(payload.idemKey)) {
-    // already sent very recently; still open link if possible
-  }
+  const resetImg = () => {
+    brandWrap.hidden = true;
+    brandImg.removeAttribute("src");
+  };
 
-  const { refNr } = await postLead(payload);
+  const tryLoad = (i) => {
+    if (i >= candidates.length) return resetImg();
 
-  // build outgoing message from textarea if exists, else payload.fullText
-  const textarea =
-    document.getElementById("fullText") ||
-    document.getElementById("message") ||
-    document.querySelector("textarea");
+    brandImg.onload = () => { brandWrap.hidden = false; };
+    brandImg.onerror = () => { tryLoad(i + 1); };
+    brandImg.src = candidates[i];
+  };
 
-  const baseText = (textarea?.value || payload.fullText || "").trim();
-  const finalText = injectRef_(baseText, refNr);
-
-  if (textarea && finalText) textarea.value = finalText;
-
-  if (kind === "whatsapp") {
-    const waUrl = buildWhatsAppUrlFromElement_(el, finalText);
-    if (waUrl) window.open(waUrl, "_blank", "noopener");
-    return;
-  }
-
-  if (kind === "email") {
-    const subjBase =
-      (document.querySelector('input[name="subject"]')?.value || "").trim() ||
-      (getLang().startsWith("de") ? "Anfrage AMD German Center" : "AMD German Center Inquiry");
-
-    const subject = refNr ? `${subjBase} – ${refNr}` : subjBase;
-    const mailto = buildMailtoFromElement_(el, subject, finalText);
-    if (mailto) window.location.href = mailto;
-    return;
-  }
+  tryLoad(0);
 }
+
+/* ================================
+   Lead Hooks: WhatsApp + Mail (nur wenn Seite nicht selbst sendet)
+   ================================ */
 
 function hookWhatsAppClicks_() {
-  // anchors or buttons that look like WhatsApp
-  const candidates = Array.from(document.querySelectorAll('a,button')).filter((el) => {
-    const href = (el.getAttribute?.("href") || "").toLowerCase();
-    const id = (el.id || "").toLowerCase();
-    const cls = (el.className || "").toString().toLowerCase();
-    const data = Object.assign({}, el.dataset || {});
-    return (
-      href.includes("wa.me") ||
-      href.includes("whatsapp") ||
-      id.includes("whatsapp") ||
-      cls.includes("whatsapp") ||
-      data.wa ||
-      data.whatsapp
-    );
-  });
+  document.addEventListener(
+    "click",
+    async (e) => {
+      const a = e.target?.closest?.('a[href*="wa.me"], a[href*="whatsapp"]');
+      const btn = e.target?.closest?.("button");
+      const txt = String((a || btn)?.innerText || "").toLowerCase();
 
-  candidates.forEach((el) => {
-    if (el.__amdHookedWhatsApp) return;
-    el.__amdHookedWhatsApp = true;
+      const isWa = !!a || txt.includes("whatsapp") || txt.includes("واتساب");
+      if (!isWa) return;
 
-    el.addEventListener(
-      "click",
-      async (ev) => {
-        // prevent default navigation to keep exactly one lead
-        ev.preventDefault();
-        ev.stopPropagation();
-        await handleSendAndOpen_("whatsapp", el);
-      },
-      true
-    );
-  });
+      // Wenn Seite selbst sendet: NICHT eingreifen
+      if (pageManagesLeads_()) return;
+
+      try {
+        const form = (a || btn)?.closest("form") || document.querySelector("form");
+        if (!form) return;
+
+        e.preventDefault();
+
+        const payload = buildLeadPayloadFromForm_(form, "whatsapp");
+        const ref = await postLead(payload);
+
+        // Text finalisieren + in UI setzen (falls textarea genutzt wird)
+        const finalText = _injectRef_(payload.fullText || payload.message || "", ref);
+        _setTextareaText_(finalText);
+
+        // Wenn es ein Link ist: versuche "text=" Parameter zu aktualisieren
+        if (a) {
+          const href = a.getAttribute("href") || "";
+          const u = new URL(href, window.location.href);
+          if (u.searchParams.has("text")) {
+            u.searchParams.set("text", finalText);
+            window.location.href = u.toString();
+            return;
+          }
+          // fallback: normal folgen
+          window.location.href = href;
+          return;
+        }
+
+        // Button ohne Link: keine sichere Navigation möglich → nur Text im UI aktualisiert
+      } catch (_) {}
+    },
+    true
+  );
 }
 
 function hookEmailClicks_() {
-  const candidates = Array.from(document.querySelectorAll('a[href^="mailto:"], a, button')).filter((el) => {
-    const href = (el.getAttribute?.("href") || "").toLowerCase();
-    const id = (el.id || "").toLowerCase();
-    const cls = (el.className || "").toString().toLowerCase();
-    const data = Object.assign({}, el.dataset || {});
-    return href.startsWith("mailto:") || id.includes("email") || cls.includes("email") || data.mailto || data.emailto;
-  });
+  document.addEventListener(
+    "click",
+    async (e) => {
+      const a = e.target?.closest?.('a[href^="mailto:"]');
+      const btn = e.target?.closest?.("button");
+      const txt = String((a || btn)?.innerText || "").toLowerCase();
 
-  candidates.forEach((el) => {
-    if (el.__amdHookedEmail) return;
-    el.__amdHookedEmail = true;
+      const isMail = !!a || txt.includes("email") || txt.includes("mail") || txt.includes("e-mail");
+      if (!isMail) return;
 
-    el.addEventListener(
-      "click",
-      async (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        await handleSendAndOpen_("email", el);
-      },
-      true
-    );
-  });
-}
+      // Wenn Seite selbst sendet: NICHT eingreifen
+      if (pageManagesLeads_()) return;
 
-function hookFormSubmits_() {
-  const forms = Array.from(document.querySelectorAll("form"));
-  forms.forEach((form) => {
-    if (form.__amdHookedSubmit) return;
-    form.__amdHookedSubmit = true;
+      try {
+        const form = (a || btn)?.closest("form") || document.querySelector("form");
+        if (!form) return;
 
-    form.addEventListener("submit", async (ev) => {
-      // some pages do custom submission; we keep it safe:
-      // - we only send lead once (idemKey) and do NOT block the form unless it would navigate away immediately
-      const payload = buildLeadPayloadFromForm_(form, {
-        channel: "form",
-        action: "submit",
-        contactPreference: "whatsapp",
-      });
+        e.preventDefault();
 
-      if (!payload.name || (!payload.email && !payload.phone)) return;
+        const payload = buildLeadPayloadFromForm_(form, "email");
+        const ref = await postLead(payload);
 
-      if (!lockAllowsSend_(payload.idemKey)) return;
+        const finalText = _injectRef_(payload.fullText || payload.message || "", ref);
+        _setTextareaText_(finalText);
 
-      // fire-and-forget; do not prevent form behavior
-      postLead(payload).catch(() => {});
-    });
-  });
+        if (a) {
+          const href = a.getAttribute("href") || "";
+          const u = new URL(href, window.location.href);
+
+          // Body ersetzen, wenn vorhanden
+          if (u.searchParams.has("body")) {
+            u.searchParams.set("body", finalText);
+          }
+          // Subject ergänzen, wenn gewünscht (optional)
+          if (!u.searchParams.has("subject") && ref) {
+            const lang = getLang();
+            const subj = (lang === "ar") ? `طلب جديد – ${ref}` : (lang === "de") ? `Neue Anfrage – ${ref}` : `New request – ${ref}`;
+            u.searchParams.set("subject", subj);
+          }
+
+          window.location.href = u.toString();
+          return;
+        }
+      } catch (_) {}
+    },
+    true
+  );
 }
 
 /* ================================
-   Boot
+   DOM Ready
    ================================ */
 
-function boot_() {
-  ensureQrTokenForHotel_(({ partner, token } = {}) => {
-    // UI
-    updatePartnerFieldVisibility_(token);
-    initPartnerBrand_(partner, token);
+document.addEventListener("DOMContentLoaded", () => {
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-    // patch links only when QR active (existing behavior)
-    const qrActive = sessionStorage.getItem(QR_ACTIVE_KEY) === "1";
-    if (qrActive) {
+  ensureQrTokenForHotel_(({ partner: p2, token: t2 } = {}) => {
+    const final = getPartnerToken_();
+    const partner = (p2 || final.partner || "").trim();
+    const token = (t2 || final.token || "").trim();
+
+    if (partner || token) {
       patchAllLinks_(partner, token);
       watchAndPatchLinks_(partner, token);
     }
 
-    // lead hooks
-    hookWhatsAppClicks_();
-    hookEmailClicks_();
-    hookFormSubmits_();
+    updatePartnerFieldVisibility_();
+    initPartnerBrand_(partner, token);
   });
-}
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", boot_);
-} else {
-  boot_();
-}
+  // Buttons ohne <a href>: data-go
+  document.addEventListener("click", (e) => {
+    const el = e.target?.closest?.("[data-go]");
+    if (!el) return;
+
+    const url = String(el.getAttribute("data-go") || "").trim();
+    if (!url) return;
+
+    e.preventDefault();
+    goWithPartner_(url);
+  });
+
+  // Lead Hooks (nur falls Seite nicht selbst sendet)
+  hookWhatsAppClicks_();
+  hookEmailClicks_();
+});
