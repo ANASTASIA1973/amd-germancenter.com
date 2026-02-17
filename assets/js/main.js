@@ -294,9 +294,11 @@ function initPartnerBrand_(partner, token) {
 
 function determineServiceFromPath_() {
   const p = (location.pathname || "").toLowerCase();
-  if (p.includes("package")) return "package_tours";
+  // Backend akzeptiert "packages" (nicht "package_tours")
+  if (p.includes("package")) return "packages";
   return "services";
 }
+
 
 
 function formToObject_(form) {

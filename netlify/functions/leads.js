@@ -49,7 +49,8 @@ export async function handler(event) {
     }
 
      // Normalize/sanitize
-    const ALLOWED = new Set(["tours", "transfer", "car_rental", "package_tours", "services"]);
+    const ALLOWED = new Set(["tours", "transfer", "packages", "services"]);
+
 
     const incomingServiceRaw = String(incoming.service || "").trim();
     const incomingPageRaw = String(incoming.page || "").trim();
