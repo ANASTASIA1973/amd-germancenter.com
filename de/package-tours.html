@@ -1386,6 +1386,9 @@ return out;
     return null;
   }
 };
+// expose for main.js so it does NOT double-send leads on WhatsApp/email
+window.postLeadToSheet = postLeadToSheet;
+window.postLeadToSheets = postLeadToSheet; // compatibility with main.js check
 
 const buildText = (refNr) => [
   `Anfrage: ${PACKAGE_TITLE}`,

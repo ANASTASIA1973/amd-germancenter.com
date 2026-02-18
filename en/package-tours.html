@@ -1566,6 +1566,7 @@ const postLeadToSheet = async (contactPreference) => {
     action: leadAction
   };
 
+
   // fullText: backend kann es bauen, aber wir liefern es sauber mit
   const fullText = buildText(null);
 
@@ -1610,6 +1611,9 @@ return out;
   }
 };
 
+// expose for main.js so it does NOT double-send leads on WhatsApp/email
+window.postLeadToSheet = postLeadToSheet;
+window.postLeadToSheets = postLeadToSheet; // compatibility with main.js check
 
 
 
