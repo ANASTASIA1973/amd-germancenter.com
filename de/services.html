@@ -1036,7 +1036,7 @@ Gesendet über amd-germancenter.com/services`;
     let leadChannel = "";
     let leadAction = "";
 
-    function postLeadToSheet() {
+    async function postLeadToSheet(contactPreference) {
       const rid = "L" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
       const fd = new FormData(form);
 
@@ -1049,6 +1049,60 @@ Gesendet über amd-germancenter.com/services`;
         return "de";
       })();
 
+      // PartnerId + Token: NICHT anfassen (QR Flow)
+      const tracking = (function () {
+        let stored = {};
+        try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+        catch (_) { stored = {}; }
+        return stored || {};
+      })();
+
+      const partnerFromUrl = tracking.partner || tracking.partnerId || tracking.pid || "";
+      const tokenFromUrl   = tracking.token || tracking.t || "";
+
+      const partnerId = ((String(fd.get("partnerId") || "").trim()) || String(partnerFromUrl || "").trim() || "");
+      const token     = (String(tokenFromUrl || "").trim());
+
+      const name  = String(fd.get("name") || "").trim();
+      const email = String(fd.get("email") || "").trim();
+      const phone = String(fd.get("phone") || "").trim();
+
+      // Backend verlangt: service + name + (email oder phone)
+      if (!name || (!email && !phone)) return null;
+
+      const serviceName = String(fd.get("service") || "").trim();
+      const urgency = String(fd.get("urgency") || "").trim();
+      const message = String(fd.get("message") || "").trim();
+
+      // idemKey: stabil genug für Dedupe (verhindert Doppelzeilen)
+      const idemKey = [
+        "services",
+        currentLocale,
+        (email || "-").toLowerCase(),
+        (phone || "-"),
+        serviceName || "-",
+        urgency || "-",
+        // message NICHT komplett (sonst ändert sich idemKey bei kleinen Änderungen),
+        // aber genug, um "same click" zu erkennen:
+        (message ? message.slice(0, 80) : "-")
+      ].join("|");
+
+      // structuredJson: sauber, wie bei packages
+      const structuredJson = {
+        page: "services",
+        service: "services",
+        serviceName,
+        urgency,
+        message,
+        contactPreference: String(fd.get("contact-preference") || "").trim(),
+        channel: leadChannel,
+        action: leadAction
+      };
+
+      // fullText: muss in WhatsApp/Email sauber sein; Sheet kann es auch nutzen
+      // buildText(refNr) sollte bei dir existieren. Falls nicht, sag Bescheid -> ich gebe dir den Patch.
+      const fullText = buildText(null);
+
       const payload = {
         timestamp: new Date().toISOString(),
         page: "services",
@@ -1057,106 +1111,110 @@ Gesendet über amd-germancenter.com/services`;
         service: "services",
 
         // ✅ konkrete Auswahl fürs Sheet/Anzeige
-        serviceName: (fd.get("service") || "").trim(),
+        serviceName,
 
         locale: currentLocale,
         lang: currentLocale,
 
-        name: fd.get("name"),
-        email: fd.get("email"),
-        phone: fd.get("phone") || "",
+        name,
+        email,
+        phone,
 
-        partnerId: (function () {
-          let stored = {};
-          try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-          catch (_) { stored = {}; }
-          const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-          return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
-        })(),
+        // ✅ Partner + Token (QR)
+        ...(partnerId ? { partnerId } : {}),
+        ...(token ? { token } : {}),
 
-        // ✅ Token aus dem QR-Flow mitsenden
-        token: (function () {
-          let stored = {};
-          try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-          catch (_) { stored = {}; }
-          return String(stored.token || stored.t || "").trim();
-        })(),
+        urgency,
+        contactPreference: String(fd.get("contact-preference") || "").trim(),
+        channel: leadChannel,
 
-        message: fd.get("message"),
-        urgency: fd.get("urgency"),
-        contactPreference: fd.get("contact-preference"),
-        channel: leadChannel
+        structuredJson,
+        fullText,
+        idemKey,
+
+        sourceUrl: window.location.href
       };
-
-      // Robust: Beacon survives navigation (mailto/wa.me)
-      try {
-        if (navigator.sendBeacon) {
-          const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-          const ok = navigator.sendBeacon("/.netlify/functions/leads", blob);
-          console.log("Lead beacon:", ok ? "queued" : "failed");
-          return;
-        }
-      } catch (err) {
-        console.warn("Lead beacon error:", err);
-      }
 
       console.log("Lead DEBUG rid=", rid, payload);
 
-      fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        keepalive: true
-      })
-      .then(async (r) => {
-        const j = await r.json().catch(() => null);
-        if (!r.ok) {
-          console.error("Lead failed:", r.status, j);
-          return;
+      try {
+        const resp = await fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+
+        const out = await resp.json().catch(() => null);
+
+        if (!resp.ok) {
+          console.error("Lead failed:", resp.status, out);
+          return null;
         }
-        console.log("Lead OK:", j);
-      })
-      .catch(err => console.error("Lead error:", err));
+
+        console.log("Lead OK:", out);
+        return out;
+      } catch (err) {
+        console.error("Lead error:", err);
+        return null;
+      }
     }
 
+    // expose for main.js so it does NOT double-send leads on WhatsApp/email
+    window.postLeadToSheet = postLeadToSheet;
+    window.postLeadToSheets = postLeadToSheet;
+
     // WhatsApp
-    document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
+    document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", async () => {
       if (!form.checkValidity()) return form.reportValidity();
       leadChannel = "whatsapp";
       leadAction = "click";
-      postLeadToSheet();
 
-      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText())}`;
+      const out = await postLeadToSheet("whatsapp");
+
+      // Netlify function leads.js returns: { ok:true, upstream: { ... } }
+      const refNr =
+        out?.upstream?.data?.refNr ||
+        out?.upstream?.data?.data?.refNr ||
+        out?.data?.refNr ||
+        out?.refNr ||
+        "";
+
+      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText(refNr || null))}`;
       window.open(url, "_blank", "noopener");
     });
 
     // Email
-    document.getElementById("btnInquiryEmail")?.addEventListener("click", () => {
+    document.getElementById("btnInquiryEmail")?.addEventListener("click", async () => {
       if (!form.checkValidity()) return form.reportValidity();
 
       leadChannel = "email";
       leadAction = "click";
-      postLeadToSheet();
 
-      const subject = `Service-Anfrage – ${SERVICE_TITLE}`;
-      const body = buildText();
-     const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const out = await postLeadToSheet("email");
 
-// Browser-Fallback (Gmail Web-Compose)
-const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const refNr =
+        out?.upstream?.data?.refNr ||
+        out?.upstream?.data?.data?.refNr ||
+        out?.data?.refNr ||
+        out?.refNr ||
+        "";
 
-try {
-  // Erst mailto versuchen
-  window.location.href = mailto;
+      const subject = `Service-Anfrage – ${SERVICE_TITLE}${refNr ? " – " + refNr : ""}`;
+      const body = buildText(refNr || null);
 
-  // Wenn nichts passiert (typisch), zusätzlich Gmail öffnen
-  setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
-} catch (e) {
-  window.open(gmail, "_blank", "noopener");
-}
+      const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
+      // Browser-Fallback (Gmail Web-Compose)
+      const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      try {
+        window.location.href = mailto;
+        setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
+      } catch (e) {
+        window.open(gmail, "_blank", "noopener");
+      }
     });
-
   })();
 
   // Burger Menu
