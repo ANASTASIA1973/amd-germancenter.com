@@ -5,8 +5,9 @@
 [[redirects]]
   from = "/r/*"
   to = "/.netlify/functions/r?pid=:splat"
-  status = 200
+  status = 302
   force = true
+
 
 [[redirects]]
   from = "/en/qr.html"
