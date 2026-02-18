@@ -988,33 +988,34 @@
     });
 
     document.addEventListener("mouseup", () => { isDragging = false; });
+function buildText(refNr) {
+  const fd = new FormData(form);
+  const service = fd.get("service") || "";
+  const urgency = fd.get("urgency") || "normal";
+  const urgencyText = {
+    'normal': 'عادي (2–4 أسابيع)',
+    'urgent': 'عاجل (1–2 أسبوع)',
+    'express': 'سريع جدًا (خلال أيام)'
+  }[urgency] || 'عادي (2–4 أسابيع)';
 
-    function buildText() {
-      const fd = new FormData(form);
-      const service = fd.get("service") || "";
-      const urgency = fd.get("urgency") || "normal";
-      const urgencyText = {
-        'normal': 'عادي (2–4 أسابيع)',
-        'urgent': 'عاجل (1–2 أسبوع)',
-        'express': 'سريع جدًا (خلال أيام)'
-      }[urgency] || 'عادي (2–4 أسابيع)';
+  const contactPref = fd.get("contact-preference") || "whatsapp";
+  const contactText = (contactPref === "email") ? "بريد إلكتروني" : (contactPref === "phone") ? "هاتف" : "واتساب";
 
-      const contactPref = fd.get("contact-preference") || "whatsapp";
-      const contactText = (contactPref === "email") ? "بريد إلكتروني" : (contactPref === "phone") ? "هاتف" : "واتساب";
+  // Partner-ID: first from input, else from stored URL params (QR)
+  let stored = {};
+  try {
+    stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {};
+  } catch (_) {
+    stored = {};
+  }
+  const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+  const partnerFinal = (fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "—";
 
-      // Partner-ID: first from input, else from stored URL params (QR)
-      let stored = {};
-      try {
-        stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {};
-      } catch (_) {
-        stored = {};
-      }
-      const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-      const partnerFinal = (fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "—";
+  const refLine = refNr ? `مرجع: ${refNr}\n\n` : "";
 
-      return `=== طلب: ${SERVICE_TITLE} ===
+  return `=== طلب: ${SERVICE_TITLE} ===
 
-الخدمة: ${service}
+${refLine}الخدمة: ${service}
 
 الاسم: ${fd.get("name")}
 البريد الإلكتروني: ${fd.get("email")}
@@ -1029,131 +1030,181 @@ ${fd.get("message")}
 
 ---
 أُرسل عبر amd-germancenter.com/ar/services`;
-    }
+}
+
 
     let leadChannel = "";
     let leadAction = "";
+function postLeadToSheet(contactPreference) {
+  const fd = new FormData(form);
 
-    function postLeadToSheet() {
-      const rid = "L" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-      const fd = new FormData(form);
+  // locale from path (de/en/ar) — SAFE fallback
+  const currentLocale = (function () {
+    const path = window.location.pathname || "";
+    if (path.includes("/de/")) return "de";
+    if (path.includes("/en/")) return "en";
+    if (path.includes("/ar/")) return "ar";
+    return "ar";
+  })();
 
-      // locale from path (de/en/ar) — SAFE fallback
-      const currentLocale = (function () {
-        const path = window.location.pathname || "";
-        if (path.includes("/de/")) return "de";
-        if (path.includes("/en/")) return "en";
-        if (path.includes("/ar/")) return "ar";
-        return "ar";
-      })();
+  const name  = String(fd.get("name") || "").trim();
+  const email = String(fd.get("email") || "").trim();
+  const phone = String(fd.get("phone") || "").trim();
 
-      const payload = {
-        timestamp: new Date().toISOString(),
-        page: "services",
+  // Minimal requirement: name + (email OR phone)
+  if (!name || (!email && !phone)) return Promise.resolve(null);
 
-        // ✅ stabiler Service-Key fürs Backend
-        service: "services",
+  // partnerId + token: NICHT kaputt machen (bleibt exakt aus deinem tracking object)
+  const partnerId = (function () {
+    let stored = {};
+    try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+    catch (_) { stored = {}; }
+    const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+    return (String(fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
+  })();
 
-        // ✅ konkrete Auswahl fürs Sheet/Anzeige (قيم موحّدة)
-        serviceName: (fd.get("service") || "").trim(),
+  const token = (function () {
+    let stored = {};
+    try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+    catch (_) { stored = {}; }
+    return String(stored.token || stored.t || "").trim();
+  })();
 
-        locale: currentLocale,
-        lang: currentLocale,
+  const idemKey = [
+    "services",
+    currentLocale,
+    (email.toLowerCase() || "-"),
+    (phone || "-"),
+    (String(fd.get("service") || "").trim() || "-"),
+    (String(fd.get("urgency") || "").trim() || "-"),
+  ].join("|");
 
-        name: fd.get("name"),
-        email: fd.get("email"),
-        phone: fd.get("phone") || "",
+  const structuredJson = {
+    serviceName: String(fd.get("service") || "").trim(),
+    urgency: String(fd.get("urgency") || "").trim(),
+    message: String(fd.get("message") || "").trim(),
+    acceptLegal: !!form.elements["acceptLegal"]?.checked,
+    channel: leadChannel,
+    action: leadAction
+  };
 
-        partnerId: (function () {
-          let stored = {};
-          try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-          catch (_) { stored = {}; }
-          const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-          return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
-        })(),
+  // fullText zuerst ohne ref (ref kommt in WA/Mail)
+  const fullText = (typeof buildText === "function")
+    ? String(buildText(null) || "").trim()
+    : String(fd.get("message") || "").trim();
 
-        // ✅ Token aus dem QR-Flow mitsenden
-        token: (function () {
-          let stored = {};
-          try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-          catch (_) { stored = {}; }
-          return String(stored.token || stored.t || "").trim();
-        })(),
+  const payload = {
+    timestamp: new Date().toISOString(),
+    page: "services",
 
-        message: fd.get("message"),
-        urgency: fd.get("urgency"),
-        contactPreference: fd.get("contact-preference"),
-        channel: leadChannel
-      };
+    service: "services",
+    serviceName: String(fd.get("service") || "").trim(),
 
-      // Robust: Beacon survives navigation (mailto/wa.me)
-      try {
-        if (navigator.sendBeacon) {
-          const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-          const ok = navigator.sendBeacon("/.netlify/functions/leads", blob);
-          console.log("Lead beacon:", ok ? "queued" : "failed");
-          return;
-        }
-      } catch (err) {
-        console.warn("Lead beacon error:", err);
-      }
+    locale: currentLocale,
+    lang: currentLocale,
 
-      console.log("Lead DEBUG rid=", rid, payload);
+    name,
+    email,
+    phone,
 
-      fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        keepalive: true
-      })
-      .then(async (r) => {
-        const j = await r.json().catch(() => null);
-        if (!r.ok) {
-          console.error("Lead failed:", r.status, j);
-          return;
-        }
-        console.log("Lead OK:", j);
-      })
-      .catch(err => console.error("Lead error:", err));
+    partnerId,
+    token,
+
+    message: String(fd.get("message") || "").trim(),
+    urgency: String(fd.get("urgency") || "").trim(),
+
+    contactPreference: contactPreference || String(fd.get("contact-preference") || "").trim() || leadChannel || "whatsapp",
+    channel: leadChannel,
+
+    structuredJson,
+    fullText,
+    idemKey,
+
+    sourceUrl: window.location.href,
+    pageUrl: window.location.href
+  };
+
+  // KEIN sendBeacon -> sonst Doppelzeile / doppelte RefNr
+  return fetch("/.netlify/functions/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+  .then(async (r) => {
+    const j = await r.json().catch(() => null);
+    if (!r.ok) {
+      const txt = await r.text().catch(() => "");
+      console.warn("Lead send failed (HTTP):", r.status, j || txt);
+      return null;
     }
-
-    // WhatsApp
-    document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
-      if (!form.checkValidity()) return form.reportValidity();
-      leadChannel = "whatsapp";
-      leadAction = "click";
-      postLeadToSheet();
-
-      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText())}`;
-      window.open(url, "_blank", "noopener");
-    });
-
-    // Email
-    document.getElementById("btnInquiryEmail")?.addEventListener("click", () => {
-      if (!form.checkValidity()) return form.reportValidity();
-
-      leadChannel = "email";
-      leadAction = "click";
-      postLeadToSheet();
-
-      const subject = `طلب خدمة – ${SERVICE_TITLE}`;
-      const body = buildText();
-      const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-// Browser-Fallback (Gmail Web-Compose)
-const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-try {
-  // Erst mailto versuchen
-  window.location.href = mailto;
-
-  // Wenn nichts passiert (typisch), zusätzlich Gmail öffnen
-  setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
-} catch (e) {
-  window.open(gmail, "_blank", "noopener");
+    return j;
+  })
+  .catch((err) => {
+    console.warn("Lead send failed:", err);
+    return null;
+  });
 }
 
-    });
+// expose for main.js so it does NOT double-send leads on WhatsApp/email
+window.postLeadToSheet = postLeadToSheet;
+window.postLeadToSheets = postLeadToSheet;
+
+// WhatsApp
+document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", async () => {
+  if (!form.checkValidity()) return form.reportValidity();
+
+  leadChannel = "whatsapp";
+  leadAction = "click";
+
+  const out = await postLeadToSheet("whatsapp");
+
+  const up = out?.upstream;
+  const refNr =
+    up?.data?.refNr ||
+    up?.refNr ||
+    up?.data?.data?.refNr ||
+    up?.data?.data?.data?.refNr ||
+    "";
+
+  const text = (typeof buildText === "function")
+    ? buildText(refNr || null)
+    : (refNr ? `مرجع: ${refNr}\n` : "") + String(new FormData(form).get("message") || "");
+
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank", "noopener");
+});
+
+// Email
+document.getElementById("btnInquiryEmail")?.addEventListener("click", async () => {
+  if (!form.checkValidity()) return form.reportValidity();
+
+  leadChannel = "email";
+  leadAction = "click";
+
+  const out = await postLeadToSheet("email");
+
+  const up = out?.upstream;
+  const refNr =
+    up?.data?.refNr ||
+    up?.refNr ||
+    up?.data?.data?.refNr ||
+    up?.data?.data?.data?.refNr ||
+    "";
+
+  const subject = `طلب خدمة – ${SERVICE_TITLE}${refNr ? " – " + refNr : ""}`;
+  const body = (typeof buildText === "function") ? buildText(refNr || null) : "";
+
+  const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  try {
+    window.location.href = mailto;
+    setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
+  } catch (e) {
+    window.open(gmail, "_blank", "noopener");
+  }
+});
+
 
   })();
 
