@@ -1434,7 +1434,7 @@ const postLeadToSheet = async (contactPreference) => {
     kids: v("kids") || "",
     travelPeriod: v("dates") || "",
     departureAirport: v("departure") || "",
-    message: v("message") || "",
+   message: cleanMessage(),
     acceptLegal: isChecked("acceptLegal") ? true : false,
     channel: leadChannel,
     action: leadAction
@@ -1488,6 +1488,15 @@ window.postLeadToSheet = postLeadToSheet;
 window.postLeadToSheets = postLeadToSheet; // compatibility with main.js check
 
 
+const cleanMessage = () => {
+  let msg = v("message") || "";
+
+  // alles alte System-Injected entfernen (falls vorhanden)
+  msg = msg.replace(/طلب:.*$/gs, "").trim();
+
+  return msg || "-";
+};
+
 const buildText = (refNr) => [
   `طلب: ${PACKAGE_TITLE}${refNr ? " – " + refNr : ""}`,
   `السعر: ${PRICE}`,
@@ -1502,9 +1511,8 @@ const buildText = (refNr) => [
   `مطار المغادرة: ${v("departure") || "-"}`,
   "",
   `الرسالة:`,
-  v("message") || "-"
+  cleanMessage()
 ].join("\n");
-
 
     btnOpen.addEventListener("click", open);
 
