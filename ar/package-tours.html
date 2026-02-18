@@ -1488,14 +1488,14 @@ window.postLeadToSheet = postLeadToSheet;
 window.postLeadToSheets = postLeadToSheet; // compatibility with main.js check
 
 
-const buildText = () => [
-  `طلب: ${PACKAGE_TITLE}`,
+const buildText = (refNr) => [
+  `طلب: ${PACKAGE_TITLE}${refNr ? " – " + refNr : ""}`,
   `السعر: ${PRICE}`,
   "",
   `الاسم: ${v("name")}`,
   `البريد الإلكتروني: ${v("email")}`,
   `الهاتف: ${v("phone") || "-"}`,
-  `الموافقة: تم قبول سياسة الخصوصية والشروط`,
+  `الموافقة: ${isChecked("acceptLegal") ? "تم قبول سياسة الخصوصية والشروط" : "غير مقبول"}`,
   `عدد الأشخاص: ${v("people")}`,
   `الأطفال (العدد والأعمار): ${v("kids") || "-"}`,
   `فترة السفر: ${v("dates") || "-"}`,
@@ -1503,8 +1503,7 @@ const buildText = () => [
   "",
   `الرسالة:`,
   v("message") || "-"
-].join("\\n");
-
+].join("\n");
 
 
     btnOpen.addEventListener("click", open);
