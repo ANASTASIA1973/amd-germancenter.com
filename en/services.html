@@ -1033,31 +1033,29 @@
     });
 
     document.addEventListener("mouseup", () => { isDragging = false; });
+function buildText(refNr) {
+  const fd = new FormData(form);
+  const service = fd.get("service") || "";
+  const urgency = fd.get("urgency") || "normal";
+  const urgencyText = {
+    normal: "Normal (2–4 weeks)",
+    urgent: "Urgent (1–2 weeks)",
+    express: "Very urgent (within days)"
+  }[urgency] || "Normal (2–4 weeks)";
 
-    function buildText() {
-      const fd = new FormData(form);
-      const service = fd.get("service") || "";
-      const urgency = fd.get("urgency") || "normal";
-      const urgencyText = {
-        'normal': 'Normal (2–4 weeks)',
-        'urgent': 'Urgent (1–2 weeks)',
-        'express': 'Very urgent (within days)'
-      }[urgency] || 'Normal (2–4 weeks)';
+  const contactPref = fd.get("contact-preference") || "whatsapp";
+  const contactText = (contactPref === "email") ? "Email" : (contactPref === "phone") ? "Phone call" : "WhatsApp";
 
-      const contactPref = fd.get("contact-preference") || "whatsapp";
-      const contactText = (contactPref === "email") ? "Email" : (contactPref === "phone") ? "Phone call" : "WhatsApp";
+  // Partner-ID: first from input, else from stored URL params (QR)
+  let stored = {};
+  try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+  catch (_) { stored = {}; }
+  const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+  const partnerFinal = (fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "—";
 
-      // Partner-ID: first from input, else from stored URL params (QR)
-      let stored = {};
-      try {
-        stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {};
-      } catch (_) {
-        stored = {};
-      }
-      const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-      const partnerFinal = (fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "—";
+  const refLine = (refNr && String(refNr).trim()) ? `Reference: ${String(refNr).trim()}\n\n` : "";
 
-      return `=== Inquiry: ${SERVICE_TITLE} ===
+  return `${refLine}=== Inquiry: ${SERVICE_TITLE} ===
 
 Service: ${service}
 
@@ -1074,131 +1072,186 @@ Preferred contact: ${contactText}
 
 ---
 Sent via amd-germancenter.com/services`;
-    }
+}
+
 
     let leadChannel = "";
     let leadAction = "";
 
-    function postLeadToSheet() {
-      const rid = "L" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-      const fd = new FormData(form);
+   function postLeadToSheet(contactPreference) {
+  const fd = new FormData(form);
 
-      // locale from path (de/en/ar) — SAFE fallback
-      const currentLocale = (function () {
-        const path = window.location.pathname || "";
-        if (path.includes("/de/")) return "de";
-        if (path.includes("/en/")) return "en";
-        if (path.includes("/ar/")) return "ar";
-        return "de";
-      })();
+  // locale from path (de/en/ar) — SAFE fallback
+  const currentLocale = (function () {
+    const path = window.location.pathname || "";
+    if (path.includes("/de/")) return "de";
+    if (path.includes("/en/")) return "en";
+    if (path.includes("/ar/")) return "ar";
+    return "en";
+  })();
 
-      const payload = {
-        timestamp: new Date().toISOString(),
-        page: "services",
+  const name  = String(fd.get("name") || "").trim();
+  const email = String(fd.get("email") || "").trim();
+  const phone = String(fd.get("phone") || "").trim();
 
-        // ✅ stable service key for backend
-        service: "services",
+  // Minimal requirement: name + (email OR phone)
+  if (!name || (!email && !phone)) return Promise.resolve(null);
 
-        // ✅ human-readable selection for sheet/display
-        serviceName: (fd.get("service") || "").trim(),
+  // partnerId + token: NICHT kaputt machen (bleibt exakt aus deinem tracking object)
+  const partnerId = (function () {
+    let stored = {};
+    try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+    catch (_) { stored = {}; }
+    const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
+    return (String(fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
+  })();
 
-        locale: currentLocale,
-        lang: currentLocale,
+  const token = (function () {
+    let stored = {};
+    try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
+    catch (_) { stored = {}; }
+    return String(stored.token || stored.t || "").trim();
+  })();
 
-        name: fd.get("name"),
-        email: fd.get("email"),
-        phone: fd.get("phone") || "",
+  // stable idemKey (dedupe server-side if needed)
+  const idemKey = [
+    "services",
+    currentLocale,
+    email.toLowerCase() || "-",
+    phone || "-",
+    String(fd.get("service") || "").trim() || "-",
+    String(fd.get("urgency") || "").trim() || "-",
+  ].join("|");
 
-        partnerId: (function () {
-          let stored = {};
-          try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-          catch (_) { stored = {}; }
-          const partnerFromUrl = stored.partner || stored.partnerId || stored.pid || "";
-          return ((fd.get("partnerId") || "").trim() || String(partnerFromUrl || "").trim() || "");
-        })(),
+  // structuredJson: sauber als Objekt (keine \n Artefakte)
+  const structuredJson = {
+    serviceName: String(fd.get("service") || "").trim(),
+    urgency: String(fd.get("urgency") || "").trim(),
+    message: String(fd.get("message") || "").trim(),
+    acceptLegal: !!form.elements["acceptLegal"]?.checked,
+    channel: leadChannel,
+    action: leadAction
+  };
 
-        // ✅ send token from QR flow
-        token: (function () {
-          let stored = {};
-          try { stored = JSON.parse(sessionStorage.getItem("amd_tracking_params_v1") || "{}") || {}; }
-          catch (_) { stored = {}; }
-          return String(stored.token || stored.t || "").trim();
-        })(),
+  // fullText: IMMER als sauberer Text
+  // Wichtig: buildText muss RefNr optional unterstützen. Falls buildText(ref) schon existiert, nutzt es ref.
+  const fullText = (typeof buildText === "function")
+    ? String(buildText(null) || "").trim()
+    : String(fd.get("message") || "").trim();
 
-        message: fd.get("message"),
-        urgency: fd.get("urgency"),
-        contactPreference: fd.get("contact-preference"),
-        channel: leadChannel
-      };
+  const payload = {
+    timestamp: new Date().toISOString(),
+    page: "services",
 
-      // Robust: Beacon survives navigation (mailto/wa.me)
-      try {
-        if (navigator.sendBeacon) {
-          const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-          const ok = navigator.sendBeacon("/.netlify/functions/leads", blob);
-          console.log("Lead beacon:", ok ? "queued" : "failed");
-          return;
-        }
-      } catch (err) {
-        console.warn("Lead beacon error:", err);
-      }
+    service: "services",
+    serviceName: String(fd.get("service") || "").trim(),
 
-      console.log("Lead DEBUG rid=", rid, payload);
+    locale: currentLocale,
+    lang: currentLocale,
 
-      fetch("/.netlify/functions/leads?rid=" + encodeURIComponent(rid), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        keepalive: true
-      })
-      .then(async (r) => {
-        const j = await r.json().catch(() => null);
-        if (!r.ok) {
-          console.error("Lead failed:", r.status, j);
-          return;
-        }
-        console.log("Lead OK:", j);
-      })
-      .catch(err => console.error("Lead error:", err));
+    name,
+    email,
+    phone,
+
+    partnerId,
+    token,
+
+    message: String(fd.get("message") || "").trim(),
+    urgency: String(fd.get("urgency") || "").trim(),
+
+    contactPreference: contactPreference || String(fd.get("contact-preference") || "").trim() || leadChannel || "whatsapp",
+    channel: leadChannel,
+
+    structuredJson,
+    fullText,
+    idemKey,
+
+    sourceUrl: window.location.href,
+    pageUrl: window.location.href
+  };
+
+  // KEIN sendBeacon -> sonst Doppelzeile / doppelte RefNr
+  return fetch("/.netlify/functions/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+  .then(async (r) => {
+    const j = await r.json().catch(() => null);
+    if (!r.ok) {
+      const txt = await r.text().catch(() => "");
+      console.warn("Lead send failed (HTTP):", r.status, j || txt);
+      return null;
     }
-
-    // WhatsApp
-    document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", () => {
-      if (!form.checkValidity()) return form.reportValidity();
-      leadChannel = "whatsapp";
-      leadAction = "click";
-      postLeadToSheet();
-
-      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildText())}`;
-      window.open(url, "_blank", "noopener");
-    });
-
-    // Email
-    document.getElementById("btnInquiryEmail")?.addEventListener("click", () => {
-      if (!form.checkValidity()) return form.reportValidity();
-
-      leadChannel = "email";
-      leadAction = "click";
-      postLeadToSheet();
-
-      const subject = `Service Inquiry – ${SERVICE_TITLE}`;
-      const body = buildText();
-const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-// Browser-Fallback (Gmail Web-Compose)
-const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-try {
-  // Erst mailto versuchen
-  window.location.href = mailto;
-
-  // Wenn nichts passiert (typisch), zusätzlich Gmail öffnen
-  setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
-} catch (e) {
-  window.open(gmail, "_blank", "noopener");
+    return j;
+  })
+  .catch((err) => {
+    console.warn("Lead send failed:", err);
+    return null;
+  });
 }
 
-    });
+// expose for main.js so it does NOT double-send leads on WhatsApp/email
+window.postLeadToSheet = postLeadToSheet;
+window.postLeadToSheets = postLeadToSheet;
+
+// WhatsApp
+document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", async () => {
+  if (!form.checkValidity()) return form.reportValidity();
+
+  leadChannel = "whatsapp";
+  leadAction = "click";
+
+  const out = await postLeadToSheet("whatsapp");
+
+  // leads.js returns: { ok:true, upstream: <apps-script-response> }
+  const up = out?.upstream;
+  const refNr =
+    up?.data?.refNr ||
+    up?.refNr ||
+    up?.data?.data?.refNr ||
+    up?.data?.data?.data?.refNr ||
+    "";
+
+  const text = (typeof buildText === "function")
+    ? buildText(refNr || null)
+    : (refNr ? `Reference: ${refNr}\n` : "") + String(new FormData(form).get("message") || "");
+
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank", "noopener");
+});
+
+// Email
+document.getElementById("btnInquiryEmail")?.addEventListener("click", async () => {
+  if (!form.checkValidity()) return form.reportValidity();
+
+  leadChannel = "email";
+  leadAction = "click";
+
+  const out = await postLeadToSheet("email");
+
+  const up = out?.upstream;
+  const refNr =
+    up?.data?.refNr ||
+    up?.refNr ||
+    up?.data?.data?.refNr ||
+    up?.data?.data?.data?.refNr ||
+    "";
+
+  const subject = `Service Inquiry – ${SERVICE_TITLE}${refNr ? " – " + refNr : ""}`;
+  const body = (typeof buildText === "function") ? buildText(refNr || null) : "";
+
+  const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  try {
+    window.location.href = mailto;
+    setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
+  } catch (e) {
+    window.open(gmail, "_blank", "noopener");
+  }
+});
+
 
   })();
 
