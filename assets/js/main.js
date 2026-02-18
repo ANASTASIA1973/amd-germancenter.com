@@ -482,23 +482,25 @@ function hookWhatsAppClicks_() {
         const payload = buildLeadPayloadFromForm_(form, "whatsapp");
         const ref = await postLead(payload);
 
-        // Text finalisieren + in UI setzen (falls textarea genutzt wird)
-        const finalText = _injectRef_(payload.fullText || payload.message || "", ref);
-        _setTextareaText_(finalText);
+// Text finalisieren (NICHT ins Textarea schreiben!)
+const finalText = _injectRef_(payload.fullText || payload.message || "", ref);
 
-        // Wenn es ein Link ist: versuche "text=" Parameter zu aktualisieren
-        if (a) {
-          const href = a.getAttribute("href") || "";
-          const u = new URL(href, window.location.href);
-          if (u.searchParams.has("text")) {
-            u.searchParams.set("text", finalText);
-            window.location.href = u.toString();
-            return;
-          }
-          // fallback: normal folgen
-          window.location.href = href;
-          return;
-        }
+// Wenn es ein Link ist: immer text= setzen (auch wenn vorher keiner existierte)
+if (a) {
+  const href = a.getAttribute("href") || "";
+  const u = new URL(href, window.location.href);
+
+  // wa.me / whatsapp links: text param erzwingen
+  if (!u.searchParams.has("text")) u.searchParams.set("text", "");
+  u.searchParams.set("text", finalText);
+
+  window.location.href = u.toString();
+  return;
+}
+
+// Button ohne Link: hier NICHTS am Textfeld verändern (sonst erzeugst du “zweite Zeile”)
+// Optional: du kannst später per HTML sagen, wie WhatsApp geöffnet wird.
+
 
         // Button ohne Link: keine sichere Navigation möglich → nur Text im UI aktualisiert
       } catch (_) {}
