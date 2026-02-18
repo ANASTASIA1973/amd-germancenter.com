@@ -1,4 +1,6 @@
 // netlify/functions/leads.js
+import { createHash } from "crypto";
+
 export async function handler(event) {
   // CORS (so your browser can POST without hacks like no-cors)
   const corsHeaders = {
@@ -48,9 +50,8 @@ export async function handler(event) {
       incoming = {};
     }
 
-     // Normalize/sanitize
+    // Normalize/sanitize
     const ALLOWED = new Set(["tours", "transfer", "packages", "services"]);
-
 
     const incomingServiceRaw = String(incoming.service || "").trim();
     const incomingPageRaw = String(incoming.page || "").trim();
@@ -61,69 +62,114 @@ export async function handler(event) {
     else if (ALLOWED.has(incomingPageRaw)) service = incomingPageRaw;
 
     const page = incomingPageRaw || service;
-  const locale = String(incoming.locale || incoming.lang || "").trim().toLowerCase() || "en";
-const lang = String(incoming.lang || incoming.language || locale || "").trim().toLowerCase() || locale;
 
+    const locale =
+      String(incoming.locale || incoming.lang || "")
+        .trim()
+        .toLowerCase() || "en";
 
-    // if frontend sent a service detail like "Translations", keep it separately
+    // IMPORTANT: keep lang = real lang, not forced to locale
+    const lang =
+      String(incoming.lang || incoming.language || locale || "")
+        .trim()
+        .toLowerCase() || locale;
+
+    // if frontend sent a service detail like "Translations", keep it separately (optional)
     const serviceDetail =
       (!ALLOWED.has(incomingServiceRaw) && incomingServiceRaw) ? incomingServiceRaw : "";
 
+    // partnerId sanitize + alt fallback (partner/pid)
     let partnerId = incoming.partnerId;
     if (partnerId != null) {
       partnerId = String(partnerId).trim().replace(/[^A-Za-z0-9_-]/g, "");
-      if (!partnerId) partnerId = ""; // keep empty consistent
+      if (!partnerId) partnerId = "";
     } else {
       partnerId = "";
     }
-    // Fallback: some pages send partner / pid instead of partnerId (QR links)
-const partnerAltRaw = incoming.partner ?? incoming.pid ?? "";
-let partnerAlt = String(partnerAltRaw || "").trim().replace(/[^A-Za-z0-9_-]/g, "");
-if (!partnerId && partnerAlt) partnerId = partnerAlt;
 
-// Build lead data for Apps Script (Router expects action + data)
-const leadData = {
-  ...incoming,
-  service,               // keep for createLead()
-  page,                  // keep for your own reference
-  locale,
-  lang,                  // IMPORTANT: keep lang = real lang, not forced to locale
+    const partnerAltRaw = incoming.partner ?? incoming.pid ?? "";
+    let partnerAlt = String(partnerAltRaw || "").trim().replace(/[^A-Za-z0-9_-]/g, "");
+    if (!partnerId && partnerAlt) partnerId = partnerAlt;
 
-  // Partner (Agent / Hotel QR)
-  ...(partnerId ? { partnerId } : {}),
+    // Human readable request text (what customer typed)
+    const fullText = String(
+      incoming.fullText ||
+        incoming.message ||
+        incoming.requestText ||
+        incoming.notes ||
+        incoming.text ||
+        ""
+    ).trim();
 
-  // Make sure fullText exists (human readable request text)
-  // Priority: whatever the customer typed
-  fullText: String(
-    incoming.fullText ||
-    incoming.message ||
-    incoming.requestText ||
-    incoming.notes ||
-    incoming.text ||
-    ""
-  ).trim(),
+    const sourceUrl = String(incoming.sourceUrl || incoming.pageUrl || incoming.url || "").trim();
 
-  // Keep everything also structured for later offer building
-  structuredJson: incoming,
+    // ------------------------------------------------------------
+    // Idempotency key: dedupe double-submit/retry within short window
+    // ------------------------------------------------------------
+    // 30s bucket: same request twice quickly => same idemKey
+    const bucket = Math.floor(Date.now() / 30000);
 
-  // Trace
-  sourceUrl: String(incoming.sourceUrl || incoming.pageUrl || incoming.url || "").trim(),
-};
+    const idemCore = {
+      bucket,
+      service,
+      name: String(incoming.name || "").trim(),
+      email: String(incoming.email || "").trim().toLowerCase(),
+      phone: String(incoming.phone || "").trim(),
+      partnerId: String(partnerId || "").trim(),
+      sourceUrl,
+      fullText,
+      // optional: structured fields that strongly identify the request
+      people: incoming.people ?? incoming.persons ?? "",
+      date: incoming.date ?? incoming.travelDate ?? "",
+    };
 
-// IMPORTANT: Apps Script Router (90_api_router.gs) requires payload.action
-const requestData = {
-  action: "lead.create",
-  secret: WEBHOOK_SECRET,
-  data: leadData,
-};
+    const idemKey =
+      "nf_" +
+      createHash("sha256")
+        .update(JSON.stringify(idemCore))
+        .digest("hex")
+        .slice(0, 32);
 
-const res = await fetch(GAS_EXEC_URL, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(requestData),
-});
+    // Build lead data for Apps Script (Router expects action + data)
+    const leadData = {
+      ...incoming,
 
+      service, // keep for createLead()
+      page, // keep for your own reference
+      locale,
+      lang,
 
+      // optional detail (harmless, in case you want it later)
+      ...(serviceDetail ? { serviceDetail } : {}),
+
+      // Partner (Agent / Hotel QR)
+      ...(partnerId ? { partnerId } : {}),
+
+      // Ensure fullText exists (human readable)
+      fullText,
+
+      // Keep everything also structured for later offer building
+      structuredJson: incoming,
+
+      // Trace
+      sourceUrl,
+
+      // Idempotency for GAS
+      idemKey,
+    };
+
+    // IMPORTANT: Apps Script Router (90_api_router.gs) requires payload.action
+    const requestData = {
+      action: "lead.create",
+      secret: WEBHOOK_SECRET,
+      data: leadData,
+    };
+
+    const res = await fetch(GAS_EXEC_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestData),
+    });
 
     const text = await res.text().catch(() => "");
     let data = null;
@@ -146,11 +192,28 @@ const res = await fetch(GAS_EXEC_URL, {
       };
     }
 
+    // Flatten refNr / leadId for frontend reliability
+    // Router returns: successResponse(result) => { success, message, data: result, timestamp }
+    const refNr =
+      data?.refNr ||
+      data?.data?.refNr ||
+      data?.data?.data?.refNr ||
+      null;
+
+    const leadId =
+      data?.leadId ||
+      data?.data?.leadId ||
+      data?.data?.data?.leadId ||
+      null;
+
     return {
       statusCode: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       body: JSON.stringify({
         ok: true,
+        refNr,
+        leadId,
+        idemKey,
         upstream: data || text || null,
       }),
     };
