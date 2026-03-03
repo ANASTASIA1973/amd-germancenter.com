@@ -757,7 +757,11 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
 .page-services .srv-field input,
 .page-services .srv-field select,
 .page-services .srv-field textarea {
-    padding: .85rem 1.05rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+
+  padding: .85rem 1.05rem;
   border: 1.5px solid var(--srv-border);
   border-radius: 10px;
   font-size: .95rem;
