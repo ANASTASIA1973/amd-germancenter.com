@@ -492,33 +492,29 @@ button {
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 500px;              /* weniger “Luft” insgesamt */
-    padding: 3.0rem 0 2.4rem;       /* unten kompakter */
+    min-height: 500px;
+    padding: 3.0rem 0 2.4rem;
     align-items: flex-start;
   }
 
   .hero-subtitle{
-    margin-bottom: 1.25rem;         /* war global 1.75rem -> mobile kompakter */
+    margin-bottom: 1.25rem;
   }
 
   .hero-actions{
-    margin-top: 2.05rem;          /* Button minimal tiefer */
+    margin-top: 2.05rem;
     display: flex;
-    justify-content: center;      /* wirklich mittig */
+    justify-content: center;
     width: 100%;
   }
 
   .hero-actions .btn{
-    margin-left: auto;            /* “hart” zentrieren */
+    margin-left: auto;
     margin-right: auto;
-    width: min(310px, 100%);      /* etwas kompakter */
-    padding: 11px 16px;           /* kompaktere Höhe */
+    width: min(310px, 100%);
+    padding: 11px 16px;
     font-size: 0.95rem;
   }
-
-}
-
-
 
   .hero-service-note {
     left: 1.25rem;
@@ -530,7 +526,7 @@ button {
   .hero-flag-pill {
     background: rgba(15, 23, 42, 0.92);
   }
-
+}
 
 /* Kleine Hero-Variante für Unterseiten (ohne Bild) */
 
