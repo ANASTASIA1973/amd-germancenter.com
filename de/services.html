@@ -408,7 +408,7 @@
           </article>
 
           <article class="srv-card">
-            <div class="srv-card-image" style="background-image:url('/assets/img/service-driving.jpg');"></div>
+            <div class="srv-card-image" style="background-image:url('../assets/img/service-driving.jpg');"></div>
             <div class="srv-card-body">
               <h3 class="srv-card-title">Führerschein & Mobilität</h3>
             <ul class="srv-card-list">
@@ -430,7 +430,7 @@
           </article>
 
           <article class="srv-card">
-            <div class="srv-card-image" style="background-image:url('/assets/img/service-realestate.jpg');"></div>
+            <div class="srv-card-image" style="background-image:url('../assets/img/service-realestate.jpg');"></div>
             <div class="srv-card-body">
               <h3 class="srv-card-title">Immobilien- & Bauunterstützung</h3>
               <ul class="srv-card-list">
@@ -452,7 +452,7 @@
 
     <!-- PROCESS -->
                <article class="srv-card">
-            <div class="srv-card-image" style="background-image:url('/assets/img/service-insurance.jpg');"></div>
+            <div class="srv-card-image" style="background-image:url('../assets/img/service-insurance.jpg');"></div>
             <div class="srv-card-body">
               <h3 class="srv-card-title">Versicherungsvermittlung</h3>
               <ul class="srv-card-list">
@@ -668,7 +668,7 @@
             <a href="https://amd-tarifcheck.de/"
                target="_blank"
                rel="noopener noreferrer">
-              Tarifcheck (AMD)
+              AMD Tarifcheck
             </a>
           </li>
         </ul>
@@ -725,14 +725,14 @@
           </label>
 
           <label class="srv-field">
-           <span>E-Mail (oder Telefon)</span>
+          <span>E-Mail *</span>
             <input autocomplete="email" name="email" required type="email" />
           </label>
 
-          <label class="srv-field">
-            <span>Telefon (optional)</span>
-            <input autocomplete="tel" name="phone" type="tel" />
-          </label>
+         <label class="srv-field">
+  <span>Telefon *</span>
+  <input autocomplete="tel" name="phone" required type="tel" inputmode="tel" placeholder="+961…" />
+</label>
 
           <label class="srv-field">
             <span>Gewünschter Service *</span>
@@ -946,7 +946,7 @@
     // Open Modal
     document.querySelectorAll('#btnOpenInquiry, #btnOpenInquiryCTA, .srv-btn-inquiry').forEach(btn => {
       btn.addEventListener("click", (e) => {
-        const service = e.target.getAttribute('data-service');
+       const service = e.currentTarget.getAttribute('data-service');
         if (service) document.getElementById('serviceSelect').value = service;
         modal.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
@@ -1020,7 +1020,7 @@ Service: ${service}
 
 Name: ${fd.get("name")}
 E-Mail: ${fd.get("email")}
-Telefon: ${fd.get("phone") || "—"}
+Telefon: ${fd.get("phone")}
 Partner-ID: ${partnerFinal}
 
 Anliegen / Dokumente:
@@ -1068,7 +1068,7 @@ Gesendet über amd-germancenter.com/services`;
       const phone = String(fd.get("phone") || "").trim();
 
       // Backend verlangt: service + name + (email oder phone)
-      if (!name || (!email && !phone)) return null;
+      if (!name || !email || !phone) return null;
 
       const serviceName = String(fd.get("service") || "").trim();
       const urgency = String(fd.get("urgency") || "").trim();
@@ -1304,7 +1304,7 @@ Gesendet über amd-germancenter.com/services`;
     "@type": "Answer",
     "text": "Ja. Wir bieten zusätzlich Versicherungsvermittlung (Kfz- und Krankenversicherung) für Privat- und Gewerbekunden – je nach Bedarf in Libanon und Deutschland."
   }
-},
+}
 
     ]
   }

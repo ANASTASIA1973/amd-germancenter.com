@@ -23,7 +23,7 @@
   <meta property="og:title" content="خدمات المعاملات والوثائق والتأمين في لبنان" />
   <meta property="og:description" content="مساعدة احترافية في المعاملات الحكومية والوثائق والترجمة والتصديق والأبوستيل — بالإضافة إلى وساطة التأمين (السيارات والتأمين الصحي) في لبنان وألمانيا." />
   <meta property="og:url" content="https://amd-germancenter.com/ar/services.html" />
-  <meta property="og:image" content="/assets/img/hero-services.jpg" />
+ <meta property="og:image" content="https://amd-germancenter.com/assets/img/hero-services.jpg" />
   <meta property="og:site_name" content="AMD German Center" />
   <meta property="og:locale" content="ar_AR" />
   <meta property="og:locale:alternate" content="de_DE" />
@@ -410,7 +410,7 @@
       
 
           <article class="srv-card">
-            <div class="srv-card-image" style="background-image:url('/assets/img/service-driving.jpg');"></div>
+            <div class="srv-card-image" style="background-image:url('../assets/img/service-driving.jpg');"></div>
             <div class="srv-card-body">
               <h3 class="srv-card-title">رخصة قيادة وتنقّل</h3>
              <ul class="srv-card-list">
@@ -432,7 +432,7 @@
           </article>
 
           <article class="srv-card">
-            <div class="srv-card-image" style="background-image:url('/assets/img/service-realestate.jpg');"></div>
+            <div class="srv-card-image" style="background-image:url('../assets/img/service-realestate.jpg');"></div>
             <div class="srv-card-body">
               <h3 class="srv-card-title">دعم عقاري وبناء</h3>
               <ul class="srv-card-list">
@@ -449,12 +449,10 @@
                 إرسال طلب
               </button>
             </div>
-          </article>
-     
+ </article>
 
-    <!-- PROCESS -->
-     <article class="srv-card">
-  <div class="srv-card-image" style="background-image:url('/assets/img/service-insurance.jpg');"></div>
+          <article class="srv-card">
+  <div class="srv-card-image" style="background-image:url('../assets/img/service-insurance.jpg');"></div>
   <div class="srv-card-body">
     <h3 class="srv-card-title">وساطة تأمين</h3>
     <ul class="srv-card-list">
@@ -463,18 +461,19 @@
       <li>تغطية خاصة وتجارية</li>
       <li>استشارة بالعربية والإنجليزية والألمانية</li>
       <li>مساعدة في تجهيز المستندات المطلوبة</li>
-      <li>وساطة تأمين عبر شركاء مرخّصين في لبنان</li>
+  <li>وساطة تأمينية عبر شركاء مرخّصين في لبنان وألمانيا</li>  
     </ul>
   </div>
   <div class="srv-card-footer">
-    <button class="btn btn-outline srv-btn-inquiry" data-service="وساطة تأمين">
-      إرسال طلب
-    </button>
+  <button class="btn btn-outline srv-btn-inquiry" data-service="Versicherungsvermittlung">
+  إرسال طلب
+</button>
   </div>
 </article>
-     </div>
+        </div>
       </div>
     </section>
+
     <section class="srv-section srv-section-process">
       <div class="srv-container">
         <div class="srv-section-head srv-section-head--center">
@@ -665,7 +664,7 @@
             <a href="https://amd-tarifcheck.de/"
                target="_blank"
                rel="noopener noreferrer">
-              فحص العروض (AMD)
+             AMD Tarifcheck
             </a>
           </li>
         </ul>
@@ -721,15 +720,15 @@
             <input autocomplete="name" name="name" required type="text" />
           </label>
 
-          <label class="srv-field">
-            <span>البريد الإلكتروني *</span>
-            <input autocomplete="email" name="email" required type="email" />
-          </label>
+         <label class="srv-field">
+  <span>البريد الإلكتروني *</span>
+  <input autocomplete="email" name="email" required type="email" placeholder="name@example.com" />
+</label>
 
           <label class="srv-field">
-            <span>الهاتف (اختياري)</span>
-            <input autocomplete="tel" name="phone" type="tel" />
-          </label>
+  <span>الهاتف *</span>
+  <input autocomplete="tel" name="phone" required type="tel" inputmode="tel" placeholder="+961…" />
+</label>
 
           <label class="srv-field">
             <span>الخدمة المطلوبة *</span>
@@ -944,7 +943,7 @@
     // Open Modal
     document.querySelectorAll('#btnOpenInquiry, #btnOpenInquiryCTA, .srv-btn-inquiry').forEach(btn => {
       btn.addEventListener("click", (e) => {
-        const service = e.target.getAttribute('data-service');
+        const service = e.currentTarget.getAttribute('data-service');
         if (service) document.getElementById('serviceSelect').value = service;
         modal.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
@@ -1051,8 +1050,8 @@ function postLeadToSheet(contactPreference) {
   const email = String(fd.get("email") || "").trim();
   const phone = String(fd.get("phone") || "").trim();
 
-  // Minimal requirement: name + (email OR phone)
-  if (!name || (!email && !phone)) return Promise.resolve(null);
+ // Required: name + email + phone
+if (!name || !email || !phone) return Promise.resolve(null);
 
   // partnerId + token: NICHT kaputt machen (bleibt exakt aus deinem tracking object)
   const partnerId = (function () {
@@ -1131,10 +1130,12 @@ function postLeadToSheet(contactPreference) {
     body: JSON.stringify(payload),
   })
   .then(async (r) => {
-    const j = await r.json().catch(() => null);
+    const raw = await r.text().catch(() => "");
+    let j = null;
+    try { j = raw ? JSON.parse(raw) : null; } catch (_) {}
+
     if (!r.ok) {
-      const txt = await r.text().catch(() => "");
-      console.warn("Lead send failed (HTTP):", r.status, j || txt);
+      console.warn("Lead send failed (HTTP):", r.status, j || raw);
       return null;
     }
     return j;

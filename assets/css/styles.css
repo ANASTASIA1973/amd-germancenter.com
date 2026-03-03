@@ -3053,3 +3053,22 @@ a.btn-whatsapp * {
   color: #ffffff !important;
   text-decoration: none;
 }
+/* ===== HERO SUBTITLE – Mobile iPhone Fix ===== */
+@media (max-width: 520px){
+  .hero-subtitle{
+    font-size: 0.95rem;      /* minimal kleiner */
+    line-height: 1.35;       /* luftiger */
+    max-width: 22rem;        /* verhindert “quetschen” */
+    margin-bottom: 1.1rem;   /* etwas weniger Abstand */
+  }
+
+  .br-mobile{ display: inline; }
+}
+
+/* optional: sehr kleine Geräte */
+@media (max-width: 390px){
+  .hero-subtitle{
+    font-size: 0.90rem;
+    max-width: 20rem;
+  }
+}
