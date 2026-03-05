@@ -1095,3 +1095,54 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
   height: 20px;
 }
 
+/* Klickbarer Hinweis (Extra Note) */
+.srv-section-extra .srv-extra-note{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border:1px solid rgba(17,24,39,.10);
+  border-radius:14px;
+  background:rgba(255,255,255,.75);
+  box-shadow:0 12px 30px rgba(15,23,42,.08);
+  text-decoration:none;
+  color:inherit;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.srv-section-extra .srv-extra-note:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 40px rgba(15,23,42,.12);
+  border-color:rgba(193,39,45,.25);
+}
+
+.srv-extra-note__title{
+  font-weight:800;
+  color:var(--amd-text, #111827);
+  white-space:nowrap;
+}
+
+.srv-extra-note__text{
+  color:rgba(17,24,39,.75);
+  flex:1;
+}
+
+.srv-extra-note__cta{
+  font-weight:700;
+  color:var(--amd-primary, #c1272d);
+  white-space:nowrap;
+}
+
+/* Mobile: sauber umbrechen */
+@media (max-width: 680px){
+  .srv-section-extra .srv-extra-note{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .srv-extra-note__title{ white-space:normal; }
+  .srv-extra-note__cta{ margin-top:2px; }
+}
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
