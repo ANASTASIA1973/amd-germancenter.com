@@ -99,16 +99,15 @@
 
 .page-services .srv-bottom-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
   gap: .75rem;
   margin-top: 1.4rem;
 }
 
 .page-services .srv-hero .srv-actions {
-  margin-left: 1.25rem;
+  margin-left: 0;
 }
-
 .page-services .srv-hero-bg {
   position: absolute;
   inset: 0;
@@ -898,6 +897,36 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
 
   .page-services .srv-form__grid {
     grid-template-columns: 1fr;
+  }
+
+  .page-services .srv-bottom-row {
+    justify-content: center;
+  }
+
+  .page-services .srv-hero .srv-actions {
+    width: 100%;
+    margin-top: 1.25rem;
+    justify-content: center;
+  }
+
+  .page-services .srv-hero .srv-actions .btn {
+    margin: 0 auto;
+  }
+    .page-services .srv-bottom-row {
+    width: 100%;
+  }
+
+  .page-services .srv-hero .srv-actions {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .page-services .srv-hero .srv-actions .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
