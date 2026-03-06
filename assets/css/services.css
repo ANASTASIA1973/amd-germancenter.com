@@ -259,7 +259,18 @@
   flex-direction: column;
   gap: .75rem;
 }
+.page-services .srv-side-actions .btn-outline {
+  background: #1b6f5a;
+  border: 2px solid #1b6f5a;
+  color: #fff !important;
+  text-decoration: none;
+}
 
+.page-services .srv-side-actions .btn-outline:hover {
+  background: #165a4a;
+  border-color: #165a4a;
+  color: #fff !important;
+}
 /* ===================================================
    TARGET AUDIENCE (Für wen ist das?)
    =================================================== */
