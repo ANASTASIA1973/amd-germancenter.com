@@ -13,12 +13,10 @@
 (function () {
   "use strict";
 
-  // null = Vorschau mit Beispieldaten | String = echte Datenquelle
-  //
-  // ZUM SCHARFSTELLEN nur diese eine Zeile aendern auf:
-  //   var AMD_REVIEWS_ENDPOINT = "/.netlify/functions/reviews";
-  // Dann liest die Seite echte Bewertungen und das Formular sendet wirklich.
-  var AMD_REVIEWS_ENDPOINT = null;
+  // Echtbetrieb seit System API @48.
+  // Auf null setzen, um wieder in den Vorschau-Modus mit Beispieldaten
+  // zurueckzufallen (dann sendet das Formular bewusst nichts).
+  var AMD_REVIEWS_ENDPOINT = "/.netlify/functions/reviews";
 
   // ---------------------------------------------------
   // Beispieldaten (werden bei Echtbetrieb nicht genutzt)
@@ -116,6 +114,8 @@
       link: "Das sagen unsere Kunden",
       empty: "Hier erscheinen in Kürze die ersten Bewertungen unserer Kunden. Sie waren bei uns? Dann freuen wir uns über Ihre Rückmeldung – Sie wären die oder der Erste.",
       preview: "Vorschau: Dies sind Beispielbewertungen zur Ansicht des Layouts – noch keine echten Kundenbewertungen.",
+      anon: "Kundin oder Kunde",
+      anonFrom: function (c) { return "Kundin oder Kunde aus " + c; },
       sending: "Wird gesendet…",
       errAlready: "Für diesen Vorgang wurde bereits eine Bewertung abgegeben. Vielen Dank!",
       errGeneric: "Ihre Bewertung konnte gerade nicht gesendet werden. Bitte versuchen Sie es in einigen Minuten noch einmal.",
@@ -130,6 +130,8 @@
       link: "What our customers say",
       empty: "The first customer reviews will appear here shortly. Have you used our service? We would be glad to hear from you – you would be the first.",
       preview: "Preview: these are sample reviews to show the layout – not real customer reviews yet.",
+      anon: "A customer",
+      anonFrom: function (c) { return "A customer from " + c; },
       sending: "Sending…",
       errAlready: "A review has already been submitted for this reference. Thank you!",
       errGeneric: "Your review could not be sent right now. Please try again in a few minutes.",
@@ -150,6 +152,8 @@
       link: "ماذا يقول عملاؤنا",
       empty: "ستظهر هنا قريبًا أولى تقييمات عملائنا. هل استفدت من خدماتنا؟ يسعدنا أن نسمع رأيك – ستكون أول المقيّمين.",
       preview: "معاينة: هذه تقييمات نموذجية لعرض التصميم – وليست تقييمات حقيقية بعد.",
+      anon: "أحد العملاء",
+      anonFrom: function (c) { return "أحد العملاء من " + c; },
       sending: "جارٍ الإرسال…",
       errAlready: "تم إرسال تقييم لهذه المعاملة من قبل. شكرًا لك!",
       errGeneric: "تعذّر إرسال تقييمك في الوقت الحالي. يرجى المحاولة مرة أخرى بعد بضع دقائق.",
@@ -226,9 +230,23 @@
     parts.push("</div>");
     parts.push('<p class="rv-card-text">' + t.q1 + escapeHtml(review.text) + t.q2 + "</p>");
     parts.push('<div class="rv-card-foot">');
-    parts.push('<span class="rv-card-author">' + escapeHtml(review.name) + "</span>");
-    if (review.country) {
-      parts.push('<span class="rv-card-origin">· ' + escapeHtml(review.country) + "</span>");
+
+    // Der Name kommt nur mit Einwilligung. Fehlt er, wird nicht der
+    // Ort leer gelassen, sondern eine neutrale Bezeichnung gesetzt.
+    var author = String(review.name || "").trim();
+    var country = String(review.country || "").trim();
+
+    if (author) {
+      parts.push('<span class="rv-card-author">' + escapeHtml(author) + "</span>");
+      if (country) {
+        parts.push('<span class="rv-card-origin">· ' + escapeHtml(country) + "</span>");
+      }
+    } else {
+      parts.push(
+        '<span class="rv-card-author">' +
+        escapeHtml(country ? t.anonFrom(country) : t.anon) +
+        "</span>"
+      );
     }
     if (review.service) {
       parts.push('<span class="rv-card-service">' + escapeHtml(review.service) + "</span>");
