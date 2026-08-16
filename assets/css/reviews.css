@@ -1,0 +1,526 @@
+/* =====================================================
+   AMD German Center – Kundenbewertungen
+   Verwendet die Variablen aus styles.css
+   ===================================================== */
+
+:root {
+  --rv-star: #f2a01d;
+  --rv-star-empty: #d9dde3;
+}
+
+/* WICHTIG: [hidden] wuerde sonst von eigenen display-Regeln
+   ueberschrieben (z. B. .rv-summary { display:flex }) und
+   ausgeblendete Bereiche waeren trotzdem sichtbar. */
+[hidden] {
+  display: none !important;
+}
+
+/* =====================================================
+   STERNE
+   Fuellstand ueber --rv-pct (0–100), erlaubt halbe Sterne
+   ===================================================== */
+
+.rv-stars {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.rv-stars-bg,
+.rv-stars-fg {
+  display: block;
+  letter-spacing: 0.12em;
+  /* letzten Buchstabenabstand wieder abziehen, sonst stimmt
+     die Prozent-Fuellung nicht exakt mit den Sternen ueberein */
+  margin-inline-end: -0.12em;
+}
+
+.rv-stars-bg {
+  color: var(--rv-star-empty);
+}
+
+.rv-stars-fg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow: hidden;
+  width: var(--rv-pct, 0%);
+  color: var(--rv-star);
+}
+
+/* Arabisch: Sterne fuellen sich von rechts nach links,
+   sonst waere der angebrochene Stern am falschen Ende */
+[dir="rtl"] .rv-stars-fg {
+  left: auto;
+  right: 0;
+}
+
+/* =====================================================
+   VERTRAUENSZEILE (unter dem Hero)
+   ===================================================== */
+
+.rv-trustbar {
+  background: var(--amd-card-bg);
+  border-bottom: 1px solid var(--amd-border);
+}
+
+.rv-trustbar-inner {
+  width: min(1100px, 100% - 2rem);
+  margin: 0 auto;
+  padding: 0.75rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--amd-text);
+  text-align: center;
+}
+
+.rv-trustbar .rv-stars {
+  font-size: 1.15rem;
+}
+
+.rv-trustbar-score {
+  font-weight: 700;
+}
+
+.rv-trustbar-count {
+  color: var(--amd-text-muted);
+}
+
+.rv-trustbar-link {
+  color: var(--amd-primary);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  /* ausreichend grosse Tippflaeche auf dem Handy */
+  padding: 0.4rem 0.2rem;
+}
+
+.rv-trustbar-link:hover {
+  text-decoration: underline;
+}
+
+.rv-trustbar-sep {
+  color: var(--amd-border);
+}
+
+@media (max-width: 620px) {
+  .rv-trustbar-sep {
+    display: none;
+  }
+
+  .rv-trustbar-inner {
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.85rem 0;
+  }
+}
+
+/* =====================================================
+   GESAMTNOTE
+   ===================================================== */
+
+.rv-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.rv-summary .rv-stars {
+  font-size: 2rem;
+}
+
+.rv-summary-score {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--amd-heading);
+}
+
+.rv-summary-score span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--amd-text-muted);
+}
+
+.rv-summary-count {
+  color: var(--amd-text-muted);
+  font-size: 0.95rem;
+}
+
+/* =====================================================
+   BEWERTUNGSKARTEN
+   ===================================================== */
+
+.rv-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+
+.rv-card {
+  background: var(--amd-card-bg);
+  border: 1px solid var(--amd-border);
+  border-radius: var(--amd-radius-lg);
+  box-shadow: var(--amd-shadow-card);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  /* verhindert, dass lange Woerter oder URLs die Karte sprengen */
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.rv-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.rv-card-date {
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+  white-space: nowrap;
+}
+
+.rv-card-text {
+  margin: 0;
+  color: var(--amd-text);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.rv-card-foot {
+  border-top: 1px solid var(--amd-border);
+  padding-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+}
+
+.rv-card-author {
+  font-weight: 700;
+  color: var(--amd-heading);
+}
+
+.rv-card-origin {
+  color: var(--amd-text-muted);
+  font-size: 0.9rem;
+}
+
+.rv-card-service {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  color: var(--amd-accent);
+  font-weight: 600;
+}
+
+.rv-empty {
+  text-align: center;
+  color: var(--amd-text-muted);
+  padding: 2rem 0;
+  max-width: 46ch;
+  margin-inline: auto;
+  line-height: 1.6;
+}
+
+/* =====================================================
+   HINWEIS ECHTHEITSPRUEFUNG
+   ===================================================== */
+
+.rv-note {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  background: var(--amd-card-bg);
+  border: 1px solid var(--amd-border);
+  /* logische Eigenschaft: liegt im Arabischen automatisch rechts */
+  border-inline-start: 4px solid var(--amd-accent);
+  border-radius: var(--amd-radius-md);
+  font-size: 0.9rem;
+  color: var(--amd-text-muted);
+  line-height: 1.6;
+}
+
+/* =====================================================
+   VORSCHAU-HINWEIS (nur solange Beispieldaten aktiv)
+   ===================================================== */
+
+.rv-preview-flag {
+  width: min(1100px, 100% - 2rem);
+  margin: 1.5rem auto 0;
+  padding: 0.85rem 1.25rem;
+  background: #fff8e1;
+  border: 1px solid #f0c869;
+  border-radius: var(--amd-radius-md);
+  color: #7a5300;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   FORMULAR
+   ===================================================== */
+
+.rv-form-wrap {
+  background: var(--amd-card-bg);
+  border: 1px solid var(--amd-border);
+  border-radius: var(--amd-radius-lg);
+  box-shadow: var(--amd-shadow-soft);
+  padding: 2rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.rv-form-row {
+  margin-bottom: 1.25rem;
+}
+
+.rv-form-row label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: var(--amd-heading);
+}
+
+.rv-form-row input[type="text"],
+.rv-form-row select,
+.rv-form-row textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--amd-border);
+  border-radius: var(--amd-radius-sm);
+  font-family: inherit;
+  /* 16px ist Pflicht: darunter zoomt Safari auf dem iPhone
+     beim Antippen automatisch in die Seite hinein */
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--amd-text);
+  background-color: #fff;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  min-height: 48px;
+}
+
+/* iOS zeigt Auswahlfelder sonst in eigener Optik ohne Pfeil */
+.rv-form-row select {
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px 8px;
+}
+
+/* Arabisch: Pfeil des Auswahlfelds gehoert nach links */
+[dir="rtl"] .rv-form-row select {
+  padding-right: 0.9rem;
+  padding-left: 2.5rem;
+  background-position: left 1rem center;
+}
+
+.rv-form-row textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.rv-form-row input:focus,
+.rv-form-row select:focus,
+.rv-form-row textarea:focus {
+  outline: 2px solid var(--amd-primary);
+  outline-offset: 1px;
+  border-color: var(--amd-primary);
+}
+
+.rv-form-hint {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--amd-text-muted);
+}
+
+/* Sterne-Auswahl: Radios in umgekehrter Reihenfolge,
+   damit ~ auf alle Sterne links davon wirkt */
+.rv-picker {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.15rem;
+}
+
+.rv-picker input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.rv-picker label {
+  margin: 0;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+  /* Tippflaeche mindestens 44x44 px – Apples Vorgabe */
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rv-star-empty);
+  transition: color .12s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.rv-picker input:checked ~ label {
+  color: var(--rv-star);
+}
+
+/* Hover nur auf Geraeten mit echtem Mauszeiger – auf dem
+   iPhone bliebe der Hover-Zustand sonst nach dem Tippen haengen */
+@media (hover: hover) and (pointer: fine) {
+  .rv-picker label:hover,
+  .rv-picker label:hover ~ label {
+    color: var(--rv-star);
+  }
+
+  .rv-picker label:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Tastaturbedienung sichtbar machen */
+.rv-picker input:focus-visible + label {
+  outline: 2px solid var(--amd-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Spezifitaet muss ueber '.rv-form-row label' liegen,
+   sonst gewinnt dort display:block und die Checkbox
+   rutscht unter den Text */
+.rv-form-row label.rv-consent {
+  display: flex;
+  margin-bottom: 0;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--amd-text);
+  cursor: pointer;
+}
+
+.rv-form-row label.rv-consent input {
+  margin-top: 0.15rem;
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
+  accent-color: var(--amd-primary);
+}
+
+.rv-ref-info {
+  background: var(--amd-primary-soft);
+  border-radius: var(--amd-radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--amd-text);
+  margin-bottom: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+/* Fehlermeldung im Formular */
+.rv-error {
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--amd-primary-soft);
+  border: 1px solid var(--amd-primary);
+  border-radius: var(--amd-radius-sm);
+  color: #8c1a20;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* Erfolgsmeldung nach dem Absenden */
+.rv-success {
+  max-width: 680px;
+  margin: 0 auto 2rem;
+  padding: 1.5rem;
+  background: #eaf6f1;
+  border: 1px solid var(--amd-accent);
+  border-radius: var(--amd-radius-lg);
+  text-align: center;
+  color: #14503f;
+}
+
+.rv-success h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #14503f;
+}
+
+.rv-success p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* =====================================================
+   HANDY
+   ===================================================== */
+
+@media (max-width: 620px) {
+  .rv-form-wrap {
+    padding: 1.5rem 1.15rem;
+  }
+
+  .rv-card {
+    padding: 1.25rem;
+  }
+
+  .rv-summary .rv-stars {
+    font-size: 1.75rem;
+  }
+
+  .rv-summary {
+    margin-bottom: 2rem;
+  }
+
+  /* Absende-Knopf ueber die volle Breite, leichter zu treffen */
+  .rv-form-wrap .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    min-height: 48px;
+  }
+
+  .rv-preview-flag {
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* sehr schmale Geraete (iPhone SE) */
+@media (max-width: 380px) {
+  .rv-picker label {
+    font-size: 1.75rem;
+    min-width: 40px;
+  }
+
+  .rv-card-head {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Favicon / Google-Suchergebnis-Icon -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+
+  <title>Customer Reviews – AMD German Center</title>
+
+  <meta name="description"
+        content="Customer reviews of our transfers, day tours, package trips and administrative &amp; document services in Lebanon. Leave your own review." />
+
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://amd-germancenter.com/en/review.html" />
+
+  <meta name="theme-color" content="#0b1f3a" />
+
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/reviews.css" />
+</head>
+
+<body class="amd-page">
+
+  <!-- HEADER -->
+  <header class="amd-header">
+    <div class="amd-header-inner">
+      <a href="./index.html" class="amd-logo">
+        <img src="../assets/img/logo-amd-lion.png" alt="AMD German Center Logo"
+             width="140" height="140" decoding="async" />
+      </a>
+
+      <div class="amd-header-right">
+        <div class="amd-lang-switch" aria-label="Choose language">
+          <a href="../de/bewertung.html" class="lang-btn">
+            <span class="lang-flag lang-flag-de" aria-hidden="true"></span>
+            <span class="lang-label">DE</span>
+          </a>
+          <a href="../ar/review.html" class="lang-btn">
+            <span class="lang-flag lang-flag-ar" aria-hidden="true"></span>
+            <span class="lang-label">AR</span>
+          </a>
+          <a href="./review.html" class="lang-btn is-active" aria-current="page">
+            <span class="lang-flag lang-flag-en" aria-hidden="true"></span>
+            <span class="lang-label">EN</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="amd-subnav" aria-label="Back to home">
+    <div class="amd-subnav-inner">
+      <a class="amd-backlink" href="./index.html">← Back to home</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- Only visible while sample data is active -->
+    <p class="rv-preview-flag" data-reviews-previewflag hidden></p>
+
+    <!-- ====================================== -->
+    <!-- REVIEWS                                -->
+    <!-- ====================================== -->
+    <section class="section">
+      <div class="container">
+
+        <header class="section-header section-header--center">
+          <h1>What our customers say</h1>
+          <p class="section-subtitle">
+            Feedback on transfers, day tours, package trips and our
+            administrative &amp; document services
+          </p>
+        </header>
+
+        <div class="rv-summary" data-reviews-summary></div>
+
+        <div class="rv-grid" data-reviews-list></div>
+
+        <p class="rv-note">
+          <strong>How we handle reviews:</strong>
+          Reviews come from customers who have booked a service with us.
+          Every review is checked before publication – we only remove spam,
+          abusive language and clearly false statements. Critical reviews
+          stay online unchanged.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- LEAVE A REVIEW                         -->
+    <!-- ====================================== -->
+    <section class="section" id="write-review">
+      <div class="container">
+
+        <header class="section-header section-header--center">
+          <h2 class="section-title">Write a review</h2>
+          <p class="section-subtitle">
+            Your feedback helps other customers decide.
+            Thank you for taking two minutes.
+          </p>
+        </header>
+
+        <!-- Shown after submitting -->
+        <div class="rv-success" data-review-success hidden>
+          <h2>Thank you for your review!</h2>
+          <p>
+            We have received your review. It will be checked and then
+            published on this page.
+          </p>
+        </div>
+
+        <div class="rv-form-wrap" data-review-form>
+
+          <!-- Only visible when reached via a personal link -->
+          <p class="rv-ref-info" data-review-refinfo hidden>
+            Your review will be linked to reference
+            <strong data-review-refvalue></strong>.
+          </p>
+
+          <p class="rv-error" data-review-error hidden></p>
+
+          <form
+            name="review"
+            method="POST"
+          >
+            <input type="hidden" name="refNr" value="" />
+            <input type="hidden" name="locale" value="en" />
+
+            <!-- Honeypot against bots -->
+            <p style="display:none;">
+              <label>Please leave empty: <input name="bot-field" /></label>
+            </p>
+
+            <div class="rv-form-row">
+              <label id="rating-label">How satisfied were you? *</label>
+              <div class="rv-picker" role="radiogroup" aria-labelledby="rating-label">
+                <input type="radio" id="star5" name="rating" value="5" required />
+                <label for="star5" title="5 out of 5 stars">★</label>
+
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 out of 5 stars">★</label>
+
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 out of 5 stars">★</label>
+
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 out of 5 stars">★</label>
+
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 out of 5 stars">★</label>
+              </div>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-service">Which service did you use? *</label>
+              <select id="rv-service" name="service" required>
+                <option value="" selected disabled>Please choose…</option>
+                <option value="Airport transfer">Airport transfer</option>
+                <option value="Day tour">Day tour</option>
+                <option value="Package tour">Package tour</option>
+                <option value="Administrative &amp; document services">Administrative &amp; document services</option>
+                <option value="Insurance">Insurance</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-text">Your experience *</label>
+              <textarea id="rv-text" name="text" rows="6" required
+                        minlength="20" maxlength="1200"
+                        placeholder="What did you like? What could we do better?"></textarea>
+              <p class="rv-form-hint">At least 20 characters.</p>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-name">Your name *</label>
+              <input id="rv-name" name="name" type="text" required maxlength="60"
+                     placeholder="e.g. Peter W." />
+              <p class="rv-form-hint">
+                First name and the initial of your surname is enough.
+              </p>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-country">Country (optional)</label>
+              <input id="rv-country" name="country" type="text" maxlength="40"
+                     placeholder="e.g. United Kingdom" />
+            </div>
+
+            <div class="rv-form-row">
+              <label class="rv-consent">
+                <input type="checkbox" name="consent" value="yes" required />
+                <span>
+                  I agree that my review may be published on this website
+                  together with my name, country and date. *
+                </span>
+              </label>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Submit review</button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================== -->
+  <!-- FOOTER                                 -->
+  <!-- ====================================== -->
+  <footer class="amd-footer">
+    <div class="footer-grid">
+      <div class="footer-column">
+        <ul class="footer-links">
+          <li>
+            <a href="https://transfer.amd-germancenter.com/booking" target="_blank" rel="noopener">
+              Airport Transfer
+            </a>
+          </li>
+          <li>
+            <a href="https://tours.amd-germancenter.com/index.html" target="_blank" rel="noopener">
+              Day Tours
+            </a>
+          </li>
+          <li><a href="./services.html">Services</a></li>
+          <li><a href="./package-tours.html">Package Tours</a></li>
+          <li>
+            <a href="https://amd-tarifcheck.de/" target="_blank" rel="noopener">
+              AMD Tarifcheck
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-column footer-column--center">
+        <p class="footer-title">Follow us on:</p>
+        <div class="footer-social">
+          <a href="https://wa.me/96181622668" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-whatsapp.svg" alt="WhatsApp" />
+          </a>
+          <a href="https://www.instagram.com/amd.german.center/" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-instagram.svg" alt="Instagram" />
+          </a>
+          <a href="https://www.facebook.com/p/AMD-German-Center-61575238540217/" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-facebook.svg" alt="Facebook" />
+          </a>
+          <a href="https://www.tiktok.com/@amdgermancenter" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-tiktok.svg" alt="TikTok" />
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <ul class="footer-links">
+          <li><a href="./faq.html">FAQ Lebanon</a></li>
+          <li><a href="./about.html">About us</a></li>
+          <li><a href="./imprint.html">Imprint</a></li>
+          <li><a href="./datenschutz.html">Privacy Policy</a></li>
+          <li><a href="./agb.html">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/reviews.js"></script>
+</body>
+</html>

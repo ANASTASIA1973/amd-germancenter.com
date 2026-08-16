@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Favicon / Google-Suchergebnis-Icon -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+
+  <title>Kundenbewertungen – AMD German Center</title>
+
+  <meta name="description"
+        content="Bewertungen unserer Kunden zu Transfers, Tagestouren, Pauschalreisen sowie Behörden- und Dokumentenservice im Libanon. Jetzt selbst bewerten." />
+
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://amd-germancenter.com/de/bewertung.html" />
+
+  <meta name="theme-color" content="#0b1f3a" />
+
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/reviews.css" />
+</head>
+
+<body class="amd-page">
+
+  <!-- HEADER -->
+  <header class="amd-header">
+    <div class="amd-header-inner">
+      <a href="./index.html" class="amd-logo">
+        <img src="../assets/img/logo-amd-lion.png" alt="AMD German Center Logo"
+             width="140" height="140" decoding="async" />
+      </a>
+
+      <div class="amd-header-right">
+        <div class="amd-lang-switch" aria-label="Sprache wählen">
+          <a href="./bewertung.html" class="lang-btn is-active" aria-current="page">
+            <span class="lang-flag lang-flag-de" aria-hidden="true"></span>
+            <span class="lang-label">DE</span>
+          </a>
+          <a href="../ar/review.html" class="lang-btn">
+            <span class="lang-flag lang-flag-ar" aria-hidden="true"></span>
+            <span class="lang-label">AR</span>
+          </a>
+          <a href="../en/review.html" class="lang-btn">
+            <span class="lang-flag lang-flag-en" aria-hidden="true"></span>
+            <span class="lang-label">EN</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="amd-subnav" aria-label="Zurück zur Hauptseite">
+    <div class="amd-subnav-inner">
+      <a class="amd-backlink" href="./index.html">← Zurück zur Hauptseite</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- Nur sichtbar, solange Beispieldaten laufen -->
+    <p class="rv-preview-flag" data-reviews-previewflag hidden></p>
+
+    <!-- ====================================== -->
+    <!-- BEWERTUNGEN                            -->
+    <!-- ====================================== -->
+    <section class="section">
+      <div class="container">
+
+        <header class="section-header section-header--center">
+          <h1>Das sagen unsere Kunden</h1>
+          <p class="section-subtitle">
+            Rückmeldungen zu Transfers, Tagestouren, Pauschalreisen sowie
+            Behörden- und Dokumentenservice
+          </p>
+        </header>
+
+        <div class="rv-summary" data-reviews-summary></div>
+
+        <div class="rv-grid" data-reviews-list></div>
+
+        <p class="rv-note">
+          <strong>Wie wir Bewertungen prüfen:</strong>
+          Bewertungen stammen von Kundinnen und Kunden, die einen Service bei uns
+          gebucht haben. Jede Bewertung wird vor der Veröffentlichung geprüft –
+          entfernt werden ausschließlich Spam, Beleidigungen und offensichtlich
+          unzutreffende Angaben. Kritische Bewertungen bleiben unverändert stehen.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- BEWERTUNG ABGEBEN                      -->
+    <!-- ====================================== -->
+    <section class="section" id="bewerten">
+      <div class="container">
+
+        <header class="section-header section-header--center">
+          <h2 class="section-title">Jetzt bewerten</h2>
+          <p class="section-subtitle">
+            Ihre Rückmeldung hilft anderen Kundinnen und Kunden bei der Entscheidung.
+            Vielen Dank, dass Sie sich zwei Minuten Zeit nehmen.
+          </p>
+        </header>
+
+        <!-- Erfolgsmeldung nach dem Absenden -->
+        <div class="rv-success" data-review-success hidden>
+          <h2>Vielen Dank für Ihre Bewertung!</h2>
+          <p>
+            Wir haben Ihre Bewertung erhalten. Sie wird geprüft und erscheint
+            anschließend auf dieser Seite.
+          </p>
+        </div>
+
+        <div class="rv-form-wrap" data-review-form>
+
+          <!-- Nur sichtbar, wenn die Seite über einen persönlichen Link erreicht wurde -->
+          <p class="rv-ref-info" data-review-refinfo hidden>
+            Ihre Bewertung wird dem Vorgang
+            <strong data-review-refvalue></strong> zugeordnet.
+          </p>
+
+          <p class="rv-error" data-review-error hidden></p>
+
+          <form
+            name="review"
+            method="POST"
+          >
+            <input type="hidden" name="refNr" value="" />
+            <input type="hidden" name="locale" value="de" />
+
+            <!-- Honeypot gegen Bots -->
+            <p style="display:none;">
+              <label>Bitte nicht ausfüllen: <input name="bot-field" /></label>
+            </p>
+
+            <div class="rv-form-row">
+              <label id="rating-label">Wie zufrieden waren Sie? *</label>
+              <div class="rv-picker" role="radiogroup" aria-labelledby="rating-label">
+                <input type="radio" id="star5" name="rating" value="5" required />
+                <label for="star5" title="5 von 5 Sternen">★</label>
+
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 von 5 Sternen">★</label>
+
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 von 5 Sternen">★</label>
+
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 von 5 Sternen">★</label>
+
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 von 5 Sternen">★</label>
+              </div>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-service">Welchen Service haben Sie genutzt? *</label>
+              <select id="rv-service" name="service" required>
+                <option value="" selected disabled>Bitte auswählen…</option>
+                <option value="Flughafentransfer">Flughafentransfer</option>
+                <option value="Tagestour">Tagestour</option>
+                <option value="Pauschalreise">Pauschalreise</option>
+                <option value="Behörden- &amp; Dokumentenservice">Behörden- &amp; Dokumentenservice</option>
+                <option value="Versicherung">Versicherung</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </select>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-text">Ihre Erfahrung *</label>
+              <textarea id="rv-text" name="text" rows="6" required
+                        minlength="20" maxlength="1200"
+                        placeholder="Was hat Ihnen gefallen? Was können wir besser machen?"></textarea>
+              <p class="rv-form-hint">Mindestens 20 Zeichen.</p>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-name">Ihr Name *</label>
+              <input id="rv-name" name="name" type="text" required maxlength="60"
+                     placeholder="z. B. Sabine M." />
+              <p class="rv-form-hint">
+                Vorname und erster Buchstabe des Nachnamens genügen.
+              </p>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-country">Land (optional)</label>
+              <input id="rv-country" name="country" type="text" maxlength="40"
+                     placeholder="z. B. Deutschland" />
+            </div>
+
+            <div class="rv-form-row">
+              <label class="rv-consent">
+                <input type="checkbox" name="consent" value="ja" required />
+                <span>
+                  Ich bin damit einverstanden, dass meine Bewertung mit Name, Land
+                  und Datum auf dieser Website veröffentlicht wird. *
+                </span>
+              </label>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Bewertung absenden</button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================== -->
+  <!-- FOOTER                                 -->
+  <!-- ====================================== -->
+  <footer class="amd-footer">
+    <div class="footer-grid">
+      <!-- Linke Spalte: Leistungen -->
+      <div class="footer-column">
+        <ul class="footer-links">
+          <li>
+            <a href="https://transfer.amd-germancenter.com/booking" target="_blank" rel="noopener">
+              Airport Transfer
+            </a>
+          </li>
+          <li>
+            <a href="https://tours.amd-germancenter.com/index.html" target="_blank" rel="noopener">
+              Tagestouren
+            </a>
+          </li>
+          <li><a href="./services.html">Services</a></li>
+          <li><a href="./package-tours.html">Pauschalreisen</a></li>
+          <li>
+            <a href="https://amd-tarifcheck.de/" target="_blank" rel="noopener">
+              AMD Tarifcheck
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Mitte: Social Media -->
+      <div class="footer-column footer-column--center">
+        <p class="footer-title">Folgen Sie uns auf:</p>
+        <div class="footer-social">
+          <a href="https://wa.me/96181622668" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-whatsapp.svg" alt="WhatsApp" />
+          </a>
+          <a href="https://www.instagram.com/amd.german.center/" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-instagram.svg" alt="Instagram" />
+          </a>
+          <a href="https://www.facebook.com/p/AMD-German-Center-61575238540217/" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-facebook.svg" alt="Facebook" />
+          </a>
+          <a href="https://www.tiktok.com/@amdgermancenter" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-tiktok.svg" alt="TikTok" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Rechte Spalte: Info-Seiten -->
+      <div class="footer-column">
+        <ul class="footer-links">
+          <li><a href="./faq.html">FAQ Libanon</a></li>
+          <li><a href="./about.html">Über uns</a></li>
+          <li><a href="./imprint.html">Impressum</a></li>
+          <li><a href="./datenschutz.html">Datenschutzerklärung</a></li>
+          <li><a href="./agb.html">AGB</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/reviews.js"></script>
+</body>
+</html>

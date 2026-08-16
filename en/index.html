@@ -58,6 +58,7 @@
     />
 
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/reviews.css" />
 
     <script type="application/ld+json">
 {
@@ -229,6 +230,16 @@
             <span class="amd-phone-ltr">+961 81 622 668</span>
           </a>
         </div>
+      </div>
+
+      <!-- ====================================== -->
+      <!-- TRUST BAR (customer reviews)           -->
+      <!-- Filled and revealed by JS              -->
+      <!-- ====================================== -->
+      <div class="rv-trustbar" data-reviews-section hidden>
+        <div class="rv-trustbar-inner"
+             data-reviews-trustbar
+             data-reviews-href="./review.html"></div>
       </div>
 
       <!-- ====================================== -->
@@ -490,6 +501,28 @@ Including insurance mediation (e.g., car and health insurance) for private and c
       </section>
 
       <!-- ====================================== -->
+      <!-- CUSTOMER REVIEWS                       -->
+      <!-- Filled and revealed by JS              -->
+      <!-- ====================================== -->
+      <section class="section" data-reviews-section hidden>
+        <div class="container">
+          <div class="section-header section-header--center">
+            <h2 class="section-title">What our customers say</h2>
+          </div>
+
+          <div class="rv-summary" data-reviews-summary></div>
+
+          <div class="rv-grid" data-reviews-list="3"></div>
+
+          <div class="section-header section-header--center" style="margin-top:2rem;">
+            <a class="btn btn-outline" href="./review.html">
+              See all reviews
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================== -->
       <!-- PARTNER BANNER (moving logos)          -->
       <!-- ====================================== -->
       <section class="section section-partners">
@@ -627,6 +660,7 @@ Including insurance mediation (e.g., car and health insurance) for private and c
 
     <!-- Token/Link preservation script must remain -->
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/reviews.js"></script>
 
     <script>
       (function () {

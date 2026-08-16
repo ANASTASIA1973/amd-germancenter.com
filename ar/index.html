@@ -92,6 +92,7 @@
     />
 
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/reviews.css" />
   </head>
 
   <body class="amd-page">
@@ -178,6 +179,17 @@
           </a>
         </div>
       </div>
+
+      <!-- ====================================== -->
+      <!-- شريط التقييمات                          -->
+      <!-- يُملأ ويُعرض عبر JS                      -->
+      <!-- ====================================== -->
+      <div class="rv-trustbar" data-reviews-section hidden>
+        <div class="rv-trustbar-inner"
+             data-reviews-trustbar
+             data-reviews-href="./review.html"></div>
+      </div>
+
       <!-- SERVICES -->
       <section id="leistungen" class="section section-tours">
         <!-- ====================================== -->
@@ -354,6 +366,28 @@
           </div>
         </div>
       </section>
+
+      <!-- ====================================== -->
+      <!-- تقييمات العملاء                         -->
+      <!-- يُملأ ويُعرض عبر JS                      -->
+      <!-- ====================================== -->
+      <section class="section" data-reviews-section hidden>
+        <div class="container">
+          <div class="section-header section-header--center">
+            <h2 class="section-title">ماذا يقول عملاؤنا</h2>
+          </div>
+
+          <div class="rv-summary" data-reviews-summary></div>
+
+          <div class="rv-grid" data-reviews-list="3"></div>
+
+          <div class="section-header section-header--center" style="margin-top:2rem;">
+            <a class="btn btn-outline" href="./review.html">
+              عرض جميع التقييمات
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- FOOTER -->
@@ -399,5 +433,6 @@
 
     <!-- Token preservation -->
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/reviews.js"></script>
   </body>
 </html>

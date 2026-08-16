@@ -1,0 +1,9 @@
+# Lokaler Ablageordner für Google-Apps-Script-Dateien.
+# Diese enthalten interne Sheet-IDs und Zugangsdaten und dürfen
+# NICHT in das öffentliche GitHub-Repository gelangen.
+_gas/
+
+# System- und Editor-Dateien
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Favicon / Google-Suchergebnis-Icon -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+
+  <title>تقييمات العملاء – AMD German Center</title>
+
+  <meta name="description"
+        content="تقييمات عملائنا حول خدمات النقل والجولات اليومية والباقات السياحية وخدمات المعاملات والوثائق في لبنان. شاركنا تقييمك." />
+
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://amd-germancenter.com/ar/review.html" />
+
+  <meta name="theme-color" content="#0b1f3a" />
+
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/reviews.css" />
+</head>
+
+<body class="amd-page">
+
+  <!-- HEADER -->
+  <header class="amd-header">
+    <div class="amd-header-inner">
+      <a href="./index.html" class="amd-logo">
+        <img src="../assets/img/logo-amd-lion.png" alt="شعار AMD German Center"
+             width="140" height="140" decoding="async" />
+      </a>
+
+      <div class="amd-header-right">
+        <div class="amd-lang-switch" aria-label="اختيار اللغة">
+          <a href="../de/bewertung.html" class="lang-btn">
+            <span class="lang-flag lang-flag-de" aria-hidden="true"></span>
+            <span class="lang-label">DE</span>
+          </a>
+          <a href="./review.html" class="lang-btn is-active" aria-current="page">
+            <span class="lang-flag lang-flag-ar" aria-hidden="true"></span>
+            <span class="lang-label">AR</span>
+          </a>
+          <a href="../en/review.html" class="lang-btn">
+            <span class="lang-flag lang-flag-en" aria-hidden="true"></span>
+            <span class="lang-label">EN</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="amd-subnav" aria-label="العودة إلى الصفحة الرئيسية">
+    <div class="amd-subnav-inner">
+      <a class="amd-backlink" href="./index.html">← العودة إلى الصفحة الرئيسية</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- يظهر فقط ما دامت البيانات النموذجية مفعّلة -->
+    <p class="rv-preview-flag" data-reviews-previewflag hidden></p>
+
+    <!-- ====================================== -->
+    <!-- التقييمات                               -->
+    <!-- ====================================== -->
+    <section class="section">
+      <div class="container">
+
+        <header class="section-header section-header--center">
+          <h1>ماذا يقول عملاؤنا</h1>
+          <p class="section-subtitle">
+            آراء حول خدمات النقل والجولات اليومية والباقات السياحية
+            وخدمات المعاملات والوثائق
+          </p>
+        </header>
+
+        <div class="rv-summary" data-reviews-summary></div>
+
+        <div class="rv-grid" data-reviews-list></div>
+
+        <p class="rv-note">
+          <strong>كيف نتعامل مع التقييمات:</strong>
+          التقييمات واردة من عملاء حجزوا خدمة لدينا. تتم مراجعة كل تقييم قبل
+          النشر – ولا نحذف سوى الرسائل المزعجة والعبارات المسيئة والمعلومات
+          غير الصحيحة بشكل واضح. أما التقييمات النقدية فتبقى منشورة كما هي.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- إضافة تقييم                             -->
+    <!-- ====================================== -->
+    <section class="section" id="write-review">
+      <div class="container">
+
+        <header class="section-header section-header--center">
+          <h2 class="section-title">أضف تقييمك</h2>
+          <p class="section-subtitle">
+            رأيك يساعد العملاء الآخرين على اتخاذ قرارهم.
+            شكرًا لتخصيصك دقيقتين من وقتك.
+          </p>
+        </header>
+
+        <!-- يظهر بعد الإرسال -->
+        <div class="rv-success" data-review-success hidden>
+          <h2>شكرًا لك على تقييمك!</h2>
+          <p>
+            لقد استلمنا تقييمك. ستتم مراجعته ثم نشره على هذه الصفحة.
+          </p>
+        </div>
+
+        <div class="rv-form-wrap" data-review-form>
+
+          <!-- يظهر فقط عند الوصول عبر رابط شخصي -->
+          <p class="rv-ref-info" data-review-refinfo hidden>
+            سيتم ربط تقييمك بالرقم المرجعي
+            <strong data-review-refvalue></strong>.
+          </p>
+
+          <p class="rv-error" data-review-error hidden></p>
+
+          <form
+            name="review"
+            method="POST"
+          >
+            <input type="hidden" name="refNr" value="" />
+            <input type="hidden" name="locale" value="ar" />
+
+            <!-- حقل مخفي لمكافحة الرسائل الآلية -->
+            <p style="display:none;">
+              <label>يرجى ترك هذا الحقل فارغًا: <input name="bot-field" /></label>
+            </p>
+
+            <div class="rv-form-row">
+              <label id="rating-label">ما مدى رضاك عن الخدمة؟ *</label>
+              <div class="rv-picker" role="radiogroup" aria-labelledby="rating-label">
+                <input type="radio" id="star5" name="rating" value="5" required />
+                <label for="star5" title="5 من 5 نجوم">★</label>
+
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 من 5 نجوم">★</label>
+
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 من 5 نجوم">★</label>
+
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="نجمتان من 5">★</label>
+
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="نجمة واحدة من 5">★</label>
+              </div>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-service">ما الخدمة التي استخدمتها؟ *</label>
+              <select id="rv-service" name="service" required>
+                <option value="" selected disabled>يرجى الاختيار…</option>
+                <option value="النقل من وإلى المطار">النقل من وإلى المطار</option>
+                <option value="جولة يومية">جولة يومية</option>
+                <option value="باقة سياحية">باقة سياحية</option>
+                <option value="خدمات المعاملات والوثائق">خدمات المعاملات والوثائق</option>
+                <option value="التأمين">التأمين</option>
+                <option value="أخرى">أخرى</option>
+              </select>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-text">تجربتك معنا *</label>
+              <textarea id="rv-text" name="text" rows="6" required
+                        minlength="20" maxlength="1200"
+                        placeholder="ما الذي أعجبك؟ وما الذي يمكننا تحسينه؟"></textarea>
+              <p class="rv-form-hint">20 حرفًا على الأقل.</p>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-name">اسمك *</label>
+              <input id="rv-name" name="name" type="text" required maxlength="60"
+                     placeholder="مثال: كريم ح." />
+              <p class="rv-form-hint">
+                يكفي الاسم الأول والحرف الأول من اسم العائلة.
+              </p>
+            </div>
+
+            <div class="rv-form-row">
+              <label for="rv-country">البلد (اختياري)</label>
+              <input id="rv-country" name="country" type="text" maxlength="40"
+                     placeholder="مثال: لبنان" />
+            </div>
+
+            <div class="rv-form-row">
+              <label class="rv-consent">
+                <input type="checkbox" name="consent" value="نعم" required />
+                <span>
+                  أوافق على نشر تقييمي على هذا الموقع مع الاسم والبلد والتاريخ. *
+                </span>
+              </label>
+            </div>
+
+            <button class="btn btn-primary" type="submit">إرسال التقييم</button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================== -->
+  <!-- FOOTER                                 -->
+  <!-- ====================================== -->
+  <footer class="amd-footer">
+    <div class="footer-grid">
+      <div class="footer-column">
+        <ul class="footer-links">
+          <li>
+            <a href="https://transfer.amd-germancenter.com/booking" target="_blank" rel="noopener">
+              النقل من وإلى المطار
+            </a>
+          </li>
+          <li>
+            <a href="https://tours.amd-germancenter.com/index.html" target="_blank" rel="noopener">
+              الجولات اليومية
+            </a>
+          </li>
+          <li><a href="./services.html">خدمات المعاملات</a></li>
+          <li><a href="./package-tours.html">الرحلات المنظمة</a></li>
+          <li>
+            <a href="https://amd-tarifcheck.de/" target="_blank" rel="noopener">
+              AMD Tarifcheck
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-column footer-column--center">
+        <p class="footer-title">تابعونا على:</p>
+        <div class="footer-social">
+          <a href="https://wa.me/96181622668" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-whatsapp.svg" alt="WhatsApp" />
+          </a>
+          <a href="https://www.instagram.com/amd.german.center/" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-instagram.svg" alt="Instagram" />
+          </a>
+          <a href="https://www.facebook.com/p/AMD-German-Center-61575238540217/" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-facebook.svg" alt="Facebook" />
+          </a>
+          <a href="https://www.tiktok.com/@amdgermancenter" target="_blank" rel="noopener">
+            <img src="../assets/img/icon-tiktok.svg" alt="TikTok" />
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <ul class="footer-links">
+          <li><a href="./faq.html">الأسئلة الشائعة</a></li>
+          <li><a href="./about.html">من نحن</a></li>
+          <li><a href="./imprint.html">بيانات الناشر</a></li>
+          <li><a href="./datenschutz.html">سياسة الخصوصية</a></li>
+          <li><a href="./agb.html">الشروط والأحكام</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/reviews.js"></script>
+</body>
+</html>
