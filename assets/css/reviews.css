@@ -432,14 +432,22 @@
   accent-color: var(--amd-primary);
 }
 
+/* Neutral gehalten: Das ist eine Information, keine Warnung.
+   Das Rot bleibt der Fehlermeldung vorbehalten. */
 .rv-ref-info {
-  background: var(--amd-primary-soft);
+  background: #f3f4f6;
+  border: 1px solid var(--amd-border);
+  border-inline-start: 4px solid var(--amd-accent);
   border-radius: var(--amd-radius-sm);
   padding: 0.75rem 1rem;
   font-size: 0.9rem;
-  color: var(--amd-text);
+  color: var(--amd-text-muted);
   margin-bottom: 1.5rem;
   overflow-wrap: anywhere;
+}
+
+.rv-ref-info strong {
+  color: var(--amd-text);
 }
 
 /* Fehlermeldung im Formular */
