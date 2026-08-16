@@ -282,10 +282,23 @@
       var limit = parseInt(el.getAttribute("data-reviews-list"), 10);
       var slice = isNaN(limit) ? reviews : reviews.slice(0, limit);
       if (!slice.length) {
-        el.innerHTML = '<p class="rv-empty">' + escapeHtml(t.empty) + "</p>";
+        el.hidden = true;
         return;
       }
+      el.hidden = false;
       el.innerHTML = slice.map(cardHtml).join("");
+    });
+
+    // Leerzustand: Solange nichts freigegeben ist, soll die Seite zum
+    // Bewerten auffordern statt Leere zu melden. Der Untertitel wird zur
+    // Einladung, der Hinweis zur Echtheitspruefung verschwindet - es gibt
+    // ja noch keine Bewertung, deren Pruefung man erklaeren muesste.
+    document.querySelectorAll("[data-reviews-subtitle]").forEach(function (el) {
+      if (!count) el.textContent = t.empty;
+    });
+
+    document.querySelectorAll("[data-reviews-note]").forEach(function (el) {
+      el.hidden = !count;
     });
 
     // Vertrauenszeile
