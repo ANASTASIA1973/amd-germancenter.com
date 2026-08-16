@@ -3061,6 +3061,35 @@ a.btn-whatsapp * {
   .br-mobile{ display: inline; }
 }
 
+/* ===== Footer Social Icons – alle identisch groß & auf einer Linie =====
+   Muss NACH der globalen wa.me-Regel (display:inline-flex) stehen,
+   sonst wird das WhatsApp-Icon anders ausgerichtet als die übrigen Icons. */
+.footer-social{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  line-height: 0;
+}
+
+.footer-social a[href]{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  line-height: 0;
+  gap: 0;
+}
+
+.footer-social a[href] img{
+  display: block;
+  width: 26px;
+  height: 26px;
+  max-width: 26px;
+  object-fit: contain;
+}
+
 /* optional: sehr kleine Geräte */
 @media (max-width: 390px){
   .hero-subtitle{
