@@ -26,4 +26,28 @@
   to = "/ar/index.html"
   status = 301
   force = true
+
+# --- Mietwagen/Autovermietung deaktiviert (2026-08-22) ---
+# Die Seiten bleiben im Projekt, sind aber ueber die Website nicht erreichbar.
+# Zum Reaktivieren: diese drei Redirect-Bloecke entfernen, in de/en/ar
+# car-rental.html das robots-Meta wieder auf "index, follow" setzen und die
+# auskommentierten Nav-Links in package-tours.html freigeben.
+[[redirects]]
+  from = "/de/car-rental.html"
+  to = "/de/index.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/en/car-rental.html"
+  to = "/en/index.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/ar/car-rental.html"
+  to = "/ar/index.html"
+  status = 302
+  force = true
+
 # deploy bump
