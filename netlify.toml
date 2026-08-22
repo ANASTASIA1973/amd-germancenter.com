@@ -50,4 +50,44 @@
   status = 302
   force = true
 
+# --- Platzhalterseiten -> echte Apps (2026-08-22) ---
+# de/tages-touren.html, */day-tours.html und */airport-transfer.html sind noch
+# leere Platzhalter. Bis sie mit Inhalt gefuellt sind, gehen die URLs auf die
+# produktiven Apps, damit niemand auf einer leeren Seite landet.
+[[redirects]]
+  from = "/de/tages-touren.html"
+  to = "https://tours.amd-germancenter.com/index.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/en/day-tours.html"
+  to = "https://tours.amd-germancenter.com/index.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/ar/day-tours.html"
+  to = "https://tours.amd-germancenter.com/index.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/de/airport-transfer.html"
+  to = "https://transfer.amd-germancenter.com/booking"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/en/airport-transfer.html"
+  to = "https://transfer.amd-germancenter.com/booking"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/ar/airport-transfer.html"
+  to = "https://transfer.amd-germancenter.com/booking"
+  status = 302
+  force = true
+
 # deploy bump

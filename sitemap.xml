@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AMD German Center - Sitemap, zuletzt aktualisiert 2026-08-22 -->
+<!-- Nicht enthalten: car-rental.html (Angebot deaktiviert) sowie die Platzhalter day-tours/airport-transfer -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://amd-germancenter.com/de/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/index.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/index.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/index.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/index.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/index.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/index.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/index.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/index.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/index.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/services.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/services.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/services.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/services.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/services.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/services.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/services.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/services.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/services.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/services.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/services.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/services.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/package-tours.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/package-tours.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/package-tours.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/package-tours.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/package-tours.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/package-tours.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/package-tours.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/about.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/about.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/about.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/about.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/about.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/about.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/bewertung.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/bewertung.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/review.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/review.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/review.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/review.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/bewertung.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/review.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/review.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/review.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/review.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/bewertung.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/review.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/review.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/review.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/contact.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/contact.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/contact.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/contact.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/contact.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/contact.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/contact.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/contact.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/contact.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/contact.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/contact.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/contact.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/faq.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/faq.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/faq.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/faq.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/faq.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/faq.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/faq.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/faq.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/faq.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/faq.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/faq.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/faq.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/faq.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/faq.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/faq.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/imprint.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/imprint.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/imprint.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/imprint.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/imprint.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/imprint.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/imprint.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/agb.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/agb.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/agb.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/agb.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/agb.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/agb.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/agb.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/agb.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/agb.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/agb.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/agb.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/agb.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/agb.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/agb.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/agb.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/de/datenschutz.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/datenschutz.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/en/datenschutz.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/datenschutz.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amd-germancenter.com/ar/datenschutz.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://amd-germancenter.com/de/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://amd-germancenter.com/en/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://amd-germancenter.com/ar/datenschutz.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://amd-germancenter.com/en/datenschutz.html" />
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

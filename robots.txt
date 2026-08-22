@@ -1,0 +1,14 @@
+# robots.txt - AMD German Center
+# https://amd-germancenter.com
+
+User-agent: *
+Allow: /
+
+# Deaktivierte Angebote und interne Pfade
+Disallow: /de/car-rental.html
+Disallow: /en/car-rental.html
+Disallow: /ar/car-rental.html
+Disallow: /r/
+Disallow: /.netlify/
+
+Sitemap: https://amd-germancenter.com/sitemap.xml
