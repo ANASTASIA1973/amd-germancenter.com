@@ -1,6 +1,19 @@
 // netlify/functions/leads.js
 import { createHash } from "crypto";
 
+/**
+ * Glaettet Text fuer den Vergleich zweier Anfragen: mehrfache Leerzeichen
+ * zu einem, Leerraum um Zeilenumbrueche weg, Raender getrimmt.
+ * Aendert NICHT, was gespeichert wird.
+ */
+function normalizeForFingerprint_(text) {
+  return String(text || '')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/[ \t]*\n[ \t]*/g, '\n')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
+}
+
 export async function handler(event) {
   // CORS (so your browser can POST without hacks like no-cors)
   const corsHeaders = {
@@ -106,8 +119,19 @@ export async function handler(event) {
     // ------------------------------------------------------------
     // Idempotency key: dedupe double-submit/retry within short window
     // ------------------------------------------------------------
-    // 30s bucket: same request twice quickly => same idemKey
-    const bucket = Math.floor(Date.now() / 30000);
+    // Tagesfenster statt 30-Sekunden-Fenster.
+    //
+    // Vorher: Math.floor(Date.now() / 30000). Zwei identische Absendungen
+    // galten damit nur dann als dieselbe Anfrage, wenn sie im GLEICHEN
+    // 30-Sekunden-Block ankamen. Am 25.08.2026 hat ein Kunde beim
+    // Behoerdenservice mehrfach abgeschickt; weil der Aufruf rund 45
+    // Sekunden brauchte, fielen die Versuche in verschiedene Bloecke - und
+    // jeder zaehlte als neue Anfrage (SRV-2026-00012 bis -00020).
+    //
+    // Ob zwei Anfragen dieselbe sind, soll am INHALT haengen, nicht an der
+    // Uhr. Der Tag bleibt drin, damit derselbe Vorgang naechste Woche
+    // wieder erlaubt ist.
+    const bucket = new Date().toISOString().slice(0, 10);
 
     const idemCore = {
       bucket,
@@ -117,7 +141,10 @@ export async function handler(event) {
       phone: String(incoming.phone || "").trim(),
       partnerId: String(partnerId || "").trim(),
       sourceUrl,
-      fullText,
+      // Nur fuer den Fingerabdruck geglaettet - GESPEICHERT wird weiter der
+      // Originaltext. Ein Kunde, der beim zweiten Anlauf eine Leerzeile mehr
+      // stehen laesst, stellt damit keine neue Anfrage.
+      fullText: normalizeForFingerprint_(fullText),
       // optional: structured fields that strongly identify the request
       people: incoming.people ?? incoming.persons ?? "",
       date: incoming.date ?? incoming.travelDate ?? "",

@@ -597,3 +597,119 @@ document.addEventListener("DOMContentLoaded", () => {
   hookWhatsAppClicks_();
   hookEmailClicks_();
 });
+
+/* ============================================================================
+   DOPPELKLICK-SPERRE FUER DIE ANFRAGE-KNOEPFE
+   ============================================================================
+
+   Am 25.08.2026 hat ein Kunde beim Behoerdenservice zehnmal abgeschickt und
+   dabei zwischen "Angebot anfragen" und "Per WhatsApp senden" gewechselt. Es
+   entstanden zehn Anfragen; vier davon trugen sogar dieselbe Referenznummer
+   (SRV-2026-00020), weil sie gleichzeitig durch die Duplikatspruefung liefen.
+
+   Die Ursache war nicht Ungeduld: Der Aufruf dauerte an dem Tag rund 45
+   Sekunden, und in dieser ganzen Zeit sah der Knopf unveraendert aus. Wer
+   keine Rueckmeldung bekommt, klickt noch einmal - das ist normales Verhalten.
+
+   Warum die Sperre hier steht und nicht in den sechs Formularseiten:
+   services.html und package-tours.html haben ihre Absende-Logik jeweils
+   inline, in unterschiedlicher Einrueckung und mit unterschiedlichem Aufbau.
+   Sechs Seiten umzubauen waere sechsmal Gelegenheit, eine Klammer zu
+   verlieren. Alle sechs laden dafuer diese Datei.
+
+   Technik: Der Wachposten haengt am document und arbeitet in der
+   Erfassungsphase (capture). Dadurch laeuft er VOR den Knopf-eigenen
+   Handlern der Seite - unabhaengig davon, welches Skript zuerst geladen
+   wurde. Beim zweiten Klick wird das Ereignis gestoppt, bevor die Seite es
+   ueberhaupt sieht.
+   ========================================================================= */
+(function () {
+  var BUTTON_IDS = "#btnInquiryEmail, #btnInquiryWhatsApp";
+  var LEAD_ENDPOINT = "/.netlify/functions/leads";
+  var LABELS = { de: "Wird gesendet …", en: "Sending …", ar: "جارٍ الإرسال …" };
+
+  // Notbremse: falls die Anfrage nie zurueckkommt, darf der Knopf nicht
+  // fuer immer gesperrt bleiben.
+  var MAX_LOCK_MS = 90000;
+
+  var busy = false;
+  var savedHtml = null;
+  var lockedButtons = [];
+  var timer = null;
+
+  function buttons() {
+    return Array.prototype.slice.call(document.querySelectorAll(BUTTON_IDS));
+  }
+
+  function release() {
+    if (!busy) return;
+    busy = false;
+    if (timer) { clearTimeout(timer); timer = null; }
+    lockedButtons.forEach(function (b, i) {
+      b.disabled = false;
+      b.removeAttribute("aria-busy");
+      if (savedHtml && savedHtml[i] != null) b.innerHTML = savedHtml[i];
+    });
+    lockedButtons = [];
+    savedHtml = null;
+  }
+
+  function lock(clicked) {
+    busy = true;
+    lockedButtons = buttons();
+    // innerHTML sichern: der WhatsApp-Knopf traegt ein Icon, das sonst beim
+    // Zuruecksetzen verloren ginge.
+    savedHtml = lockedButtons.map(function (b) { return b.innerHTML; });
+
+    var lang = String(document.documentElement.lang || "de").slice(0, 2).toLowerCase();
+    var label = LABELS[lang] || LABELS.de;
+
+    // Erst im naechsten Durchlauf sperren: wuerde der Knopf noch waehrend
+    // der Ereignisverarbeitung auf disabled gesetzt, koennte der eigene
+    // Handler der Seite gar nicht mehr anspringen.
+    setTimeout(function () {
+      lockedButtons.forEach(function (b) {
+        b.disabled = true;
+        b.setAttribute("aria-busy", "true");
+      });
+      if (clicked) clicked.textContent = label;
+    }, 0);
+
+    timer = setTimeout(release, MAX_LOCK_MS);
+  }
+
+  document.addEventListener("click", function (ev) {
+    var target = ev.target && ev.target.closest ? ev.target.closest(BUTTON_IDS) : null;
+    if (!target) return;
+
+    if (busy) {
+      // Zweiter Klick prallt ab, bevor die Seite ihn sieht.
+      ev.stopImmediatePropagation();
+      ev.preventDefault();
+      return;
+    }
+
+    // Ist das Formular unvollstaendig, sendet die Seite gar nicht erst -
+    // dann darf auch nicht gesperrt werden, sonst haengt der Knopf grundlos.
+    var form = target.closest("form") || document.querySelector("form");
+    if (form && typeof form.checkValidity === "function" && !form.checkValidity()) return;
+
+    lock(target);
+  }, true);
+
+  // Freigeben, sobald die Lead-Anfrage tatsaechlich beantwortet ist. Das ist
+  // genauer als jede feste Wartezeit: die Sperre dauert exakt so lange wie
+  // der Vorgang, den sie schuetzt.
+  if (typeof window.fetch === "function") {
+    var originalFetch = window.fetch;
+    window.fetch = function (input, init) {
+      var url = "";
+      try { url = String((input && input.url) || input || ""); } catch (e) {}
+      var result = originalFetch.apply(this, arguments);
+      if (url.indexOf(LEAD_ENDPOINT) !== -1 && result && typeof result.then === "function") {
+        result.then(release, release);
+      }
+      return result;
+    };
+  }
+})();
