@@ -92,6 +92,36 @@ keine Mail. Im Netlify-Protokoll steht
 
 ---
 
+## 📨 Wie eine Anfrage läuft (Stand 26.08.2026)
+
+```
+Formular  →  netlify/functions/leads.js  →  Apps Script  →  Google Sheet
+                     ↓
+              Maildienst der Transfer-Seite  →  Mail an Kunde + Büro
+```
+
+`leads.js` arbeitet dreistufig, weil die Apps-Script-Adresse unter Last
+gelegentlich eine HTML-Seite statt der JSON-Antwort liefert — **die Zeile
+entsteht dabei trotzdem**:
+
+```
+1. anlegen            max 12 s
+2. nachsehen          max  7 s   "Ist meine Anfrage angekommen?" (lead.getByIdemKey)
+3. noch mal anlegen   max  9 s
+```
+
+Zusammen bleibt das unter Netlifys Trennung bei etwa 26 Sekunden. Der Abbruch
+in Schritt 1 kostet nichts: Google schreibt die Zeile zu Ende, auch wenn
+niemand mehr zuhört — deshalb findet Schritt 2 sie.
+
+Die Referenznummer und `mailQueued` gehen flach in der Antwort an den Browser;
+`assets/js/main.js` baut daraus den Bestätigungskasten.
+
+⚠️ **Die Zeitgrenzen sind knapp.** Zwei Abschlussläufe am 26.08. brauchten 25
+Sekunden. Beschlossen, aber nicht mehr umgesetzt: auf 9 / 5 Sekunden herunter.
+
+---
+
 ## 📁 Projekt-Struktur
 
 ```
