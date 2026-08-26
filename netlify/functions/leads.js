@@ -192,28 +192,48 @@ export async function handler(event) {
       data: leadData,
     };
 
-    const res = await fetch(GAS_EXEC_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestData),
-    });
+    // ------------------------------------------------------------------
+    // Ein Wiederholversuch, wenn die Antwort nicht brauchbar ist.
+    //
+    // Gemessen am 26.08.2026: Bei gleichzeitigen Anfragen liefert die
+    // Apps-Script-Adresse manchen Aufrufen eine HTML-Seite statt der
+    // JSON-Antwort - oder ihre eigene Meldung "GET requests not supported",
+    // weil Googles Umleitung aus dem POST ein GET gemacht hat. Die Zeile im
+    // Sheet entsteht dabei trotzdem; nur der Kunde bekommt seine
+    // Referenznummer nicht und sieht einen Fehler.
+    //
+    // Der Wiederholversuch ist gefahrlos, weil oben ein idemKey gebaut wird:
+    // Steht die Anfrage schon drin, gibt das Apps Script dieselbe Nummer
+    // zurueck statt eine zweite Zeile anzulegen.
+    //
+    // Zeitwaechter: Netlify trennt nach etwa 26 Sekunden. Hat der erste
+    // Versuch schon lange gedauert, wird nicht wiederholt.
+    // ------------------------------------------------------------------
+    const begonnen = Date.now();
 
-    const text = await res.text().catch(() => "");
-    let data = null;
-    try {
-      data = text ? JSON.parse(text) : null;
-    } catch (_) {
-      data = null;
+    let antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
+
+    if (!antwort.data || istUnbrauchbar_(antwort.data)) {
+      const verbraucht = Date.now() - begonnen;
+      if (verbraucht < 10000) {
+        console.warn(`Antwort unbrauchbar nach ${verbraucht} ms - ein Wiederholversuch`);
+        antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
+      } else {
+        console.warn(`Antwort unbrauchbar nach ${verbraucht} ms - keine Zeit fuer einen zweiten Versuch`);
+      }
     }
 
-    if (!res.ok) {
+    const text = antwort.text;
+    const data = istUnbrauchbar_(antwort.data) ? null : antwort.data;
+
+    if (!antwort.ok || !data) {
       return {
         statusCode: 502,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         body: JSON.stringify({
           ok: false,
           error: "Upstream error",
-          status: res.status,
+          status: antwort.status,
           upstream: data || text || null,
         }),
       };
@@ -295,6 +315,40 @@ export async function handler(event) {
 
 const MAIL_SERVICE_URL_FALLBACK =
   "https://transfer.amd-germancenter.com/.netlify/functions/send-mail-background";
+
+/**
+ * Einmal beim Apps Script anfragen. Gibt die geparste Antwort zurueck -
+ * oder data: null, wenn zurueckkam, was sich nicht als JSON lesen laesst.
+ */
+async function frageAppsScript_(url, requestData) {
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestData),
+    });
+    const text = await res.text().catch(() => "");
+    let data = null;
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch (_) {
+      data = null;
+    }
+    return { ok: res.ok, status: res.status, data, text };
+  } catch (e) {
+    return { ok: false, status: 0, data: null, text: String(e?.message || e) };
+  }
+}
+
+/**
+ * Lesbare JSON, aber trotzdem unbrauchbar: Das passiert, wenn Googles
+ * Umleitung aus dem POST ein GET gemacht hat - dann antwortet der Router
+ * des Apps Script mit "GET requests not supported".
+ */
+function istUnbrauchbar_(data) {
+  const fehler = String((data && data.error) || "");
+  return /GET requests not supported/i.test(fehler);
+}
 
 /**
  * Putzt die Zusammenfassung fuer die Mail an den KUNDEN.
