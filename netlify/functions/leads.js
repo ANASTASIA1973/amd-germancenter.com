@@ -212,21 +212,26 @@ export async function handler(event) {
     const begonnen = Date.now();
     const verbraucht = () => Date.now() - begonnen;
 
-    let antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
+    // Schritt 1: anlegen, aber hoechstens 12 Sekunden darauf warten.
+    let antwort = await frageAppsScript_(GAS_EXEC_URL, requestData, 12000);
 
     // Schritt 2: NACHSEHEN, nicht raten.
     // Kam nichts Lesbares zurueck, heisst das nicht, dass nichts passiert
     // ist - die Zeile entsteht in diesen Faellen fast immer trotzdem. Also
     // fragen wir gezielt nach dem idemKey. Reine Lesefrage, ohne
     // Schreibsperre, entsprechend schnell.
-    if (unbrauchbar_(antwort) && verbraucht() < 12000) {
+    if (unbrauchbar_(antwort) && verbraucht() < 16000) {
       console.warn(`Antwort unbrauchbar nach ${verbraucht()} ms - nachsehen, ob die Anfrage angekommen ist`);
 
-      const nachschau = await frageAppsScript_(GAS_EXEC_URL, {
-        action: "lead.getByIdemKey",
-        secret: WEBHOOK_SECRET,
-        data: { idemKey },
-      });
+      const nachschau = await frageAppsScript_(
+        GAS_EXEC_URL,
+        {
+          action: "lead.getByIdemKey",
+          secret: WEBHOOK_SECRET,
+          data: { idemKey },
+        },
+        7000
+      );
 
       const gefunden =
         nachschau.data && nachschau.data.data ? nachschau.data.data : null;
@@ -245,9 +250,9 @@ export async function handler(event) {
     // Schritt 3: wirklich nicht angekommen -> ein echter zweiter Versuch.
     // Gefahrlos dank idemKey: waere sie doch schon drin, gaebe das Apps
     // Script dieselbe Nummer zurueck statt eine zweite Zeile anzulegen.
-    if (unbrauchbar_(antwort) && verbraucht() < 15000) {
+    if (unbrauchbar_(antwort) && verbraucht() < 14000) {
       console.warn(`Nicht gefunden nach ${verbraucht()} ms - ein Wiederholversuch`);
-      antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
+      antwort = await frageAppsScript_(GAS_EXEC_URL, requestData, 9000);
     }
 
     const text = antwort.text;
@@ -347,12 +352,21 @@ const MAIL_SERVICE_URL_FALLBACK =
  * Einmal beim Apps Script anfragen. Gibt die geparste Antwort zurueck -
  * oder data: null, wenn zurueckkam, was sich nicht als JSON lesen laesst.
  */
-async function frageAppsScript_(url, requestData) {
+async function frageAppsScript_(url, requestData, zeitlimitMs) {
+  // Zeitlimit: Ohne Abbruch wartet dieser Aufruf, bis Netlify die ganze
+  // Funktion nach rund 26 Sekunden trennt - dann bleibt keine Zeit mehr,
+  // nachzusehen, ob die Anfrage trotzdem angekommen ist. Lieber frueher
+  // aufhoeren und nachschauen: Google schreibt die Zeile ohnehin zu Ende,
+  // auch wenn wir nicht mehr zuhoeren.
+  const abbruch = new AbortController();
+  const wecker = setTimeout(() => abbruch.abort(), zeitlimitMs || 12000);
+
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData),
+      signal: abbruch.signal,
     });
     const text = await res.text().catch(() => "");
     let data = null;
@@ -364,6 +378,8 @@ async function frageAppsScript_(url, requestData) {
     return { ok: res.ok, status: res.status, data, text };
   } catch (e) {
     return { ok: false, status: 0, data: null, text: String(e?.message || e) };
+  } finally {
+    clearTimeout(wecker);
   }
 }
 
