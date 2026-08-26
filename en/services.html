@@ -867,7 +867,12 @@
 
     function appendToHref(href, paramsObj) {
       try {
-        const url = new URL(href, window.location.origin);
+        // Gegen die AKTUELLE Seite rechnen, nicht gegen die Wurzel der Domain.
+        // Mit window.location.origin wurde aus "./package-tours.html" auf
+        // /en/services.html die Adresse /package-tours.html - ohne Sprachordner
+        // und damit ins Leere. Das traf jeden Besucher mit ?partner= aus einem
+        // QR-Code, sobald er von dieser Seite aus weiterklickte. (26.08.2026)
+        const url = new URL(href, window.location.href);
         if (!/^https?:$/i.test(url.protocol)) return href;
         Object.keys(paramsObj).forEach(k => {
           if (!url.searchParams.has(k)) url.searchParams.set(k, paramsObj[k]);
@@ -1204,28 +1209,12 @@ document.getElementById("btnInquiryEmail")?.addEventListener("click", async () =
   leadChannel = "email";
   leadAction = "click";
 
-  const out = await postLeadToSheet("email");
-
-  const up = out?.upstream;
-  const refNr =
-    up?.data?.refNr ||
-    up?.refNr ||
-    up?.data?.data?.refNr ||
-    up?.data?.data?.data?.refNr ||
-    "";
-
-  const subject = `Service Inquiry – ${SERVICE_TITLE}${refNr ? " – " + refNr : ""}`;
-  const body = (typeof buildText === "function") ? buildText(refNr || null) : "";
-
-  const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-  try {
-    window.location.href = mailto;
-    setTimeout(() => window.open(gmail, "_blank", "noopener"), 250);
-  } catch (e) {
-    window.open(gmail, "_blank", "noopener");
-  }
+  // Bis 26.08.2026 wurde hier das Mailprogramm des Kunden geoeffnet und
+  // 250 ms spaeter zusaetzlich ein Gmail-Fenster. Beides ist entfallen:
+  // netlify/functions/leads.js meldet die Anfrage an den zentralen
+  // Maildienst, der die Bestaetigung an den Kunden und die Meldung ans Buero
+  // verschickt. Den Kasten mit der Referenznummer zeigt assets/js/main.js.
+  await postLeadToSheet("email");
 });
 
 

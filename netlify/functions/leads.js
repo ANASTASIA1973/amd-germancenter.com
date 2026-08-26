@@ -233,6 +233,21 @@ export async function handler(event) {
       data?.data?.data?.leadId ||
       null;
 
+    // Bestaetigung an den Kunden + Meldung ans Buero anstossen.
+    // Kein Fehler in diesem Schritt darf die Anfrage kippen: sie steht zu
+    // diesem Zeitpunkt bereits im Sheet und hat ihre Referenznummer.
+    const mailQueued = await triggerLeadMails({
+      refNr,
+      service,
+      locale,
+      customer: {
+        name: String(incoming.name || "").trim(),
+        email: String(incoming.email || "").trim(),
+        phone: String(incoming.phone || "").trim(),
+      },
+      summary: fullText,
+    });
+
     return {
       statusCode: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -241,6 +256,10 @@ export async function handler(event) {
         refNr,
         leadId,
         idemKey,
+        // Sagt der Seite, ob sie eine Bestaetigungsmail versprechen darf.
+        // Fehlt das Geheimnis in Netlify oder antwortet der Maildienst nicht,
+        // steht hier false - dann zeigt die Seite den neutralen Satz.
+        mailQueued,
         upstream: data || text || null,
       }),
     };
@@ -254,4 +273,68 @@ export async function handler(event) {
       }),
     };
   }
+}
+
+// ============================================================================
+// Mailversand
+// ============================================================================
+//
+// Verschickt wird NICHT hier, sondern ueber den gemeinsamen Dienst auf der
+// Transfer-Seite. Diese Seite ist statisch und hat keine package.json; ein
+// eigenes nodemailer haette ihr einen npm-Lauf bei jedem Deploy verpasst und
+// die Mailtexte ein zweites Mal in die Welt gesetzt. Eine Aenderung an den
+// Texten soll an EINER Stelle wirken.
+//
+// Erforderliche Netlify-Variable dieser Seite:
+//   MAIL_TRIGGER_SECRET   derselbe Wert wie bei der Transfer-Seite
+//   MAIL_SERVICE_URL      optional, falls der Dienst spaeter umzieht
+//
+// Fehlt das Geheimnis, geht KEINE Mail raus. Die Anfrage steht dann trotzdem
+// im Sheet und der Kunde sieht seine Referenznummer auf dem Bildschirm.
+
+const MAIL_SERVICE_URL_FALLBACK =
+  "https://transfer.amd-germancenter.com/.netlify/functions/send-mail-background";
+
+/**
+ * Stoesst den Versand an. Gibt true zurueck, wenn der Dienst den Auftrag
+ * angenommen hat - nur dann darf die Seite eine Mail versprechen.
+ */
+async function triggerLeadMails({ refNr, service, locale, customer, summary }) {
+  if (!refNr) {
+    console.error("Mailversand uebersprungen: keine Referenznummer vom Apps Script");
+    return false;
+  }
+
+  const secret = process.env.MAIL_TRIGGER_SECRET || "";
+  if (!secret) {
+    console.error("Mailversand uebersprungen: MAIL_TRIGGER_SECRET fehlt in Netlify");
+    return false;
+  }
+
+  const url = process.env.MAIL_SERVICE_URL || MAIL_SERVICE_URL_FALLBACK;
+
+  // Zeitlimit: Ohne Abbruch wartet diese Funktion so lange auf den Maildienst,
+  // bis Netlify SIE abbricht. Der Kunde bekaeme dann einen Fehler zu sehen,
+  // obwohl seine Anfrage laengst im Sheet steht - und schickt sie nochmal.
+  // Genau die Kette, die zu den Doppelanfragen vom 25.08. gefuehrt hat.
+  const abbruch = new AbortController();
+  const wecker = setTimeout(() => abbruch.abort(), 4000);
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret, refNr, service, locale, customer, summary }),
+      signal: abbruch.signal,
+    });
+    // 202 = angenommen, wird im Hintergrund verschickt.
+    if (res.ok || res.status === 202) return true;
+    console.error(`Mailversand abgelehnt (HTTP ${res.status}) fuer ${refNr}`);
+  } catch (e) {
+    console.error(`Mailversand nicht erreichbar fuer ${refNr}:`, String(e?.message || e));
+  } finally {
+    clearTimeout(wecker);
+  }
+
+  return false;
 }

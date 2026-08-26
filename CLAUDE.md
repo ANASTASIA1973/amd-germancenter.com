@@ -72,6 +72,26 @@ git push origin main
 
 ---
 
+## 🔑 Netlify-Umgebungsvariablen
+
+Diese Seite hat keine `.env` im Projekt – alle Werte stehen ausschließlich in
+Netlify (Site configuration → Environment variables).
+
+| Variable | Wofür | Geheim? |
+|---|---|---|
+| `GAS_EXEC_URL` | Adresse der AMD System API (Apps Script) | ja |
+| `WEBHOOK_SECRET` | Ausweis gegenüber dem Apps Script | ja |
+| `MAIL_TRIGGER_SECRET` | Ausweis gegenüber dem zentralen Maildienst der Transfer-Seite. **Muss denselben Wert haben wie dort.** | ja |
+| `MAIL_SERVICE_URL` | optional – nur nötig, wenn der Maildienst umzieht. Ohne diese Variable wird `https://transfer.amd-germancenter.com/.netlify/functions/send-mail-background` benutzt. | nein |
+
+⚠️ **Fehlt `MAIL_TRIGGER_SECRET`, geht keine Bestätigungsmail raus.** Die
+Anfrage landet trotzdem im Sheet und der Kunde sieht seine Referenznummer;
+`leads.js` meldet dann `mailQueued:false` und die Seite verspricht bewusst
+keine Mail. Im Netlify-Protokoll steht
+`Mailversand uebersprungen: MAIL_TRIGGER_SECRET fehlt in Netlify`.
+
+---
+
 ## 📁 Projekt-Struktur
 
 ```

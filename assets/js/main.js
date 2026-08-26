@@ -654,6 +654,12 @@ document.addEventListener("DOMContentLoaded", () => {
     savedHtml = null;
   }
 
+  // Von aussen freigeben koennen: de/package-tours.html steigt bei fehlender
+  // Kontaktangabe mit einer Meldung aus, ohne etwas zu senden. Dort kommt nie
+  // eine Antwort, an der die Sperre sich loesen koennte - der Knopf bliebe
+  // 90 Sekunden auf "Wird gesendet ...".
+  window.AMD_leadButtonsRelease = release;
+
   function lock(clicked) {
     busy = true;
     lockedButtons = buttons();
@@ -668,6 +674,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // der Ereignisverarbeitung auf disabled gesetzt, koennte der eigene
     // Handler der Seite gar nicht mehr anspringen.
     setTimeout(function () {
+      // Wurde in der Zwischenzeit schon wieder freigegeben (die Seite ist
+      // ausgestiegen, ohne etwas zu senden), dann hier nichts mehr anfassen -
+      // sonst traegt der Knopf "Wird gesendet ..." und ist dabei klickbar.
+      if (!busy) return;
+
       lockedButtons.forEach(function (b) {
         b.disabled = true;
         b.setAttribute("aria-busy", "true");
@@ -712,4 +723,184 @@ document.addEventListener("DOMContentLoaded", () => {
       return result;
     };
   }
+})();
+
+/* =========================================================================
+   Bestaetigung nach dem Absenden (alle sechs Formularseiten)
+   -------------------------------------------------------------------------
+   Bis zum 26.08.2026 bestand die Rueckmeldung an den Kunden darin, dass sich
+   sein Mailprogramm oeffnete - und 250 ms spaeter zusaetzlich ein
+   Gmail-Fenster. Der Versand laeuft jetzt serverseitig ueber das
+   IONOS-Postfach (netlify/functions/leads.js -> Maildienst der
+   Transfer-Seite). Ohne Ersatz saehe der Kunde nach dem Absenden gar nichts
+   mehr, deshalb dieser Kasten mit der Referenznummer.
+
+   Warum hier und nicht auf den sechs Seiten: dieselbe Ueberlegung wie beim
+   Wachposten oben. Die Seiten haben ihre Absende-Logik jeweils inline und
+   jede etwas anders aufgebaut; alle sechs laden aber diese Datei.
+
+   Technik: Die Antwort der Lead-Funktion wird mitgelesen - ueber res.clone(),
+   damit die Seite ihre eigene Auswertung unveraendert weiterbenutzt. Die
+   sechs Seiten brauchen dafuer keine einzige Zeile.
+   ========================================================================= */
+(function () {
+  var LEAD_ENDPOINT = "/.netlify/functions/leads";
+  var BOX_CLASS = "amd-lead-feedback";
+
+  var TEXTS = {
+    de: {
+      title: "Vielen Dank! Ihre Anfrage ist bei uns eingegangen.",
+      ref: "Ihre Referenznummer",
+      mail: "Eine Bestätigung mit allen Angaben geht per E-Mail an Sie raus. Bitte sehen Sie auch im Spam-Ordner nach, falls Sie nichts finden.",
+      noMail: "Wir melden uns in Kürze bei Ihnen.",
+      error: "Ihre Anfrage konnte gerade nicht gespeichert werden. Bitte versuchen Sie es noch einmal oder nutzen Sie den WhatsApp-Knopf."
+    },
+    en: {
+      title: "Thank you! We have received your request.",
+      ref: "Your reference number",
+      mail: "A confirmation with all the details is on its way to you by email. If you cannot find it, please also check your spam folder.",
+      noMail: "We will get back to you shortly.",
+      error: "We could not save your request just now. Please try again or use the WhatsApp button."
+    },
+    ar: {
+      title: "شكرًا لكم! لقد استلمنا طلبكم.",
+      ref: "رقم المرجع الخاص بكم",
+      mail: "سيصلكم تأكيد بجميع التفاصيل عبر البريد الإلكتروني. إذا لم تجدوه، يرجى مراجعة مجلد الرسائل غير المرغوب فيها.",
+      noMail: "سنتواصل معكم في أقرب وقت.",
+      error: "تعذر حفظ طلبكم الآن. يرجى المحاولة مرة أخرى أو استخدام زر الواتساب."
+    }
+  };
+
+  function texts() {
+    var lang = String(document.documentElement.lang || "de").slice(0, 2).toLowerCase();
+    return TEXTS[lang] || TEXTS.de;
+  }
+
+  function box() {
+    var existing = document.querySelector("." + BOX_CLASS);
+    if (existing) return existing;
+
+    // Direkt unter die Knopfreihe - dorthin schaut der Kunde nach dem Klick.
+    //
+    // Kein Rueckfall auf "irgendein Formular": Die Lead-Funktion wird auch von
+    // hookEmailClicks_ weiter oben aufgerufen, und zwar auf Seiten ohne diese
+    // Knopfreihe (contact.html, bewertung.html). Dort waere der Kasten
+    // verwirrend - der Besucher hat nur auf eine E-Mail-Adresse geklickt.
+    // Kein Anker, kein Kasten.
+    var actions = document.querySelector(".srv-form__actions, .pt-form__actions");
+    if (!actions || !actions.parentNode) return null;
+
+    var el = document.createElement("div");
+    el.className = BOX_CLASS;
+    actions.parentNode.insertBefore(el, actions.nextSibling);
+    return el;
+  }
+
+  // Die Zusage "Sie bekommen eine E-Mail" darf nur stehen, wenn der Kunde
+  // ueberhaupt eine Adresse angegeben hat. Auf den Pauschalreise-Seiten
+  // genuegt wahlweise Telefon.
+  function hasEmail() {
+    var el = document.querySelector('input[name="email"]');
+    return !!(el && String(el.value || "").trim());
+  }
+
+  function paragraph(suffix, text) {
+    var p = document.createElement("p");
+    p.className = BOX_CLASS + "__" + suffix;
+    p.textContent = text; // textContent, nie innerHTML: hier landen Kundendaten
+    return p;
+  }
+
+  // Alten Kasten wegnehmen. Noetig, weil das Anfrage-Fenster auf den
+  // Pauschalreise-Seiten beim Schliessen nur unsichtbar geschaltet und nicht
+  // ausgehaengt wird: ohne das saehe der Kunde beim naechsten Oeffnen sofort
+  // die Bestaetigung von vorhin, mitsamt alter Referenznummer.
+  function clearBox() {
+    var el = document.querySelector("." + BOX_CLASS);
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  function show(kind, refNr, mailQueued) {
+    var el = box();
+    if (!el) return;
+
+    var t = texts();
+    el.innerHTML = "";
+    el.classList.remove(BOX_CLASS + "--success", BOX_CLASS + "--error");
+
+    if (kind === "success") {
+      el.classList.add(BOX_CLASS + "--success");
+      el.setAttribute("role", "status");
+      el.appendChild(paragraph("title", t.title));
+      if (refNr) el.appendChild(paragraph("ref", t.ref + ": " + refNr));
+      // Eine Mail nur versprechen, wenn der Server sie auch angestossen hat
+      // UND eine Adresse vorliegt. Fehlt das Geheimnis in Netlify, meldet
+      // leads.js mailQueued:false - dann steht hier der neutrale Satz.
+      el.appendChild(paragraph("hint", (mailQueued && hasEmail()) ? t.mail : t.noMail));
+    } else {
+      el.classList.add(BOX_CLASS + "--error");
+      el.setAttribute("role", "alert");
+      el.appendChild(paragraph("title", t.error));
+    }
+
+    try { el.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+  }
+
+  // leads.js reicht refNr flach mit; die aelteren Verschachtelungen bleiben
+  // als Rueckfall stehen, damit ein Umbau am Apps Script die Nummer nicht
+  // wieder verschwinden laesst.
+  function refFrom(out) {
+    if (!out) return "";
+    var up = out.upstream || null;
+    var candidates = [
+      out.refNr,
+      up && up.data && up.data.refNr,
+      up && up.data && up.data.data && up.data.data.refNr,
+      up && up.refNr,
+      out.data && out.data.refNr
+    ];
+    for (var i = 0; i < candidates.length; i++) {
+      var v = candidates[i] == null ? "" : String(candidates[i]).trim();
+      if (v) return v;
+    }
+    return "";
+  }
+
+  // Sobald der Kunde wieder am Formular arbeitet oder das Anfrage-Fenster
+  // erneut oeffnet, ist die alte Bestaetigung nicht mehr wahr.
+  document.addEventListener("input", clearBox);
+  document.addEventListener("click", function (ev) {
+    if (ev.target && ev.target.closest && ev.target.closest("#btnOpenInquiry")) clearBox();
+  }, true);
+
+  if (typeof window.fetch !== "function") return;
+
+  var innerFetch = window.fetch;
+  window.fetch = function (input, init) {
+    var url = "";
+    try { url = String((input && input.url) || input || ""); } catch (e) {}
+
+    var result = innerFetch.apply(this, arguments);
+
+    if (url.indexOf(LEAD_ENDPOINT) !== -1 && result && typeof result.then === "function") {
+      // Neue Anfrage laeuft: alte Rueckmeldung sofort weg.
+      clearBox();
+
+      result.then(function (res) {
+        var copy;
+        try { copy = res.clone(); } catch (e) { return; }
+        copy.json().then(
+          function (out) {
+            if (!res.ok || !out || out.ok === false) { show("error"); return; }
+            show("success", refFrom(out), out.mailQueued === true);
+          },
+          function () { if (!res.ok) show("error"); }
+        );
+      }, function () {
+        show("error");
+      });
+    }
+
+    return result;
+  };
 })();
