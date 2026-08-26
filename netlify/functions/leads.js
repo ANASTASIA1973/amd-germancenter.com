@@ -210,21 +210,48 @@ export async function handler(event) {
     // Versuch schon lange gedauert, wird nicht wiederholt.
     // ------------------------------------------------------------------
     const begonnen = Date.now();
+    const verbraucht = () => Date.now() - begonnen;
 
     let antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
 
-    if (!antwort.data || istUnbrauchbar_(antwort.data)) {
-      const verbraucht = Date.now() - begonnen;
-      if (verbraucht < 10000) {
-        console.warn(`Antwort unbrauchbar nach ${verbraucht} ms - ein Wiederholversuch`);
-        antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
-      } else {
-        console.warn(`Antwort unbrauchbar nach ${verbraucht} ms - keine Zeit fuer einen zweiten Versuch`);
+    // Schritt 2: NACHSEHEN, nicht raten.
+    // Kam nichts Lesbares zurueck, heisst das nicht, dass nichts passiert
+    // ist - die Zeile entsteht in diesen Faellen fast immer trotzdem. Also
+    // fragen wir gezielt nach dem idemKey. Reine Lesefrage, ohne
+    // Schreibsperre, entsprechend schnell.
+    if (unbrauchbar_(antwort) && verbraucht() < 12000) {
+      console.warn(`Antwort unbrauchbar nach ${verbraucht()} ms - nachsehen, ob die Anfrage angekommen ist`);
+
+      const nachschau = await frageAppsScript_(GAS_EXEC_URL, {
+        action: "lead.getByIdemKey",
+        secret: WEBHOOK_SECRET,
+        data: { idemKey },
+      });
+
+      const gefunden =
+        nachschau.data && nachschau.data.data ? nachschau.data.data : null;
+
+      if (gefunden && gefunden.refNr) {
+        console.warn(`Anfrage war bereits gespeichert: ${gefunden.refNr}`);
+        antwort = {
+          ok: true,
+          status: 200,
+          data: { success: true, data: gefunden },
+          text: nachschau.text,
+        };
       }
     }
 
+    // Schritt 3: wirklich nicht angekommen -> ein echter zweiter Versuch.
+    // Gefahrlos dank idemKey: waere sie doch schon drin, gaebe das Apps
+    // Script dieselbe Nummer zurueck statt eine zweite Zeile anzulegen.
+    if (unbrauchbar_(antwort) && verbraucht() < 15000) {
+      console.warn(`Nicht gefunden nach ${verbraucht()} ms - ein Wiederholversuch`);
+      antwort = await frageAppsScript_(GAS_EXEC_URL, requestData);
+    }
+
     const text = antwort.text;
-    const data = istUnbrauchbar_(antwort.data) ? null : antwort.data;
+    const data = unbrauchbar_(antwort) ? null : antwort.data;
 
     if (!antwort.ok || !data) {
       return {
@@ -341,12 +368,15 @@ async function frageAppsScript_(url, requestData) {
 }
 
 /**
- * Lesbare JSON, aber trotzdem unbrauchbar: Das passiert, wenn Googles
- * Umleitung aus dem POST ein GET gemacht hat - dann antwortet der Router
- * des Apps Script mit "GET requests not supported".
+ * Ist mit dieser Antwort nichts anzufangen?
+ *
+ * Zwei Faelle: gar keine lesbare JSON (Google hat eine HTML-Seite
+ * geschickt), oder lesbare JSON mit der Router-Meldung "GET requests not
+ * supported" - dann hat Googles Umleitung aus dem POST ein GET gemacht.
  */
-function istUnbrauchbar_(data) {
-  const fehler = String((data && data.error) || "");
+function unbrauchbar_(antwort) {
+  if (!antwort || !antwort.data) return true;
+  const fehler = String(antwort.data.error || "");
   return /GET requests not supported/i.test(fehler);
 }
 
