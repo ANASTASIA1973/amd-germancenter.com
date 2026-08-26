@@ -474,7 +474,13 @@ function hookWhatsAppClicks_() {
       if (pageManagesLeads_()) return;
 
       try {
-        const form = (a || btn)?.closest("form") || document.querySelector("form");
+        // Nur eingreifen, wenn der angeklickte Link im Formular sitzt und
+        // damit dessen Absende-Knopf IST. Bis 26.08.2026 stand hier ein
+        // Rueckfall auf "irgendein Formular der Seite": Ein Klick auf die
+        // WhatsApp-Nummer im Kontaktblock schickte dadurch den Inhalt des
+        // Kontaktformulars als Anfrage ab - meist leer, mit "—" als Namen.
+        // Wer nur die Nummer anklickt, will schreiben, nicht anfragen.
+        const form = (a || btn)?.closest("form");
         if (!form) return;
 
         e.preventDefault();
@@ -524,7 +530,15 @@ function hookEmailClicks_() {
       if (pageManagesLeads_()) return;
 
       try {
-        const form = (a || btn)?.closest("form") || document.querySelector("form");
+        // Nur eingreifen, wenn der angeklickte Link im Formular sitzt und
+        // damit dessen Absende-Knopf IST. Bis 26.08.2026 stand hier ein
+        // Rueckfall auf "irgendein Formular der Seite": Ein Klick auf die
+        // sichtbare Adresse info@amd-germancenter.com im Kontaktblock
+        // schickte dadurch den Inhalt des Kontaktformulars als Anfrage ab -
+        // meist leer, mit "—" als Namen und gezaehlt als Behoerdenservice.
+        // Seit der Mailversand laeuft, ging daraus zusaetzlich eine Meldung
+        // ans Buero raus. Wer die Adresse anklickt, will selbst schreiben.
+        const form = (a || btn)?.closest("form");
         if (!form) return;
 
         e.preventDefault();
