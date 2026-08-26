@@ -3115,6 +3115,11 @@ a.btn-whatsapp * {
   box-shadow: var(--amd-shadow-card);
 }
 
+/* Wartemeldung: neutral, damit sie nicht wie ein Ergebnis aussieht */
+.amd-lead-feedback--pending {
+  border-inline-start: 4px solid var(--amd-text-muted);
+}
+
 .amd-lead-feedback--success {
   border-inline-start: 4px solid var(--amd-accent);
 }

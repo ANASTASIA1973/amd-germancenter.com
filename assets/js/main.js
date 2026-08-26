@@ -763,6 +763,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var TEXTS = {
     de: {
+      pending:
+        "Ihre Anfrage wird gesendet – das dauert einen Moment. Bitte nicht erneut klicken.",
       title: "Vielen Dank! Ihre Anfrage ist bei uns eingegangen.",
       ref: "Ihre Referenznummer",
       mail: "Eine Bestätigung mit allen Angaben geht per E-Mail an Sie raus. Bitte sehen Sie auch im Spam-Ordner nach, falls Sie nichts finden.",
@@ -770,6 +772,8 @@ document.addEventListener("DOMContentLoaded", () => {
       error: "Ihre Anfrage konnte gerade nicht gespeichert werden. Bitte versuchen Sie es noch einmal oder nutzen Sie den WhatsApp-Knopf."
     },
     en: {
+      pending:
+        "Your request is being sent – this takes a moment. Please do not click again.",
       title: "Thank you! We have received your request.",
       ref: "Your reference number",
       mail: "A confirmation with all the details is on its way to you by email. If you cannot find it, please also check your spam folder.",
@@ -777,6 +781,7 @@ document.addEventListener("DOMContentLoaded", () => {
       error: "We could not save your request just now. Please try again or use the WhatsApp button."
     },
     ar: {
+      pending: "يتم إرسال طلبكم – قد يستغرق ذلك لحظات. يرجى عدم الضغط مرة أخرى.",
       title: "شكرًا لكم! لقد استلمنا طلبكم.",
       ref: "رقم المرجع الخاص بكم",
       mail: "سيصلكم تأكيد بجميع التفاصيل عبر البريد الإلكتروني. إذا لم تجدوه، يرجى مراجعة مجلد الرسائل غير المرغوب فيها.",
@@ -829,7 +834,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Pauschalreise-Seiten beim Schliessen nur unsichtbar geschaltet und nicht
   // ausgehaengt wird: ohne das saehe der Kunde beim naechsten Oeffnen sofort
   // die Bestaetigung von vorhin, mitsamt alter Referenznummer.
+  // Laeuft gerade eine Anfrage? Dann darf die Wartemeldung nicht verschwinden,
+  // nur weil der Kunde waehrenddessen noch etwas ins Formular tippt.
+  var laeuft = false;
+
   function clearBox() {
+    if (laeuft) return;
     var el = document.querySelector("." + BOX_CLASS);
     if (el && el.parentNode) el.parentNode.removeChild(el);
   }
@@ -840,7 +850,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var t = texts();
     el.innerHTML = "";
-    el.classList.remove(BOX_CLASS + "--success", BOX_CLASS + "--error");
+    el.classList.remove(BOX_CLASS + "--success", BOX_CLASS + "--error", BOX_CLASS + "--pending");
+
+    if (kind === "pending") {
+      // Das Apps Script braucht rund sieben Sekunden. So lange sah der Kunde
+      // bisher nur den Knopf mit "Wird gesendet ..." und sonst nichts - und
+      // hielt das fuer einen Ausfall. Diese Meldung steht sofort da und wird
+      // gleich durch die Bestaetigung ersetzt.
+      el.classList.add(BOX_CLASS + "--pending");
+      el.setAttribute("role", "status");
+      el.appendChild(paragraph("title", t.pending));
+      try { el.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+      return;
+    }
 
     if (kind === "success") {
       el.classList.add(BOX_CLASS + "--success");
@@ -897,10 +919,13 @@ document.addEventListener("DOMContentLoaded", () => {
     var result = innerFetch.apply(this, arguments);
 
     if (url.indexOf(LEAD_ENDPOINT) !== -1 && result && typeof result.then === "function") {
-      // Neue Anfrage laeuft: alte Rueckmeldung sofort weg.
+      // Neue Anfrage laeuft: alte Rueckmeldung weg, Wartemeldung hin.
       clearBox();
+      laeuft = true;
+      show("pending");
 
       result.then(function (res) {
+        laeuft = false;
         var copy;
         try { copy = res.clone(); } catch (e) { return; }
         copy.json().then(
@@ -911,6 +936,7 @@ document.addEventListener("DOMContentLoaded", () => {
           function () { if (!res.ok) show("error"); }
         );
       }, function () {
+        laeuft = false;
         show("error");
       });
     }

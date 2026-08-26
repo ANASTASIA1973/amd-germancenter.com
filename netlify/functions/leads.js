@@ -365,7 +365,7 @@ async function triggerLeadMails({ refNr, service, locale, customer, summary, sum
   // obwohl seine Anfrage laengst im Sheet steht - und schickt sie nochmal.
   // Genau die Kette, die zu den Doppelanfragen vom 25.08. gefuehrt hat.
   const abbruch = new AbortController();
-  const wecker = setTimeout(() => abbruch.abort(), 4000);
+  const wecker = setTimeout(() => abbruch.abort(), 1500);
 
   try {
     const res = await fetch(url, {
