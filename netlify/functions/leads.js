@@ -246,6 +246,7 @@ export async function handler(event) {
         phone: String(incoming.phone || "").trim(),
       },
       summary: fullText,
+      summaryCustomer: summaryForCustomer_(fullText),
     });
 
     return {
@@ -296,10 +297,56 @@ const MAIL_SERVICE_URL_FALLBACK =
   "https://transfer.amd-germancenter.com/.netlify/functions/send-mail-background";
 
 /**
+ * Putzt die Zusammenfassung fuer die Mail an den KUNDEN.
+ *
+ * Die sechs Formularseiten bauen diesen Text noch so, wie er frueher in das
+ * Mailfenster des Kunden geschrieben wurde: mit einem Rahmen aus
+ * Gleichheitszeichen, einer internen Partner-ID und einer Fusszeile
+ * "Gesendet ueber amd-germancenter.com". Auf den Pauschalreise-Seiten steht
+ * ausserdem "Referenz: (pending)" - das widerspricht dem Kasten mit der
+ * echten Nummer direkt darueber.
+ *
+ * Was ins Sheet geschrieben wird, was das Buero per Mail bekommt und was der
+ * WhatsApp-Knopf verschickt, bleibt unveraendert. Geputzt wird nur die Kopie
+ * fuer die Kundenmail.
+ */
+function summaryForCustomer_(text) {
+  const behalten = [];
+
+  for (const roh of String(text || "").split("\n")) {
+    const zeile = roh.replace(/\s+$/, "");
+    const geprueft = zeile.trim();
+
+    // interne Partner-Kennung (de / en / ar)
+    if (/^(partner-?\s?id|رقم الشريك)\s*:/i.test(geprueft)) continue;
+
+    // Platzhalter-Referenz - die echte Nummer steht im Kasten darueber
+    if (/^(referenz|reference|المرجع)\s*:\s*\(?pending\)?$/i.test(geprueft)) continue;
+
+    // Fusszeile aus der mailto-Zeit
+    if (/^(gesendet über|gesendet ueber|sent via|أُرسل عبر)\b/i.test(geprueft)) continue;
+
+    // der Trennstrich, der nur zu dieser Fusszeile gehoerte
+    if (/^-{3,}$/.test(geprueft)) continue;
+
+    // Rahmen aus Gleichheitszeichen: Inhalt behalten, Zierrat weg
+    const rahmen = geprueft.match(/^=+\s*(.+?)\s*=+$/);
+    if (rahmen) {
+      behalten.push(rahmen[1]);
+      continue;
+    }
+
+    behalten.push(zeile);
+  }
+
+  return behalten.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/**
  * Stoesst den Versand an. Gibt true zurueck, wenn der Dienst den Auftrag
  * angenommen hat - nur dann darf die Seite eine Mail versprechen.
  */
-async function triggerLeadMails({ refNr, service, locale, customer, summary }) {
+async function triggerLeadMails({ refNr, service, locale, customer, summary, summaryCustomer }) {
   if (!refNr) {
     console.error("Mailversand uebersprungen: keine Referenznummer vom Apps Script");
     return false;
@@ -324,7 +371,7 @@ async function triggerLeadMails({ refNr, service, locale, customer, summary }) {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ secret, refNr, service, locale, customer, summary }),
+      body: JSON.stringify({ secret, refNr, service, locale, customer, summary, summaryCustomer }),
       signal: abbruch.signal,
     });
     // 202 = angenommen, wird im Hintergrund verschickt.
