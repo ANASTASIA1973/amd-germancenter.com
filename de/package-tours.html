@@ -1311,12 +1311,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 const postLeadToSheet = async (contactPreference) => {
-  const name = v("name");
+  const firstName = v("firstName");
+  const lastName  = v("lastName");
+  const name = [firstName, lastName].filter(Boolean).join(" ");
   const email = v("email");
   const phone = v("phone");
 
-  // Backend verlangt: service + name + (email oder phone)
-  if (!name || (!email && !phone)) return null;
+  // Seit 26.08.2026 sind alle vier Felder Pflicht (Wunsch des Auftraggebers).
+  if (!firstName || !lastName || !email || !phone) return null;
 
   const partnerId = (sessionStorage.getItem("amd_partner") || localStorage.getItem("amd_partner") || "").trim();
   const token     = (sessionStorage.getItem("amd_token")   || localStorage.getItem("amd_token")   || "").trim();
@@ -1333,6 +1335,8 @@ const postLeadToSheet = async (contactPreference) => {
   ].join("|");
 
   const structuredJson = {
+    firstName: firstName,
+    lastName: lastName,
     packageTitle: PACKAGE_TITLE,
     price: PRICE,
     people: v("people"),
@@ -1397,7 +1401,7 @@ const buildText = (refNr) => [
   (refNr ? `Referenz: ${refNr}` : `Referenz: (pending)`),
   `Preis: ${PRICE}`,
   "",
-  `Name: ${v("name")}`,
+  `Name: ${v("firstName")} ${v("lastName")}`,
   `E-Mail: ${v("email")}`,
   `Telefon: ${v("phone") || "-"}`,
   `Zustimmung: Datenschutz & AGB akzeptiert`,
@@ -1431,8 +1435,8 @@ document.getElementById("btnInquiryWhatsApp")?.addEventListener("click", async (
   leadAction = "click";
 const emailVal = v("email");
 const phoneVal = v("phone");
-if (!emailVal && !phoneVal) {
-  alert("Bitte E-Mail oder Telefon angeben.");
+if (!emailVal || !phoneVal) {
+  alert("Bitte E-Mail und Telefonnummer angeben.");
   // Knopfsperre aus main.js wieder loesen: hier wird nichts gesendet, also
   // kommt auch keine Antwort, an der sie sich von selbst loesen wuerde.
   if (typeof window.AMD_leadButtonsRelease === "function") window.AMD_leadButtonsRelease();
@@ -1454,8 +1458,8 @@ document.getElementById("btnInquiryEmail")?.addEventListener("click", async () =
   leadAction = "click";
 const emailVal = v("email");
 const phoneVal = v("phone");
-if (!emailVal && !phoneVal) {
-  alert("Bitte E-Mail oder Telefon angeben.");
+if (!emailVal || !phoneVal) {
+  alert("Bitte E-Mail und Telefonnummer angeben.");
   // Knopfsperre aus main.js wieder loesen: hier wird nichts gesendet, also
   // kommt auch keine Antwort, an der sie sich von selbst loesen wuerde.
   if (typeof window.AMD_leadButtonsRelease === "function") window.AMD_leadButtonsRelease();
@@ -1485,16 +1489,20 @@ if (!emailVal && !phoneVal) {
 <form class="pt-form" id="ptInquiryForm">
 <div class="pt-form__grid">
 <label class="pt-field">
-<span>Name *</span>
-<input autocomplete="name" name="name" required="" type="text"/>
+<span>Vorname *</span>
+<input autocomplete="given-name" name="firstName" required="" type="text"/>
 </label>
 <label class="pt-field">
-<span>E-Mail (oder Telefon)</span>
-<input autocomplete="email" name="email" type="email"/>
+<span>Nachname *</span>
+<input autocomplete="family-name" name="lastName" required="" type="text"/>
 </label>
 <label class="pt-field">
-<span>Telefon (optional)</span>
-<input autocomplete="tel" name="phone" type="tel"/>
+<span>E-Mail *</span>
+<input autocomplete="email" name="email" required="" type="email"/>
+</label>
+<label class="pt-field">
+<span>Telefon *</span>
+<input autocomplete="tel" inputmode="tel" name="phone" placeholder="z. B. 0176 1234567" required="" type="tel"/>
 </label>
 <label class="pt-field">
 <span>Personen Anzahl *</span>

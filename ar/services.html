@@ -730,8 +730,13 @@
       <form class="srv-form" id="srvInquiryForm">
         <div class="srv-form__grid">
           <label class="srv-field">
-            <span>الاسم *</span>
-            <input autocomplete="name" name="name" required type="text" />
+            <span>الاسم الأول *</span>
+            <input autocomplete="given-name" name="firstName" required type="text" />
+          </label>
+
+          <label class="srv-field">
+            <span>اسم العائلة *</span>
+            <input autocomplete="family-name" name="lastName" required type="text" />
           </label>
 
          <label class="srv-field">
@@ -786,10 +791,15 @@
             </select>
           </label>
 
-          <label class="srv-field">
-            <span>رقم الشريك (اختياري)</span>
-            <input name="partnerId" type="text" inputmode="text" autocomplete="off" placeholder="مثال: LH001" />
-          </label>
+          <div class="partner-row srv-field--full">
+            <details class="amd-partner">
+              <summary>للشركاء التجاريين فقط: أدخل رقم الشريك</summary>
+              <div class="amd-partner__body">
+                <input name="partnerId" type="text" inputmode="text" autocomplete="off" placeholder="مثال: LH001" aria-label="Partner-ID" />
+                <p class="amd-partner__hint">هذا الحقل مخصّص للشركاء التجاريين أصحاب اتفاقية العمولة الذين يحجزون نيابة عن عملائهم. إن كنت ضيفًا، يُرجى تركه فارغًا.</p>
+              </div>
+            </details>
+          </div>
         </div>
 
         <label class="srv-check srv-check--must">
@@ -1035,7 +1045,7 @@ function buildText(refNr) {
 
 ${refLine}الخدمة: ${service}
 
-الاسم: ${fd.get("name")}
+الاسم: ${fd.get("firstName")} ${fd.get("lastName")}
 البريد الإلكتروني: ${fd.get("email")}
 الهاتف: ${fd.get("phone") || "—"}
 رقم الشريك: ${partnerFinal}
@@ -1065,7 +1075,9 @@ function postLeadToSheet(contactPreference) {
     return "ar";
   })();
 
-  const name  = String(fd.get("name") || "").trim();
+  const firstName = String(fd.get("firstName") || "").trim();
+  const lastName  = String(fd.get("lastName") || "").trim();
+  const name  = [firstName, lastName].filter(Boolean).join(" ");
   const email = String(fd.get("email") || "").trim();
   const phone = String(fd.get("phone") || "").trim();
 

@@ -1287,8 +1287,13 @@
       <form class="pt-form" id="ptInquiryForm">
         <div class="pt-form__grid">
           <label class="pt-field">
-            <span>الاسم *</span>
-            <input type="text" name="name" autocomplete="name" required />
+            <span>الاسم الأول *</span>
+            <input type="text" name="firstName" autocomplete="given-name" required />
+          </label>
+
+          <label class="pt-field">
+            <span>اسم العائلة *</span>
+            <input type="text" name="lastName" autocomplete="family-name" required />
           </label>
 
           <label class="pt-field">
@@ -1297,8 +1302,8 @@
           </label>
 
           <label class="pt-field">
-            <span>الهاتف (اختياري)</span>
-            <input type="tel" name="phone" autocomplete="tel" />
+            <span>الهاتف *</span>
+            <input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="0176 1234567" required />
           </label>
 
        <label class="pt-field">
@@ -1408,12 +1413,14 @@ const isChecked = (name) => {
 let leadChannel = "form";
 let leadAction = "submit";
 const postLeadToSheet = async (contactPreference) => {
-  const name = v("name");
+  const firstName = v("firstName");
+  const lastName  = v("lastName");
+  const name = [firstName, lastName].filter(Boolean).join(" ");
   const email = v("email");
   const phone = v("phone");
 
-  // Backend verlangt: service + name + (email oder phone)
-  if (!name || (!email && !phone)) return null;
+  // Seit 26.08.2026 sind alle vier Felder Pflicht (Wunsch des Auftraggebers).
+  if (!firstName || !lastName || !email || !phone) return null;
 
   const partnerId = (sessionStorage.getItem("amd_partner") || localStorage.getItem("amd_partner") || "").trim();
   const token     = (sessionStorage.getItem("amd_token")   || localStorage.getItem("amd_token")   || "").trim();
@@ -1430,6 +1437,8 @@ const postLeadToSheet = async (contactPreference) => {
   ].join("|");
 
   const structuredJson = {
+    firstName: firstName,
+    lastName: lastName,
     packageTitle: PACKAGE_TITLE,
     price: PRICE,
     people: v("people"),
@@ -1503,7 +1512,7 @@ const buildText = (refNr) => [
   `طلب: ${PACKAGE_TITLE}${refNr ? " – " + refNr : ""}`,
   `السعر: ${PRICE}`,
   "",
-  `الاسم: ${v("name")}`,
+  `الاسم: ${v("firstName")} ${v("lastName")}`,
   `البريد الإلكتروني: ${v("email")}`,
   `الهاتف: ${v("phone") || "-"}`,
   `الموافقة: ${isChecked("acceptLegal") ? "تم قبول سياسة الخصوصية والشروط" : "غير مقبول"}`,

@@ -738,8 +738,13 @@
       <form class="srv-form" id="srvInquiryForm">
         <div class="srv-form__grid">
           <label class="srv-field">
-            <span>Name *</span>
-            <input autocomplete="name" name="name" required type="text" />
+            <span>Vorname *</span>
+            <input autocomplete="given-name" name="firstName" required type="text" />
+          </label>
+
+          <label class="srv-field">
+            <span>Nachname *</span>
+            <input autocomplete="family-name" name="lastName" required type="text" />
           </label>
 
           <label class="srv-field">
@@ -792,10 +797,15 @@
             </select>
           </label>
 
-          <label class="srv-field">
-            <span>Partner-ID (optional)</span>
-            <input name="partnerId" type="text" inputmode="text" autocomplete="off" placeholder="z. B.: LH001" />
-          </label>
+          <div class="partner-row srv-field--full">
+            <details class="amd-partner">
+              <summary>Nur für Geschäftspartner: Partner-ID eintragen</summary>
+              <div class="amd-partner__body">
+                <input name="partnerId" type="text" inputmode="text" autocomplete="off" placeholder="z. B.: LH001" aria-label="Partner-ID" />
+                <p class="amd-partner__hint">Dieses Feld ist ausschließlich für Geschäftspartner mit Provisionsvereinbarung, die eine Buchung für ihre Kunden vornehmen. Als Gast bitte frei lassen.</p>
+              </div>
+            </details>
+          </div>
         </div>
 
         <label class="srv-check srv-check--must">
@@ -1041,7 +1051,7 @@
 
 Service: ${service}
 
-Name: ${fd.get("name")}
+Name: ${fd.get("firstName")} ${fd.get("lastName")}
 E-Mail: ${fd.get("email")}
 Telefon: ${fd.get("phone")}
 Partner-ID: ${partnerFinal}
@@ -1086,7 +1096,9 @@ Gesendet über amd-germancenter.com/services`;
       const partnerId = ((String(fd.get("partnerId") || "").trim()) || String(partnerFromUrl || "").trim() || "");
       const token     = (String(tokenFromUrl || "").trim());
 
-      const name  = String(fd.get("name") || "").trim();
+      const firstName = String(fd.get("firstName") || "").trim();
+      const lastName  = String(fd.get("lastName") || "").trim();
+      const name  = [firstName, lastName].filter(Boolean).join(" ");
       const email = String(fd.get("email") || "").trim();
       const phone = String(fd.get("phone") || "").trim();
 
@@ -1113,6 +1125,8 @@ Gesendet über amd-germancenter.com/services`;
       // structuredJson: sauber, wie bei packages
       const structuredJson = {
         page: "services",
+        firstName,
+        lastName,
         service: "services",
         serviceName,
         urgency,

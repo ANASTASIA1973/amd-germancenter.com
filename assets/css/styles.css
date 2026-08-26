@@ -3147,3 +3147,108 @@ a.btn-whatsapp * {
   font-size: 0.95rem;
   line-height: 1.5;
 }
+
+/* ==================================================================
+   Partner-ID: zugeklappt
+   ------------------------------------------------------------------
+   Gaeste haben angerufen und gefragt, was sie dort eintragen sollen.
+   Das Feld ist aber ausschliesslich fuer Geschaeftspartner mit
+   Provisionsvereinbarung. Es steht deshalb hinter einer unauffaelligen
+   Zeile, die sagt, fuer wen es gedacht ist - ohne JavaScript, ueber
+   das <details>-Element. Der Wert wird auch zugeklappt mitgesendet,
+   weil das Feld im Formular bleibt.
+   ================================================================== */
+
+details.amd-partner {
+  display: block;
+  margin: .35rem 0 .2rem;
+  padding-top: .6rem;
+  border-top: 1px solid rgba(15, 23, 42, .10);
+}
+
+.amd-partner > summary {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  cursor: pointer;
+  list-style: none;
+  padding: .45rem 0;
+  font-size: .82rem;
+  line-height: 1.35;
+  color: rgba(15, 23, 42, .55);
+}
+
+.amd-partner > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Der Aufklapp-Pfeil ist aus zwei Rahmenkanten gezeichnet, nicht aus einem
+   Schriftzeichen. Ein Plus im Kreis wurde bei dieser Groesse matschig und
+   sass nie ganz mittig - das haengt an der jeweiligen Schrift. Der Pfeil
+   bleibt in jeder Groesse scharf, nimmt die Textfarbe an und dreht sich
+   beim Aufklappen nach unten. */
+.amd-partner > summary::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin: 0 0.1rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  border-radius: 1px;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+
+.amd-partner[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+/* Rechtslaeufig zeigt der zugeklappte Pfeil nach links. */
+html[dir="rtl"] .amd-partner > summary::before {
+  transform: rotate(135deg);
+}
+
+html[dir="rtl"] .amd-partner[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.amd-partner > summary:hover,
+.amd-partner > summary:focus-visible {
+  color: rgba(15, 23, 42, .85);
+}
+
+.amd-partner__body {
+  padding: .35rem 0 .2rem;
+}
+
+.amd-partner__body input {
+  width: 100%;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, .14);
+  padding: 0 .85rem;
+  font: inherit;
+  background: #fff;
+  outline: none;
+}
+
+.amd-partner__hint {
+  margin: .45rem 0 0;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: rgba(15, 23, 42, .55);
+}
+
+html[dir="rtl"] .amd-partner > summary {
+  flex-direction: row;
+}
+
+/* Der Rahmen .partner-row wird von main.js ausgeblendet, wenn der Gast
+   ueber einen Partner-QR-Code kommt - dann ist die Partner-ID bereits
+   bekannt und niemand soll sie eintippen. Der Aufklapper darin behaelt
+   die volle Breite: */
+.partner-row > details.amd-partner {
+  width: 100%;
+  align-self: stretch;
+}

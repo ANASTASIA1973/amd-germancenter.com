@@ -736,8 +736,13 @@
       <form class="srv-form" id="srvInquiryForm">
    <div class="srv-form__grid">
   <label class="srv-field">
-    <span>Name *</span>
-    <input autocomplete="name" name="name" required type="text" />
+    <span>First name *</span>
+    <input autocomplete="given-name" name="firstName" required type="text" />
+  </label>
+
+  <label class="srv-field">
+    <span>Last name *</span>
+    <input autocomplete="family-name" name="lastName" required type="text" />
   </label>
 
   <label class="srv-field">
@@ -792,10 +797,15 @@
             </select>
           </label>
 
-          <label class="srv-field">
-            <span>Partner ID (optional)</span>
-            <input name="partnerId" type="text" inputmode="text" autocomplete="off" placeholder="e.g.: LH001" />
-          </label>
+          <div class="partner-row srv-field--full">
+            <details class="amd-partner">
+              <summary>Business partners only: enter partner ID</summary>
+              <div class="amd-partner__body">
+                <input name="partnerId" type="text" inputmode="text" autocomplete="off" placeholder="e.g.: LH001" aria-label="Partner-ID" />
+                <p class="amd-partner__hint">This field is only for business partners with a commission agreement who book on behalf of their customers. If you are a guest, please leave it empty.</p>
+              </div>
+            </details>
+          </div>
         </div>
 
         <label class="srv-check srv-check--must">
@@ -1039,7 +1049,7 @@ function buildText(refNr) {
 
 Service: ${service}
 
-Name: ${fd.get("name")}
+Name: ${fd.get("firstName")} ${fd.get("lastName")}
 Email: ${fd.get("email")}
 Phone: ${fd.get("phone")}
 Partner ID: ${partnerFinal}
@@ -1070,7 +1080,9 @@ Sent via amd-germancenter.com/services`;
     return "en";
   })();
 
-  const name  = String(fd.get("name") || "").trim();
+  const firstName = String(fd.get("firstName") || "").trim();
+  const lastName  = String(fd.get("lastName") || "").trim();
+  const name  = [firstName, lastName].filter(Boolean).join(" ");
   const email = String(fd.get("email") || "").trim();
   const phone = String(fd.get("phone") || "").trim();
 

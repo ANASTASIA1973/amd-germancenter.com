@@ -1402,8 +1402,13 @@ expertise and on-site support.
     <form class="pt-form" id="ptInquiryForm">
       <div class="pt-form__grid">
         <label class="pt-field">
-          <span>Name *</span>
-          <input autocomplete="name" name="name" required type="text" />
+          <span>First name *</span>
+          <input autocomplete="given-name" name="firstName" required type="text" />
+        </label>
+
+        <label class="pt-field">
+          <span>Last name *</span>
+          <input autocomplete="family-name" name="lastName" required type="text" />
         </label>
 
         <label class="pt-field">
@@ -1412,8 +1417,8 @@ expertise and on-site support.
         </label>
 
         <label class="pt-field">
-          <span>Phone (optional)</span>
-          <input autocomplete="tel" name="phone" type="tel" />
+          <span>Phone *</span>
+          <input autocomplete="tel" inputmode="tel" name="phone" placeholder="e.g. 0176 1234567" required type="tel" />
         </label>
 
        <label class="pt-field">
@@ -1522,12 +1527,14 @@ let leadChannel = "form";
 let leadAction = "submit";
 
 const postLeadToSheet = async (contactPreference) => {
-  const name = v("name");
+  const firstName = v("firstName");
+  const lastName  = v("lastName");
+  const name = [firstName, lastName].filter(Boolean).join(" ");
   const email = v("email");
   const phone = v("phone");
 
-  // Backend verlangt: service + name + (email oder phone)
-  if (!name || (!email && !phone)) return null;
+  // Seit 26.08.2026 sind alle vier Felder Pflicht (Wunsch des Auftraggebers).
+  if (!firstName || !lastName || !email || !phone) return null;
 
   const partnerId = (sessionStorage.getItem("amd_partner") || localStorage.getItem("amd_partner") || "").trim();
   const token     = (sessionStorage.getItem("amd_token")   || localStorage.getItem("amd_token")   || "").trim();
@@ -1544,6 +1551,8 @@ const postLeadToSheet = async (contactPreference) => {
   ].join("|");
 
   const structuredJson = {
+    firstName: firstName,
+    lastName: lastName,
     packageTitle: PACKAGE_TITLE,
     price: PRICE,
     people: v("people"),
@@ -1613,7 +1622,7 @@ const buildText = (refNr) => [
   (refNr ? `Reference: ${refNr}` : `Reference: (pending)`),
   `Price: ${PRICE}`,
   "",
-  `Name: ${v("name")}`,
+  `Name: ${v("firstName")} ${v("lastName")}`,
   `E-mail: ${v("email")}`,
   `Phone: ${v("phone") || "-"}`,
   `Consent: Privacy policy & terms accepted`,
