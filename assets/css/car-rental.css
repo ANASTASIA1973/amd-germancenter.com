@@ -2212,13 +2212,7 @@ body.page-car-rental .pt-modal .form-actions a#btnRentalWhatsApp *{
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
-/* ===== AR: Telefonnummer immer LTR (nicht gespiegelt) ===== */
-body[dir="rtl"] .amd-phone-ltr{
-  direction: ltr !important;
-  unicode-bidi: isolate !important;
-  display: inline-block !important;
-  white-space: nowrap !important;
-}
+/* AR: Telefonnummern werden global in styles.css auf LTR gezwungen. */
 /* =========================================
    PHONE LINE – AR: Nummer immer korrekt LTR + 1 Zeile
    ========================================= */
@@ -2246,13 +2240,6 @@ body.page-car-rental .form-note-phone{
   text-decoration: none !important;
 }
 
-/* Nummer in RTL wirklich LTR erzwingen (das ist der entscheidende Punkt) */
-body[dir="rtl"] .amd-phone-ltr{
-  direction: ltr !important;
- unicode-bidi: isolate !important;
-  display: inline-block !important;
-  white-space: nowrap !important;
-}
 
 /* Icon rot über currentColor */
 body.page-car-rental .form-note-phone .amd-phone-icon{
@@ -2267,14 +2254,6 @@ body.page-car-rental .form-note-phone .amd-phone-icon path{
 /* Sehr kleine Screens: minimal kleiner, aber bleibt 1 Zeile */
 @media (max-width: 380px){
   body.page-car-rental .form-note{ font-size: 0.85rem !important; }
-}
-/* FIX: Telefonnummern korrekt in RTL (Modal, Footer, überall) */
-body[dir="rtl"] .amd-phone-ltr{
-
-  direction: ltr !important;
-  unicode-bidi: isolate !important;
-  display: inline-block !important;
-  white-space: nowrap !important;
 }
 /* FIX: Telefonnummer im AR-Buchungsdialog korrekt darstellen */
 .phone-ltr{
