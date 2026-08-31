@@ -3252,3 +3252,16 @@ html[dir="rtl"] .amd-partner > summary {
   width: 100%;
   align-self: stretch;
 }
+
+/* ===== Telefonnummern in RTL nicht spiegeln =====
+   Die alten Regeln standen auf body[dir="rtl"], das dir-Attribut sitzt aber
+   am <html>-Tag - deshalb griffen sie nie. Diese Regel gilt global; in LTR
+   ist sie wirkungslos, weil die Richtung dort ohnehin ltr ist. */
+.amd-phone-ltr,
+.phone-link,
+a[href^="tel:"],
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}

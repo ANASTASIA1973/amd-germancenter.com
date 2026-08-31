@@ -1067,7 +1067,7 @@ html[dir="rtl"] .page-services .srv-card-list li:before{
 
 .page-services .amd-phone-ltr {
   direction: ltr;
-  unicode-bidi: embed;
+  unicode-bidi: isolate;
 }
 
 .page-services .amd-inline-icon {
