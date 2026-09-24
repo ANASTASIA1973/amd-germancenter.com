@@ -16,6 +16,7 @@ const PARTNER_KEY = "amd_partner";
 const TOKEN_KEY = "amd_token";
 const TOKEN_TS_KEY = "amd_token_ts";
 const QR_ACTIVE_KEY = "amd_qr_active";
+const TOKEN_TRY_KEY = "amd_token_try"; // Partner, für den r.js in diesem Tab schon gefragt wurde
 const TOKEN_TTL_MS = 60 * 60 * 1000; // 1 Stunde
 
 /**
@@ -208,14 +209,47 @@ async function ensureQrTokenForHotel_(onReady) {
     return;
   }
 
-  // Wenn kein token: über r.js holen (server-side)
+  // r.js hat schon geantwortet, aber ohne Token (tok/cfg/ex): nicht nochmal
+  // hinleiten – sonst Endlosschleife. Seite läuft mit partner, ohne token.
+  if (getUrlParam_("err")) {
+    dropErrParam_();
+    if (typeof onReady === "function") onReady(getPartnerToken_());
+    return;
+  }
+
+  // Höchstens ein Versuch pro Partner und Tab (Schutz, falls r.js kein err
+  // mitschickt, z. B. ältere Version). Ohne sessionStorage: kein Versuch.
+  let firstTry = false;
+  try {
+    firstTry = sessionStorage.getItem(TOKEN_TRY_KEY) !== partnerFromUrl;
+    if (firstTry) sessionStorage.setItem(TOKEN_TRY_KEY, partnerFromUrl);
+  } catch (_) {
+    firstTry = false;
+  }
+
+  if (!firstTry) {
+    if (typeof onReady === "function") onReady(getPartnerToken_());
+    return;
+  }
+
+  // Wenn kein token: über r.js holen (server-side), danach zurück auf diese Seite
   try {
     const pid = encodeURIComponent(partnerFromUrl);
-    const dest = `/.netlify/functions/r?pid=${pid}&next=${encodeURIComponent(window.location.href)}`;
+    const here = window.location.pathname + window.location.search + window.location.hash;
+    const dest = `/.netlify/functions/r?pid=${pid}&next=${encodeURIComponent(here)}`;
     window.location.href = dest;
   } catch (_) {
     if (typeof onReady === "function") onReady(getPartnerToken_());
   }
+}
+
+// err=… aus der Adresszeile nehmen, ohne neu zu laden.
+function dropErrParam_() {
+  try {
+    const u = new URL(window.location.href);
+    u.searchParams.delete("err");
+    history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+  } catch (_) {}
 }
 
 /* ================================
