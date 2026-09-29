@@ -146,8 +146,8 @@ async function createReview(event) {
   }
 
   const text = clean(incoming.text, MAX_TEXT_LENGTH);
-  if (text.length < 20) {
-    return json(400, { ok: false, error: "text_too_short" });
+  if (!text) {
+    return json(400, { ok: false, error: "missing_text" });
   }
 
   const name = clean(incoming.name, MAX_FIELD_LENGTH);
